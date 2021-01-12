@@ -1,4 +1,6 @@
 const ROUTES = {
+  Login: "Login",
+  
   Walkthrough: 'Walkthrough',
   SelectCity: 'SelectCity',
   SelectHashtag: 'SelectHashtag',
