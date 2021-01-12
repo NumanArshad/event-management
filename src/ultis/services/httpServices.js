@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "http://iuvo.arcocia.tech/api";
+axios.defaults.baseURL = "http://iuvo.arcocia.tech/api/";
 
 axios.interceptors.request.use(
   (request) => {
