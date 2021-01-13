@@ -1,11 +1,17 @@
 import React, { memo } from "react";
-import { ScrollView, Text } from "react-native";
+import { Button, ScrollView, Text } from "react-native";
 import UserItem from "components/UserItem";
+import { login } from "redux/auth/auth.actions";
 
 const Login = memo(() => {
+  const formData = new FormData();
+  formData.append("email", "citizen@iuvo.com");
+  formData.append("password", "password");
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Text>login screen</Text>
+      <Button onPress={() => login(formData)} title="login" />
       <UserItem
         image={require("assets/Followers/img.jpg")}
         name={"Birdie Price"}

@@ -9,7 +9,7 @@ const Main = memo(() => {
 
   useEffect(() => {
     setTimeout(() => {
-      setAutenticated(true);
+     // setAutenticated(true);
     }, 10000);
   }, []);
   return (
