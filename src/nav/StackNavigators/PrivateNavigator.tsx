@@ -56,11 +56,11 @@ const PrivateNavigator = () => (
         component={Settings}
         options={{ headerBackTitleVisible: false, title: "Settings" }}
       />
-      <privateNavStack.Screen
+      {/* <privateNavStack.Screen
         name={ROUTES.SelectCity}
         component={SelectCity}
         options={{ headerBackTitleVisible: false, title: "Select City" }}
-      />
+      /> */}
       <privateNavStack.Screen
         name={ROUTES.SearchPeople}
         component={SearchPeople}
@@ -130,11 +130,11 @@ const PrivateNavigator = () => (
         component={Notification}
         options={{ headerBackTitleVisible: false, title: "Notifications" }}
       />
-      <privateNavStack.Screen
+      {/* <privateNavStack.Screen
         name={ROUTES.SelectHashtag}
         component={SelectHashtag}
         options={{ headerBackTitleVisible: false, title: "Select #Hashtag" }}
-      />
+      /> */}
       <privateNavStack.Screen
         name={ROUTES.EvezNews}
         component={EvezNews}

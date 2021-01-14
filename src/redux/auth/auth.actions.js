@@ -1,6 +1,5 @@
-import { post } from "ultis/services/httpServices";
 import axios from "ultis/services/httpServices";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export const login = (data) => {
   return axios.post("auth/login", data);
 };

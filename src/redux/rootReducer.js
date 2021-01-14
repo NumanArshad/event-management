@@ -1,8 +1,10 @@
-import loadingReducer from "./loading/loading.reducer";
 import { combineReducers } from "redux";
+import loadingReducer from "./loading/loading.reducer";
+import eventsReducer from "./events/events.reducer";
 
 const rootReducer = combineReducers({
-  loadingReducer,
+  loading: loadingReducer,
+  events: eventsReducer,
 });
 
 export default rootReducer;

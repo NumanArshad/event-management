@@ -19,14 +19,13 @@ import SvgSaved from 'svgs/IconSaved';
 
 interface EventItemProps {
   thumbnail: any;
-  tag: string[];
-  reviewTimes: number;
+  tag?: string[];
+  reviewTimes?: number;
   eventName: string;
   location: string;
-  timeCountDown?: string;
+  timeCountDown?: string; //time left for event in days hour minute second
   distance: number;
-  currentAttending: number;
-  maxAttending: number;
+  currentAttending?: number;
   save: boolean;
   rate?: number;
   marginLeft?: number;
@@ -53,16 +52,16 @@ const EventItem = memo((props: EventItemProps) => {
   };
 
   const data = {
-    thumbnail: props.thumbnail,
-    tag: props.tag,
-    reviewTimes: props.reviewTimes,
+    thumbnail: require("@assets/Trending/trending_1.png"),//props.thumbnail,
+    tag: props.tag  || '',
+    reviewTimes: props.reviewTimes  || '',
     eventName: props.eventName,
     location: props.location,
     timeCountDown: props.timeCountDown || '',
     distance: props.distance,
-    currentAttending: props.currentAttending,
-    maxAttending: props.maxAttending,
-    rate: props.rate || 4,
+    currentAttending: props.currentAttending  || 0,
+    //maxAttending: props.maxAttending  || '',
+    rate: props.rate || 0,
     price: props.price || 0,
     save: props.save,
   };
@@ -110,7 +109,6 @@ const EventItem = memo((props: EventItemProps) => {
       />
       <EventBasicInfo
         currentAttending={props.currentAttending}
-        maxAttending={props.maxAttending}
         location={props.location}
         distance={props.distance}
         eventTime={props.eventTime}

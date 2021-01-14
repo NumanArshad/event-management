@@ -18,7 +18,7 @@ import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
 
-const Login = memo((navigation) => {
+const Login = memo(() => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const { navigate } = useNavigation();

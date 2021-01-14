@@ -9,7 +9,7 @@ export default function (state = initialState, action) {
     case START_LOADING:
       return { loading: true };
     case STOP_LOADING:
-      return { loading: true };
+      return { loading: false };
     default:
       return state;
   }

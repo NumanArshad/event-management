@@ -2,7 +2,7 @@ import React, { memo, useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthNavigator from "./StackNavigators/AuthNavigator";
 import PrivateNavigator from "./StackNavigators/PrivateNavigator";
-import { StatusBar } from "react-native";
+import { Alert, StatusBar } from "react-native";
 import { GetItem_AsynsStorage } from "redux/auth/auth.actions";
 
 const Main = memo(() => {
@@ -16,8 +16,11 @@ const Main = memo(() => {
       } else {
         setAutenticated(true);
       }
+      Alert.alert("respnw"+res)
     });
   }, []);
+
+
   return (
     <NavigationContainer>
       <StatusBar
