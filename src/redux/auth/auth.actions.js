@@ -6,10 +6,20 @@ export const login = (data) => {
 };
 
 export const register = (data) => {
-  axios
-    .post("auth/register", data)
-    .then((res) => console.log("respnse is ", res));
+  return axios.post("auth/register", data);
 };
+
+export const forgotPassword = (data) => {
+  return axios.post("auth/forget-password", data);
+};
+
+export const changePassword = (data) => {
+  return axios.post("auth/update-password", data);
+};
+
+// No Worries! You can easily recover your account with the e-mail
+//             address you have on file with us. Please enter your email below and
+//             we will respond within 1-2 minutes.
 
 ////set token in async storage////
 export const setUser = (authInfo) => {};

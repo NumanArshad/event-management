@@ -13,16 +13,22 @@ import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
 import Color from "../../ultis/color/index";
 import { LinearGradient } from "expo-linear-gradient";
-import { login, SetItem_AsynsStorage } from "redux/auth/auth.actions";
+import { login, register, SetItem_AsynsStorage } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
 
-const Login = memo((navigation) => {
+const Register = memo((navigation) => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const [name, setname] = useState("");
+  const [cPassword, setcPassword] = useState("");
   const { navigate } = useNavigation();
   const [preLoader, setpreLoader] = useState(false);
+  const [userType, setuserType] = useState("citizen");
+  const check = () => {
+    Alert.alert("", email);
+  };
 
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -32,23 +38,36 @@ const Login = memo((navigation) => {
     return false;
   };
 
-  const check = () => {
-    Alert.alert("", email);
+  const validatePassword = () => {
+    if (password === cPassword) {
+      return true;
+    }
+    Alert.alert("", "Password and Confirm Password doesn't match!");
+    return false;
   };
-  const handleLogin = () => {
-    if (ValidateEmail() && email != "" && password != "") {
+
+  const handleRegister = () => {
+    if (
+      ValidateEmail() &&
+      validatePassword() &&
+      email != "" &&
+      password != ""
+    ) {
       setpreLoader(true);
       const formData = new FormData();
       formData.append("email", email);
       formData.append("password", password);
+      formData.append("user_type", "citizen");
+      formData.append("name", name);
+      formData.append("password_confirmation", cPassword);
       console.log("FORMDATA:", formData);
-      login(formData)
+      register(formData)
         .then((res) => {
           console.log("Response ", res.data);
           if (res.data.status_code === 200) {
-            SetItem_AsynsStorage("Token", res.data.data.token);
-            SetItem_AsynsStorage("User", res.data.data.user);
-            navigate(ROUTES.SelectCity);
+            // SetItem_AsynsStorage("Token", res.data.data.token);
+            // SetItem_AsynsStorage("User", res.data.data.user);
+            navigate(ROUTES.Login);
             setpreLoader(false);
           }
           // console.log("RESPONSE LOGIN TOKEN:", res.data.data.token);
@@ -66,6 +85,12 @@ const Login = memo((navigation) => {
     <View style={styles.container}>
       <TextInput
         style={styles.textInput}
+        placeholder="Name..."
+        onChangeText={(data) => setname(data)}
+      />
+
+      <TextInput
+        style={styles.textInput}
         placeholder="Email..."
         onChangeText={(data) => setemail(data)}
       />
@@ -76,6 +101,60 @@ const Login = memo((navigation) => {
         textContentType="password"
         onChangeText={(data) => setpassword(data)}
       />
+      <TextInput
+        style={styles.textInput}
+        secureTextEntry={true}
+        placeholder="Confirm Password..."
+        textContentType="password"
+        onChangeText={(data) => setcPassword(data)}
+      />
+
+      {/* <View style={styles.viewForgotPass}>
+        <TouchableOpacity>
+          <Text style={{ color: "#ED3269", fontSize: 12, textAlign: "right" }}>
+            Forgot Password?
+          </Text>
+        </TouchableOpacity>
+      </View> */}
+
+      <View>
+        <Text
+          style={{
+            color: "#ED3269",
+            marginTop: height_screen * 0.01,
+            textAlign: "center",
+            marginBottom: height_screen * 0.01,
+          }}
+        >
+          What best describe you?
+        </Text>
+        <View style={styles.viewToggle}>
+          <Text
+            onPress={() => setuserType("citizen")}
+            style={[
+              styles.toggleButton,
+              {
+                color: userType === "citizen" ? "#fff" : "#a4a4a4",
+                backgroundColor: userType === "citizen" ? "#ED3269" : "#fff",
+              },
+            ]}
+          >
+            Citizen
+          </Text>
+          <Text
+            onPress={() => setuserType("customer")}
+            style={[
+              styles.toggleButton,
+              {
+                color: userType === "customer" ? "#fff" : "#a4a4a4",
+                backgroundColor: userType === "customer" ? "#ED3269" : "#fff",
+              },
+            ]}
+          >
+            Customer
+          </Text>
+        </View>
+      </View>
       {/* <Text_Input
         secureText={false}
         placeholder="Pakistan..."
@@ -83,32 +162,25 @@ const Login = memo((navigation) => {
         setdata={(data) => setemail(data)}
         placeholderColor="#a4a4a4"
       /> */}
-      <View style={styles.viewForgotPass}>
-        <TouchableOpacity onPress={() => navigate(ROUTES.ChangePassword)}>
-          <Text style={{ color: "#ED3269", fontSize: 12, textAlign: "right" }}>
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-      </View>
 
       <View style={styles.viewCreate}>
         <Text style={{ color: "#ED3269" }}>
-          Don't have an Account?{" "}
-          <TouchableOpacity onPress={() => navigate(ROUTES.Register)}>
+          Already have an Account?{" "}
+          <TouchableOpacity>
             <Text style={{ textDecorationLine: "underline", fontSize: 12 }}>
-              Create
+              Login
             </Text>
           </TouchableOpacity>
         </Text>
       </View>
-      <TouchableOpacity onPress={handleLogin}>
+      <TouchableOpacity onPress={handleRegister}>
         <LinearGradient
           colors={["#ED3269", "#F05F3E"]}
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
           style={{ borderRadius: 10, marginTop: height_screen * 0.03 }}
         >
-          <Text style={styles.loginBtn}>Login</Text>
+          <Text style={styles.loginBtn}>Sign Up</Text>
           <View
             style={{
               position: "absolute",
@@ -132,7 +204,7 @@ const Login = memo((navigation) => {
   );
 });
 
-export default Login;
+export default Register;
 
 const styles = StyleSheet.create({
   container: {
@@ -173,5 +245,22 @@ const styles = StyleSheet.create({
     width: width_screen,
     justifyContent: "center",
     marginTop: height_screen * 0.015,
+  },
+  toggleButton: {
+    height: height_screen * 0.05,
+    // backgroundColor: "",
+    borderRadius: 10,
+    width: width_screen * 0.25,
+    textAlign: "center",
+    paddingTop: height_screen * 0.01,
+    color: "#a4a4a4",
+    margin: 1,
+    borderWidth: 1,
+    borderColor: "#F05F3E",
+  },
+  viewToggle: {
+    width: width_screen * 0.7,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   },
 });

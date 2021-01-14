@@ -13,14 +13,17 @@ import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
 import Color from "../../ultis/color/index";
 import { LinearGradient } from "expo-linear-gradient";
-import { login, SetItem_AsynsStorage } from "redux/auth/auth.actions";
+import {
+  forgotPassword,
+  login,
+  SetItem_AsynsStorage,
+} from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
 
-const Login = memo((navigation) => {
+const ForgotPassword = memo((navigation) => {
   const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
   const { navigate } = useNavigation();
   const [preLoader, setpreLoader] = useState(false);
 
@@ -35,24 +38,19 @@ const Login = memo((navigation) => {
   const check = () => {
     Alert.alert("", email);
   };
-  const handleLogin = () => {
-    if (ValidateEmail() && email != "" && password != "") {
+  const handleForgotPassword = () => {
+    if (ValidateEmail() && email != "") {
       setpreLoader(true);
       const formData = new FormData();
       formData.append("email", email);
-      formData.append("password", password);
       console.log("FORMDATA:", formData);
-      login(formData)
+      forgotPassword(formData)
         .then((res) => {
           console.log("Response ", res.data);
           if (res.data.status_code === 200) {
-            SetItem_AsynsStorage("Token", res.data.data.token);
-            SetItem_AsynsStorage("User", res.data.data.user);
-            navigate(ROUTES.SelectCity);
+            navigate(ROUTES.Login);
             setpreLoader(false);
           }
-          // console.log("RESPONSE LOGIN TOKEN:", res.data.data.token);
-          // console.log("RESPONSE LOGIN USER:", res.data.data.user);
           setpreLoader(false);
         })
         .catch((err) => {
@@ -64,51 +62,37 @@ const Login = memo((navigation) => {
   };
   return (
     <View style={styles.container}>
+      <View>
+        <Text style={styles.forgotText}>
+          No Worries! You can easily recover your account with the e-mail
+          address you have on file with us. Please enter your email below and we
+          will respond within 1-2 minutes.
+        </Text>
+      </View>
       <TextInput
         style={styles.textInput}
         placeholder="Email..."
         onChangeText={(data) => setemail(data)}
       />
-      <TextInput
-        style={styles.textInput}
-        secureTextEntry={true}
-        placeholder="Password..."
-        textContentType="password"
-        onChangeText={(data) => setpassword(data)}
-      />
-      {/* <Text_Input
-        secureText={false}
-        placeholder="Pakistan..."
-        style={[styles.textInput, { backgroundColor: "red" }]}
-        setdata={(data) => setemail(data)}
-        placeholderColor="#a4a4a4"
-      /> */}
-      <View style={styles.viewForgotPass}>
-        <TouchableOpacity onPress={() => navigate(ROUTES.ChangePassword)}>
-          <Text style={{ color: "#ED3269", fontSize: 12, textAlign: "right" }}>
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-      </View>
 
       <View style={styles.viewCreate}>
-        <Text style={{ color: "#ED3269" }}>
-          Don't have an Account?{" "}
-          <TouchableOpacity onPress={() => navigate(ROUTES.Register)}>
+        <Text style={{ color: "#ED3269", fontSize: 12 }}>
+          Remember Password?{" "}
+          <TouchableOpacity onPress={() => navigate(ROUTES.Login)}>
             <Text style={{ textDecorationLine: "underline", fontSize: 12 }}>
-              Create
+              Back to Login
             </Text>
           </TouchableOpacity>
         </Text>
       </View>
-      <TouchableOpacity onPress={handleLogin}>
+      <TouchableOpacity onPress={handleForgotPassword}>
         <LinearGradient
           colors={["#ED3269", "#F05F3E"]}
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
           style={{ borderRadius: 10, marginTop: height_screen * 0.03 }}
         >
-          <Text style={styles.loginBtn}>Login</Text>
+          <Text style={styles.loginBtn}>Submit</Text>
           <View
             style={{
               position: "absolute",
@@ -132,7 +116,7 @@ const Login = memo((navigation) => {
   );
 });
 
-export default Login;
+export default ForgotPassword;
 
 const styles = StyleSheet.create({
   container: {
@@ -173,5 +157,14 @@ const styles = StyleSheet.create({
     width: width_screen,
     justifyContent: "center",
     marginTop: height_screen * 0.015,
+  },
+  forgotText: {
+    color: "#a4a4a4",
+    width: width_screen * 0.8,
+    textAlign: "center",
+    letterSpacing: 1,
+    textTransform: "uppercase",
+    fontSize: 10,
+    marginBottom: height_screen * 0.02,
   },
 });
