@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
@@ -17,7 +18,7 @@ import { login, SetItem_AsynsStorage } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
-
+import Logo from "../../assets/logo.jpg";
 const Login = memo(() => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
@@ -64,6 +65,14 @@ const Login = memo(() => {
   };
   return (
     <View style={styles.container}>
+      <Image
+        // source={{
+        //   uri:
+        //     "https://i.pinimg.com/originals/f6/db/9b/f6db9b785d37c154c2be26b7c32604b6.jpg",
+        // }}
+        source={Logo}
+        style={styles.imageProfile}
+      />
       <TextInput
         style={styles.textInput}
         placeholder="Email..."
@@ -84,7 +93,7 @@ const Login = memo(() => {
         placeholderColor="#a4a4a4"
       /> */}
       <View style={styles.viewForgotPass}>
-        <TouchableOpacity onPress={() => navigate(ROUTES.ChangePassword)}>
+        <TouchableOpacity onPress={() => navigate(ROUTES.ForgotPassword)}>
           <Text style={{ color: "#ED3269", fontSize: 12, textAlign: "right" }}>
             Forgot Password?
           </Text>
@@ -173,5 +182,12 @@ const styles = StyleSheet.create({
     width: width_screen,
     justifyContent: "center",
     marginTop: height_screen * 0.015,
+  },
+  imageProfile: {
+    height: height_screen * 0.23,
+    width: width_screen * 0.32,
+    // backgroundColor: "#a4a4a4",
+    resizeMode: "contain",
+    borderRadius: 100,
   },
 });

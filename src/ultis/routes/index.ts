@@ -3,6 +3,7 @@ const ROUTES = {
   Register: "Register",
   ForgotPassword: "ForgotPassword",
   ChangePassword: "ChangePassword",
+  Profile: "Profile",
   Walkthrough: "Walkthrough",
   SelectCity: "SelectCity",
   SelectHashtag: "SelectHashtag",

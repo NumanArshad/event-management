@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
@@ -17,6 +18,7 @@ import { login, register, SetItem_AsynsStorage } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
+import Logo from "../../assets/logo.jpg";
 
 const Register = memo((navigation) => {
   const [email, setemail] = useState("");
@@ -83,6 +85,14 @@ const Register = memo((navigation) => {
   };
   return (
     <View style={styles.container}>
+      <Image
+        // source={{
+        //   uri:
+        //     "https://i.pinimg.com/originals/f6/db/9b/f6db9b785d37c154c2be26b7c32604b6.jpg",
+        // }}
+        source={Logo}
+        style={styles.imageProfile}
+      />
       <TextInput
         style={styles.textInput}
         placeholder="Name..."
@@ -166,7 +176,7 @@ const Register = memo((navigation) => {
       <View style={styles.viewCreate}>
         <Text style={{ color: "#ED3269" }}>
           Already have an Account?{" "}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigate(ROUTES.Login)}>
             <Text style={{ textDecorationLine: "underline", fontSize: 12 }}>
               Login
             </Text>
@@ -212,7 +222,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: "10%",
   },
   textInput: {
     height: height_screen * 0.07,
@@ -262,5 +271,12 @@ const styles = StyleSheet.create({
     width: width_screen * 0.7,
     flexDirection: "row",
     justifyContent: "space-evenly",
+  },
+  imageProfile: {
+    height: height_screen * 0.2,
+    width: width_screen * 0.3,
+    // backgroundColor: "#a4a4a4",
+    resizeMode: "contain",
+    borderRadius: 100,
   },
 });

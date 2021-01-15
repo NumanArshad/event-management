@@ -6,6 +6,8 @@ import headerBackground from "components/header/headerbackground";
 import Register from "screens/Auth/Register";
 import ForgotPassword from "screens/Auth/ForgotPassword";
 import ChangePassword from "screens/Auth/ChangePassword";
+import PeopleProfile from "screens/PeopleProfile";
+import Profile from "screens/Auth/Profile";
 
 const authStack = createStackNavigator();
 
@@ -20,6 +22,7 @@ const AuthNavigator = () => (
     <authStack.Screen name={ROUTES.Register} component={Register} />
     <authStack.Screen name={ROUTES.ForgotPassword} component={ForgotPassword} />
     <authStack.Screen name={ROUTES.ChangePassword} component={ChangePassword} />
+    <authStack.Screen name={ROUTES.Profile} component={Profile} />
   </authStack.Navigator>
 );
 export default AuthNavigator;

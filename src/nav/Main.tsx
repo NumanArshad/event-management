@@ -16,10 +16,9 @@ const Main = memo(() => {
       } else {
         setAutenticated(true);
       }
-      Alert.alert("respnw"+res)
+      Alert.alert("respnw" + res);
     });
   }, []);
-
 
   return (
     <NavigationContainer>

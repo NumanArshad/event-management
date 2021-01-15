@@ -22,17 +22,16 @@ axios.interceptors.request.use(
     ].includes(requestUrl);
 
     if (!isAuthUrl) {
-      
       request.headers.common["Authorization"] =
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNzc5NWIzYTAwMGQwMzY5MjExYmIzYjEyZGM5NTZhYzE1ODU4M2ZhNGFjMDNlMmM5YjJiYTJhZTJkNzk5Y2E3NjM1NDQzMmY3MjQxMzFiMTEiLCJpYXQiOiIxNjEwNjQ5NzYyLjcxMTYwMCIsIm5iZiI6IjE2MTA2NDk3NjIuNzExNjAzIiwiZXhwIjoiMTY0MjE4NTc2Mi43MDg3NjgiLCJzdWIiOiI2Iiwic2NvcGVzIjpbXX0.m6wT885EncSj9HVq9vpxNLeR--dLsbchaDFUkFSWpphWSccQ66ucfSKfWWI7dwvbovkSrUsuKeyyJG9l3c518YPxVpsjqXdoLQK4bBY4x_JWO2wF4irHxr_eK35KwjBnSC8tFKSUFS4LtVss_XXmdRMEHq62uhl-AgDRzNcfyb2iKq3q62KGX9j-8sJ0qnGfOipSEGEJwsJRj3Q_jv1C6ceJVvdRIWKARsffSapNrF6VVgSUxvxOIXh9v8kETgmVd83IgkkyijKyixcyi6PJbDPmrOT8vUFqXk7JEyUvxF_9MAuv3kD-Srks7K7Q5gX7-ydbIkMPJIEWEwyWxaALJQyXY0HJeuWBYZDeAblVb6XGE_imGlvsn8_n-BW53MZMvCiJdqMGCfgb3o9NeYyCceyCCPhR37F4d1kcM54zG1pM14Kp7FascD0BkHxtKG9hadBt3BmJAOmXZhBIxy9UOLFssL4PSha80OS0Nqnn8hgJfpPVF6or6DzslPSX19AoS95HpYw5oe8zDk_HhGCbcHzJlcWlcmtsc8XQyrGOfaiLVPeXA1Ls1TgdeE2QB3oXFi5EIswrsFiMjY5bAYxwCx_l5thEJVRi6fxYc4lc9m2gAyXdvYmFjw_M7gInqiqT7VoA9KZbii6Ebw-erkefD5PhDP4tJDvSTLFxLfJ4Mk0";
-        //console.log("request headerce is ni is final is", request);
-      }
-    
+      //console.log("request headerce is ni is final is", request);
+    }
+
     return request;
   },
   (error) => {
     dispatch(stopLoading());
-  //  console.log("request error isb", error);
+    //  console.log("request error isb", error);
     return Promise.reject(error);
   }
 );
@@ -44,7 +43,7 @@ axios.interceptors.response.use(
   },
   (error) => {
     dispatch(stopLoading());
-   // console.log("response error is", error?.response?.status);
+    // console.log("response error is", error?.response?.status);
     return Promise.reject(error);
   }
 );

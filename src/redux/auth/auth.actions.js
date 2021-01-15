@@ -16,6 +16,10 @@ export const changePassword = (data) => {
   return axios.post("auth/update-password", data);
 };
 
+export const updateProfile = (data) => {
+  return axios.post("auth/update-profile", data);
+};
+
 // No Worries! You can easily recover your account with the e-mail
 //             address you have on file with us. Please enter your email below and
 //             we will respond within 1-2 minutes.
