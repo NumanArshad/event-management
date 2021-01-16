@@ -87,7 +87,7 @@ const AllEventAroundYou = memo(() => {
             location={'3 South Sherman Street…'}
             distance={15}
             currentAttending={19}
-            maxAttending={5000}
+            //maxAttending={5000}
             save={false}
             rate={4.5}
             marginLeft={24}
@@ -101,7 +101,7 @@ const AllEventAroundYou = memo(() => {
             location={'Tobacco Dock, London'}
             distance={15}
             currentAttending={19}
-            maxAttending={5000}
+            //maxAttending={5000}
             save={false}
             rate={4.5}
             marginLeft={24}
@@ -115,7 +115,7 @@ const AllEventAroundYou = memo(() => {
             location={'605 W 48th Street, Manhattan...'}
             distance={10}
             currentAttending={2500}
-            maxAttending={10000}
+            //maxAttending={10000}
             save={false}
             rate={4.5}
             marginLeft={24}
@@ -129,7 +129,7 @@ const AllEventAroundYou = memo(() => {
             location={'The Grand Connaught Rooms...'}
             distance={3.5}
             currentAttending={2568}
-            maxAttending={10000}
+            //maxAttending={10000}
             save={true}
             rate={4.5}
             timeCountDown={'7 Days 06 Hours 27 Mins 44 secs'}
@@ -144,7 +144,7 @@ const AllEventAroundYou = memo(() => {
             location={'The Grand Connaught Rooms...'}
             distance={3.5}
             currentAttending={2568}
-            maxAttending={10000}
+            //maxAttending={10000}
             save={false}
             rate={3.5}
             timeCountDown={'7 Days 06 Hours 27 Mins 44 secs'}

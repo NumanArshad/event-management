@@ -3,22 +3,18 @@ import { NavigationContainer } from "@react-navigation/native";
 import AuthNavigator from "./StackNavigators/AuthNavigator";
 import PrivateNavigator from "./StackNavigators/PrivateNavigator";
 import { Alert, StatusBar } from "react-native";
-import { GetItem_AsynsStorage } from "redux/auth/auth.actions";
+import { getUserSessions } from "redux/auth/auth.actions";
+import { useDispatch, useSelector } from "react-redux";
 
 const Main = memo(() => {
   const [isAuthenticated, setAutenticated] = useState(false);
 
+  const dispatch = useDispatch();
+  const { is_authenticated } = useSelector<any, any>((state) => state.auth);
+
   useEffect(() => {
-    GetItem_AsynsStorage("Token").then((res) => {
-      console.log("RESPONSE TOKEN", res);
-      if (res === null) {
-        setAutenticated(false);
-      } else {
-        setAutenticated(true);
-      }
-      Alert.alert("respnw" + res);
-    });
-  }, []);
+    dispatch(getUserSessions());
+  }, [dispatch]);
 
   return (
     <NavigationContainer>
@@ -28,7 +24,7 @@ const Main = memo(() => {
         backgroundColor={"transparent"}
       />
       {/* {GetItem_AsynsStorage("Token").then((res) => console.log("ASYNC", res))} */}
-      {isAuthenticated ? <PrivateNavigator /> : <AuthNavigator />}
+      {is_authenticated ? <PrivateNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 });

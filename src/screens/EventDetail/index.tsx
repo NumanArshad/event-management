@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useRef, useState } from "react";
+import React, { memo, useCallback, useRef, useState, useEffect } from "react";
 import {
   Animated,
   Image,
@@ -11,7 +11,10 @@ import {
 import Swiper from "react-native-swiper";
 import { width_screen } from "ultis/dimensions";
 import FONTS from "ultis/fonts";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import {
+  useRoute,
+  useNavigation
+} from "@react-navigation/native";
 import EventName from "components/EventItem/EventName";
 import EventBasicInfo from "components/EventItem/EventBasicInfo";
 import RateDetail from "components/RateDetail";
@@ -33,12 +36,29 @@ import MapLocation from "screens/EventDetail/components/MapLocation";
 import LocationView from "screens/EventDetail/components/LocationView";
 import { LinearGradient } from "expo-linear-gradient";
 import ThemeUtils from "ultis/themeUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { clearSingleEvent, getSingleEventDetail } from "redux/events/events.actions";
 
 const EventDetail = memo(() => {
   const route = useRoute();
   const navigation = useNavigation();
+
   // @ts-ignore
   const data = route.params?.data;
+
+  const dispatch = useDispatch();
+
+  const { single_event } = useSelector<any, any>((state) => state.events);
+  const { loading } = useSelector<any, any>((state) => state.loading);
+
+  useEffect(() => {
+    dispatch(getSingleEventDetail(data?.id));
+
+    return () => {
+      dispatch(clearSingleEvent());
+    };
+  }, [dispatch]);
+
   const [isSaved, setSaved] = useState(data.save);
   let textBuyButton = "";
   let isAvailable;
@@ -106,19 +126,22 @@ const EventDetail = memo(() => {
           </View>
         </Swiper>
 
+        {/* 7 Days 06 Hours 27 Mins 44 secs */}
         {data.timeCountDown !== "" ? (
           <View style={styles.countDownView}>
             <HourGlass />
             <Text style={styles.textCountDown}>{data.timeCountDown}</Text>
           </View>
         ) : null}
-        <View style={styles.infoView}>
-          <EventName tag={data.tag} eventName={data.eventName} />
-          <EventBasicInfo
-            currentAttending={10}
-            eventTime={"SUN, MAR. 25  -  4:30 PM EST"}
-          />
-        </View>
+        {single_event && (
+          <View style={styles.infoView}>
+            <EventName eventName={single_event.event_name} />
+            <EventBasicInfo
+              currentAttending={single_event?.participants}
+              eventTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
+            />
+          </View>
+        )}
         <RateDetail
           onPress={onReview}
           rate={data.rate}
@@ -140,32 +163,43 @@ const EventDetail = memo(() => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.contentViewNoPadding}>
-          <Text style={[styles.textTitle, { paddingHorizontal: 24 }]}>
-            ENDORSE
-          </Text>
-          <UserItem
-            image={require("@assets/Followers/img.jpg")}
-            name={"Clarence Rodgers"}
-            numberFollower={"535"}
-          />
-        </View>
-        <View style={styles.contentViewNoPadding}>
-          <View style={styles.locationContainer}>
-            <View style={[styles.flexRow, { justifyContent: "space-between" }]}>
-              <Text style={styles.textTitle}>LOCATION</Text>
-              <TouchableOpacity
-                style={styles.detailAboutBtn}
-                onPress={onDirection}
-              >
-                <Text style={styles.textBtn}>How to get there?</Text>
-                <SvgArrowRight />
-              </TouchableOpacity>
+
+        {single_event && (
+          <>
+            <View style={styles.contentViewNoPadding}>
+              <Text style={[styles.textTitle, { paddingHorizontal: 24 }]}>
+                ENDORSE
+              </Text>
+              <UserItem
+                image={require("@assets/Followers/img.jpg")}
+                name={single_event?.type_name}
+                numberFollower={"535"}
+              />
             </View>
-            <LocationView location={data.location} distance={data.distance} />
-          </View>
-          <MapLocation />
-        </View>
+
+            <View style={styles.contentViewNoPadding}>
+              <View style={styles.locationContainer}>
+                <View
+                  style={[styles.flexRow, { justifyContent: "space-between" }]}
+                >
+                  <Text style={styles.textTitle}>LOCATION</Text>
+                  <TouchableOpacity
+                    style={styles.detailAboutBtn}
+                    onPress={onDirection}
+                  >
+                    <Text style={styles.textBtn}>How to get there?</Text>
+                    <SvgArrowRight />
+                  </TouchableOpacity>
+                </View>
+                <LocationView
+                  location={single_event?.address}
+                  distance={single_event?.lat_long}
+                />
+              </View>
+              <MapLocation eventLocation={single_event?.lat_long} />
+            </View>
+          </>
+        )}
         <View style={styles.contentView}>
           <Text style={styles.textTitle}>CONTACT</Text>
           <Text style={styles.aboutContent}>

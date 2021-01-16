@@ -19,6 +19,7 @@ import SvgSaved from 'svgs/IconSaved';
 
 interface EventItemProps {
   thumbnail: any;
+  id?:number;
   tag?: string[];
   reviewTimes?: number;
   eventName: string;
@@ -54,6 +55,7 @@ const EventItem = memo((props: EventItemProps) => {
   const data = {
     thumbnail: require("@assets/Trending/trending_1.png"),//props.thumbnail,
     tag: props.tag  || '',
+    id: props.id || '',
     reviewTimes: props.reviewTimes  || '',
     eventName: props.eventName,
     location: props.location,
@@ -68,7 +70,7 @@ const EventItem = memo((props: EventItemProps) => {
 
   const onDetail = useCallback(() => {
     navigation.navigate(ROUTES.EventDetail, {
-      data: data,
+      data,
     });
   }, []);
 
@@ -101,7 +103,7 @@ const EventItem = memo((props: EventItemProps) => {
         ) : null}
       </View>
       <EventName
-        tag={props.tag}
+       // tag={props.tag}
         eventName={props.eventName}
         rate={props.rate}
         reviewTimes={props.reviewTimes}

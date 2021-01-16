@@ -42,7 +42,6 @@ const EventAroundYou = memo(() => {
           location={'605 W 48th Street, Manhattan...'}
           distance={10}
           currentAttending={2500}
-          maxAttending={10000}
           save={false}
           rate={4.5}
           price={20}
@@ -55,7 +54,6 @@ const EventAroundYou = memo(() => {
           location={'The Grand Connaught Rooms...'}
           distance={3.5}
           currentAttending={2568}
-          maxAttending={10000}
           save={true}
           rate={4.5}
           timeCountDown={'7 Days 06 Hours 27 Mins 44 secs'}
@@ -69,7 +67,6 @@ const EventAroundYou = memo(() => {
           location={'The Grand Connaught Rooms...'}
           distance={3.5}
           currentAttending={10000}
-          maxAttending={10000}
           save={false}
           rate={3.5}
           timeCountDown={'7 Days 06 Hours 27 Mins 44 secs'}

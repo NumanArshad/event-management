@@ -19,11 +19,14 @@ import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
 import Logo from "../../assets/logo.jpg";
+import { useDispatch, useSelector } from "react-redux";
 const Login = memo(() => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const { navigate } = useNavigation();
-  const [preLoader, setpreLoader] = useState(false);
+
+  const dispatch = useDispatch();
+  const { loading } = useSelector<any, any>((state) => state.loading);
 
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -38,29 +41,11 @@ const Login = memo(() => {
   };
   const handleLogin = () => {
     if (ValidateEmail() && email != "" && password != "") {
-      setpreLoader(true);
       const formData = new FormData();
       formData.append("email", email);
       formData.append("password", password);
       console.log("FORMDATA:", formData);
-      login(formData)
-        .then((res) => {
-          console.log("Response ", res.data);
-          if (res.data.status_code === 200) {
-            SetItem_AsynsStorage("Token", res.data.data.token);
-            SetItem_AsynsStorage("User", res.data.data.user);
-            navigate(ROUTES.SelectCity);
-            setpreLoader(false);
-          }
-          // console.log("RESPONSE LOGIN TOKEN:", res.data.data.token);
-          // console.log("RESPONSE LOGIN USER:", res.data.data.user);
-          setpreLoader(false);
-        })
-        .catch((err) => {
-          console.log("ERror :", err.response.data.errors);
-          Alert.alert("", JSON.stringify(err.response.data.errors));
-          setpreLoader(false);
-        });
+      dispatch(login(formData));
     }
   };
   return (
@@ -129,11 +114,7 @@ const Login = memo(() => {
               justifyContent: "center",
             }}
           >
-            <ActivityIndicator
-              color="#fff"
-              animating={preLoader}
-              size="small"
-            />
+            <ActivityIndicator color="#fff" animating={loading} size="small" />
           </View>
         </LinearGradient>
       </TouchableOpacity>

@@ -56,7 +56,8 @@ const EvezTrending = memo(() => {
     (state) => state.events
   );
 
-  console.log("all eventsare", all_trending_events);
+  const { loading } = useSelector<any, any>((state) => state.loading);
+
   const onPressFilter = useCallback(() => {
     navigation.navigate(ROUTES.FilterEvez);
   }, [navigation]);
@@ -67,28 +68,36 @@ const EvezTrending = memo(() => {
 
   const renderItem = useCallback(({ item }) => {
     const {
-      thumbnail,
-      tag,
-      reviewTimes,
-      eventName,
-      location,
-      distance,
-      currentAttending,
-      save,
+      // thumbnail,
+      // tag,
+      // reviewTimes,
+      // eventName,
+      // location,
+      // distance,
+      // currentAttending,
+      // save,
+      id,
+      name,
+      address,
+      start_time,
+      event_date,
+      lat_long,
     } = item;
     return (
       <EventItem
         thumbnail={require("@assets/Trending/trending_3.png")}
         //   tag={tag}
         //  reviewTimes={reviewTimes}
-        eventName={eventName}
-        location={location}
-        distance={distance}
-        //timeCountDown="7 Days 06 Hours 27 Mins 44 secs"
+        id={id}
+        eventName={name}
+        location={address}
+        distance={lat_long}
+        timeCountDown="7 Days 06 Hours 27 Mins 44 secs"
         //  currentAttending={currentAttending}
-        eventTime={"SUN, MAR. 25  -  4:30 PM EST"}
+        //  eventTime={`SUN, MAR. 25  -  4:30 PM EST`}
+        eventTime={`${event_date}  -  ${start_time}`}
         //  //maxAttending={//maxAttending}
-        save={save}
+        save={false}
       />
     );
   }, []);
@@ -96,7 +105,7 @@ const EvezTrending = memo(() => {
     <View style={styles.container}>
       <FlatList
         style={styles.scroll}
-        data={data}
+        data={all_trending_events}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         showsVerticalScrollIndicator={false}

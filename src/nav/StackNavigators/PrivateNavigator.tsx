@@ -38,7 +38,7 @@ const privateNavStack = createStackNavigator();
 const PrivateNavigator = () => (
   
     <privateNavStack.Navigator
-      initialRouteName={ROUTES.Walkthrough}
+      initialRouteName={ROUTES.MainBottomTab}
       screenOptions={{
         headerBackground: headerBackground,
         headerTintColor: "#FFF",

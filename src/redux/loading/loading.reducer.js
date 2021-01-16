@@ -1,4 +1,4 @@
-import { START_LOADING, STOP_LOADING } from "../rootReducer";
+import { START_LOADING, STOP_LOADING } from "../actionTypes";
 
 const initialState = {
   loading: false,
