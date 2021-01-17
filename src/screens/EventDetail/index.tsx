@@ -11,10 +11,7 @@ import {
 import Swiper from "react-native-swiper";
 import { width_screen } from "ultis/dimensions";
 import FONTS from "ultis/fonts";
-import {
-  useRoute,
-  useNavigation
-} from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import EventName from "components/EventItem/EventName";
 import EventBasicInfo from "components/EventItem/EventBasicInfo";
 import RateDetail from "components/RateDetail";
@@ -37,7 +34,10 @@ import LocationView from "screens/EventDetail/components/LocationView";
 import { LinearGradient } from "expo-linear-gradient";
 import ThemeUtils from "ultis/themeUtils";
 import { useDispatch, useSelector } from "react-redux";
-import { clearSingleEvent, getSingleEventDetail } from "redux/events/events.actions";
+import {
+  clearSingleEvent,
+  getSingleEventDetail,
+} from "redux/events/events.actions";
 
 const EventDetail = memo(() => {
   const route = useRoute();
@@ -62,17 +62,18 @@ const EventDetail = memo(() => {
   const [isSaved, setSaved] = useState(data.save);
   let textBuyButton = "";
   let isAvailable;
-  if (data.currentAttending < data.maxAttending) {
-    isAvailable = true;
-    if (data.price && data.price > 0) {
-      textBuyButton = `FROM $${data.price} - GET IT`;
-    } else {
-      textBuyButton = "JOIN IT FREE";
-    }
+  // if (data.currentAttending < data.maxAttending) {
+  isAvailable = true;
+  if (data.price && data.price > 0) {
+    textBuyButton = `FROM $${data.price} - GET IT`;
   } else {
-    textBuyButton = "The list is full. Please select other time";
-    isAvailable = false;
+    textBuyButton = "JOIN IT FREE";
   }
+  //}
+  // else {
+  //   textBuyButton = "The list is full. Please select other time";
+  //   isAvailable = false;
+  // }
   const onSaved = useCallback(() => {
     setSaved(!isSaved);
   }, [isSaved]);

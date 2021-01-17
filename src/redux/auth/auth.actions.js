@@ -39,7 +39,7 @@ export const updateProfile = (data) => {
 ////set token in async storage////
 export const setUserSessions = (data) => (dispatch) => {
   const { user, token } = data;
-  AsyncStorage.setItem("User", user);
+  AsyncStorage.setItem("User", JSON.stringify(user));
   AsyncStorage.setItem("Token", token);
   dispatch(isAuthenticated({ user, token }));
 };
@@ -49,8 +49,7 @@ export const getUserSessions = () => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("Token");
     const user = await AsyncStorage.getItem("User");
-
-    token && dispatch(isAuthenticated({ user, token }));
+    token && dispatch(isAuthenticated({ user: JSON.parse(user), token }));
   } catch (error) {
     console.error("error is ", error);
   }
