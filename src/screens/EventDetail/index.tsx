@@ -38,6 +38,8 @@ import {
   clearSingleEvent,
   getSingleEventDetail,
 } from "redux/events/events.actions";
+import {getEventAllReviews} from "redux/reviews/reviews.actions";
+
 
 const EventDetail = memo(() => {
   const route = useRoute();
@@ -49,11 +51,13 @@ const EventDetail = memo(() => {
   const dispatch = useDispatch();
 
   const { single_event } = useSelector<any, any>((state) => state.events);
+  
   const { loading } = useSelector<any, any>((state) => state.loading);
+
 
   useEffect(() => {
     dispatch(getSingleEventDetail(data?.id));
-
+    
     return () => {
       dispatch(clearSingleEvent());
     };
@@ -87,7 +91,9 @@ const EventDetail = memo(() => {
     navigation.navigate(ROUTES.EventDetailMap);
   }, []);
   const onReview = useCallback(() => {
-    navigation.navigate(ROUTES.EventDetailRateComment);
+    navigation.navigate(ROUTES.EventDetailRateComment,{
+      eventId: data?.id
+    });
   }, [navigation]);
 
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -144,9 +150,10 @@ const EventDetail = memo(() => {
           </View>
         )}
         <RateDetail
+          eventId={data?.id}
           onPress={onReview}
-          rate={data.rate}
-          reviewTimes={data.reviewTimes}
+          rate={5}
+          reviewTimes={12}
           marginTop={32}
           numberReviews={214}
         />

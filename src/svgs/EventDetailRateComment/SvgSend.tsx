@@ -1,9 +1,14 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
-function SvgComponent() {
+interface svgProps{
+  onPress?: () => void;
+}
+
+function SvgComponent(props:svgProps) {
   return (
-    <Svg width={30} height={30} viewBox="0 0 30 30" fill="none">
+    <Svg width={30} height={30} viewBox="0 0 30 30" fill="none"
+    {...props}>
       <Path
         clipRule="evenodd"
         d="M12.933 15l-4.909 6.46L28.435 15 8.025 8.54 12.932 15z"

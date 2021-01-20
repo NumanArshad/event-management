@@ -5,6 +5,7 @@ import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
 import { Provider } from "react-redux";
 import store from "redux/store";
+
 const Evez = () => {
   let [fontsLoaded] = useFonts({
     "DINCondensed-Bold": require("./assets/fonts/DINCondensed-Bold.ttf"),
