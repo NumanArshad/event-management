@@ -38,7 +38,7 @@ import {
   clearSingleEvent,
   getSingleEventDetail,
 } from "redux/events/events.actions";
-import {getEventAllReviews} from "redux/reviews/reviews.actions";
+import {clearEventAllReviews} from "redux/reviews/reviews.actions";
 
 
 const EventDetail = memo(() => {
@@ -54,12 +54,12 @@ const EventDetail = memo(() => {
   
   const { loading } = useSelector<any, any>((state) => state.loading);
 
-
   useEffect(() => {
     dispatch(getSingleEventDetail(data?.id));
     
     return () => {
       dispatch(clearSingleEvent());
+      dispatch(clearEventAllReviews());
     };
   }, [dispatch]);
 
@@ -142,7 +142,11 @@ const EventDetail = memo(() => {
         ) : null}
         {single_event && (
           <View style={styles.infoView}>
-            <EventName eventName={single_event.event_name} />
+            <EventName 
+            eventName={single_event.event_name}
+            //rate={single_event?.rating}
+            tag={single_event?.type_name} 
+            />
             <EventBasicInfo
               currentAttending={single_event?.participants}
               eventTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
@@ -152,7 +156,7 @@ const EventDetail = memo(() => {
         <RateDetail
           eventId={data?.id}
           onPress={onReview}
-          rate={5}
+          rate={single_event?.rate}
           reviewTimes={12}
           marginTop={32}
           numberReviews={214}

@@ -15,12 +15,14 @@ interface RateDetailProps {
   onPress: () => void;
 }
 
-const RateDetail = memo((props: RateDetailProps) => {
+const RateDetail = (props: RateDetailProps) => {
   const marginTop = props.marginTop ? props.marginTop : 0;
 
   const dispatch = useDispatch();
 
   const { all_reviews } = useSelector<any, any>((state) => state.reviews);
+
+//console.log("eevnt id", props.eventId,all_reviews)
 
   useEffect(() => {
     dispatch(getEventAllReviews(props.eventId));
@@ -52,7 +54,7 @@ const RateDetail = memo((props: RateDetailProps) => {
       </TouchableOpacity>
     </View>
   );
-});
+};
 
 export default RateDetail;
 

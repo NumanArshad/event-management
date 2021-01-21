@@ -38,7 +38,7 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
           <View style={styles.flexRow}>
             <Location />
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
-              bgf {props.location}
+              {props.location}
             </Text>
           </View>
           <Text style={[styles.textTag, { color: colorTextLocation }]}>

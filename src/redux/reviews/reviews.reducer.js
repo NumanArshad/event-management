@@ -1,6 +1,6 @@
 import {
   GET_SINGLE_EVENT_ALL_REVIEWS,
-
+  CLEAR_SINGLE_EVENT_ALL_REVIEWS
 } from "../actionTypes";
 
 const initialState = {
@@ -15,11 +15,11 @@ export default function (state = initialState, action) {
         ...state,
         all_reviews: action.payload,
       };
-    // case GET_SINGLE_EVENT:
-    //   return {
-    //     ...state,
-    //     single_event: action.payload,
-    //   };
+    case CLEAR_SINGLE_EVENT_ALL_REVIEWS:
+      return {
+        ...state,
+        all_reviews: null,
+      };
     // case CLEAR_SINGLE_EVENT:
     //   return {
     //     ...state,

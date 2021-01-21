@@ -28,8 +28,6 @@ const EventDetailRateComment = memo(() => {
   //@ts-ignore
   const {params:{eventId}} = useRoute();
 
-  console.log("event is is", eventId)
-
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={52}

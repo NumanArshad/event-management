@@ -76,31 +76,35 @@ const EvezTrending = memo(() => {
       // distance,
       // currentAttending,
       // save,
-      id,
-      name,
+      event_id,
+      event_name,
       address,
       start_time,
       event_date,
       lat_long,
+      rating,
+      type_name,
     } = item;
     return (
       <EventItem
         thumbnail={require("@assets/Trending/trending_3.png")}
-        //   tag={tag}
-        //  reviewTimes={reviewTimes}
-        id={id}
-        eventName={name}
+        tag={type_name}
+        // reviewTimes={20}
+        id={event_id}
+        eventName={event_name}
         location={address}
         distance={lat_long}
         timeCountDown="7 Days 06 Hours 27 Mins 44 secs"
         //  currentAttending={currentAttending}
         //  eventTime={`SUN, MAR. 25  -  4:30 PM EST`}
         eventTime={`${event_date}  -  ${start_time}`}
+        rate={rating}
         //  //maxAttending={//maxAttending}
         save={false}
       />
     );
   }, []);
+
   return (
     <View style={styles.container}>
       <FlatList

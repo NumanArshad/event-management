@@ -103,7 +103,7 @@ const EventItem = memo((props: EventItemProps) => {
         ) : null}
       </View>
       <EventName
-       // tag={props.tag}
+        tag={props.tag}
         eventName={props.eventName}
         rate={props.rate}
         reviewTimes={props.reviewTimes}
