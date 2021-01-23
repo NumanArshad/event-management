@@ -1,6 +1,7 @@
 ////Auth////
 export const IS_AUTHENTICATED = "IS_AUTHENTICATED";
 export const NOT_AUTHORIZED = "NOT_AUTHORIZED";
+export const USER_PROFILE = "USER_PROFILE";
 
 ///Loading////
 export const START_LOADING = "START_LOADING";
@@ -11,7 +12,7 @@ export const GET_ALL_TRENDING_EVENTS = "GET_ALL_TRENDING_EVENTS";
 export const GET_ALL_SAVED_EVENTS = "GET_ALL_SAVED_EVENTS";
 export const GET_SINGLE_EVENT = "GET_SINGLE_EVENT";
 export const CLEAR_SINGLE_EVENT = "CLEAR_SINGLE_EVENT";
-export const CLEAR_ALL_EVENTS = "CLEAR_ALL_EVENTS"
+export const CLEAR_ALL_EVENTS = "CLEAR_ALL_EVENTS";
 
 /////Mark attendance and event attendees////
 export const GET_ALL_EVENT_ATTENDEES = "GET_ALL_EVENT_ATTENDEES";

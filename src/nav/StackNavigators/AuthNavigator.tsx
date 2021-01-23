@@ -22,7 +22,7 @@ const AuthNavigator = () => (
     <authStack.Screen name={ROUTES.Register} component={Register} />
     <authStack.Screen name={ROUTES.ForgotPassword} component={ForgotPassword} />
     <authStack.Screen name={ROUTES.ChangePassword} component={ChangePassword} />
-    <authStack.Screen name={ROUTES.Profile} component={Profile} />
+    {/* <authStack.Screen name={ROUTES.Profile} component={Profile} /> */}
   </authStack.Navigator>
 );
 export default AuthNavigator;

@@ -32,161 +32,163 @@ import TicketDetail from "screens/TicketDetail";
 import Routes from "screens/Routes";
 import headerBackground from "components/header/headerbackground";
 import headerRight from "components/header/headerRight";
+import Profile from "screens/Auth/Profile";
 
 const privateNavStack = createStackNavigator();
 
 const PrivateNavigator = () => (
-  
-    <privateNavStack.Navigator
-      initialRouteName={ROUTES.MainBottomTab}
-      screenOptions={{
-        headerBackground: headerBackground,
-        headerTintColor: "#FFF",
+  <privateNavStack.Navigator
+    initialRouteName={ROUTES.MainBottomTab}
+    screenOptions={{
+      headerBackground: headerBackground,
+      headerTintColor: "#FFF",
+    }}
+  >
+    <privateNavStack.Screen
+      name={ROUTES.Walkthrough}
+      component={Walkthrough}
+      options={{
+        headerShown: false,
       }}
-    >
-      <privateNavStack.Screen
-        name={ROUTES.Walkthrough}
-        component={Walkthrough}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.Settings}
-        component={Settings}
-        options={{ headerBackTitleVisible: false, title: "Settings" }}
-      />
-      {/* <privateNavStack.Screen
+    />
+    <privateNavStack.Screen
+      name={ROUTES.Settings}
+      component={Settings}
+      options={{ headerBackTitleVisible: false, title: "Settings" }}
+    />
+    {/* <privateNavStack.Screen
         name={ROUTES.SelectCity}
         component={SelectCity}
         options={{ headerBackTitleVisible: false, title: "Select City" }}
       /> */}
-      <privateNavStack.Screen
-        name={ROUTES.SearchPeople}
-        component={SearchPeople}
-        options={{
-          title: "Search People",
-        }}
-      />
-      <privateNavStack.Screen
-        options={{ headerBackTitleVisible: false, title: "Search News" }}
-        name={ROUTES.SearchNews}
-        component={SearchNews}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.TabSearchEvents}
-        component={TabSearchEvents}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.Rewards}
-        component={Rewards}
-        options={{ headerShown: false }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.TabFollowers}
-        component={FollowTab}
-        options={{ headerBackTitleVisible: false }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.TicketDetail}
-        component={TicketDetail}
-        options={{ headerBackTitleVisible: false }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.Chat}
-        component={Chat}
-        options={{
-          headerBackTitleVisible: false,
-          title: "Chat",
-          headerRight: headerRight,
-        }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.Inbox}
-        component={Inbox}
-        options={{ headerBackTitleVisible: false, title: "Inbox" }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.EvezForYou}
-        component={EvezForUTab}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.FilterEvez}
-        component={FilterEvez}
-        options={{ headerBackTitleVisible: false, title: "Filter" }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.EventDetailRateComment}
-        component={EventDetailRateComment}
-        options={{ title: "Reviews", headerBackTitleVisible: false }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.NewDetail}
-        component={NewDetail}
-        options={{ headerShown: false }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.Notification}
-        component={Notification}
-        options={{ headerBackTitleVisible: false, title: "Notifications" }}
-      />
-      {/* <privateNavStack.Screen
+    <privateNavStack.Screen
+      name={ROUTES.SearchPeople}
+      component={SearchPeople}
+      options={{
+        title: "Search People",
+      }}
+    />
+    <privateNavStack.Screen
+      options={{ headerBackTitleVisible: false, title: "Search News" }}
+      name={ROUTES.SearchNews}
+      component={SearchNews}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.TabSearchEvents}
+      component={TabSearchEvents}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.Rewards}
+      component={Rewards}
+      options={{ headerShown: false }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.TabFollowers}
+      component={FollowTab}
+      options={{ headerBackTitleVisible: false }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.TicketDetail}
+      component={TicketDetail}
+      options={{ headerBackTitleVisible: false }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.Chat}
+      component={Chat}
+      options={{
+        headerBackTitleVisible: false,
+        title: "Chat",
+        headerRight: headerRight,
+      }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.Inbox}
+      component={Inbox}
+      options={{ headerBackTitleVisible: false, title: "Inbox" }}
+    />
+    <privateNavStack.Screen name={ROUTES.EvezForYou} component={EvezForUTab} />
+    <privateNavStack.Screen
+      name={ROUTES.FilterEvez}
+      component={FilterEvez}
+      options={{ headerBackTitleVisible: false, title: "Filter" }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.EventDetailRateComment}
+      component={EventDetailRateComment}
+      options={{ title: "Reviews", headerBackTitleVisible: false }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.NewDetail}
+      component={NewDetail}
+      options={{ headerShown: false }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.Notification}
+      component={Notification}
+      options={{ headerBackTitleVisible: false, title: "Notifications" }}
+    />
+    {/* <privateNavStack.Screen
         name={ROUTES.SelectHashtag}
         component={SelectHashtag}
         options={{ headerBackTitleVisible: false, title: "Select #Hashtag" }}
       /> */}
-      <privateNavStack.Screen
-        name={ROUTES.EvezNews}
-        component={EvezNews}
-        options={{ headerShown: false }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.PeopleProfile}
-        component={PeopleProfile}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.MainBottomTab}
-        component={MainBottomTab}
-        options={{
-          title: "Plan in New York",
-          headerShown: false,
-        }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.AllEventAroundYou}
-        component={AllEventAroundYou}
-        options={{ headerShown: false }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.EventDetail}
-        component={EventDetail}
-        options={{ headerShown: false }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.ListAttending}
-        component={Attending}
-        options={{ headerBackTitleVisible: false, title: "Attending" }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.PurchaseDetail}
-        component={PurchaseDetail}
-        options={{ headerShown: false }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.EventDetailMap}
-        component={EventDetailMap}
-        options={{ headerShown: false }}
-      />
-      <privateNavStack.Screen
-        name={ROUTES.Routes}
-        component={Routes}
-        options={{ headerBackTitleVisible: false }}
-      />
-    </privateNavStack.Navigator>
+    <privateNavStack.Screen
+      name={ROUTES.EvezNews}
+      component={EvezNews}
+      options={{ headerShown: false }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.PeopleProfile}
+      component={PeopleProfile}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.MainBottomTab}
+      component={MainBottomTab}
+      options={{
+        title: "Plan in New York",
+        headerShown: false,
+      }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.AllEventAroundYou}
+      component={AllEventAroundYou}
+      options={{ headerShown: false }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.EventDetail}
+      component={EventDetail}
+      options={{ headerShown: false }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.ListAttending}
+      component={Attending}
+      options={{ headerBackTitleVisible: false, title: "Attending" }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.PurchaseDetail}
+      component={PurchaseDetail}
+      options={{ headerShown: false }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.EventDetailMap}
+      component={EventDetailMap}
+      options={{ headerShown: false }}
+    />
+    <privateNavStack.Screen
+      name={ROUTES.Routes}
+      component={Routes}
+      options={{ headerBackTitleVisible: false }}
+    />
 
+    <privateNavStack.Screen
+      name={ROUTES.Profile}
+      component={Profile}
+      options={{ headerBackTitleVisible: false }}
+    />
+  </privateNavStack.Navigator>
 );
 
 export default PrivateNavigator;

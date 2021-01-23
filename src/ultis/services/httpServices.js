@@ -19,15 +19,17 @@ axios.interceptors.request.use(
     ].includes(requestUrl);
 
     if (!isAuthUrl) {
-      const {login_Session} = getState()?.auth;
-   
-      request.headers.common["Authorization"] = `Bearer ${login_Session?.token}`
+      const { login_Session } = getState()?.auth;
+
+      request.headers.common[
+        "Authorization"
+      ] = `Bearer ${login_Session?.token}`;
     }
     return request;
   },
   (error) => {
     dispatch(stopLoading());
-     console.log("request error is", error);
+    console.log("request error is", error);
     return Promise.reject(error);
   }
 );

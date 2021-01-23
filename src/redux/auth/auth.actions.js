@@ -1,6 +1,6 @@
 import axios from "ultis/services/httpServices";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IS_AUTHENTICATED, NOT_AUTHORIZED } from "../actionTypes";
+import { IS_AUTHENTICATED, NOT_AUTHORIZED, USER_PROFILE } from "../actionTypes";
 
 export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
@@ -24,6 +24,18 @@ export const changePassword = (data) => {
 
 export const updateProfile = (data) => {
   return axios.post("auth/update-profile", data);
+};
+
+export const getProfile = () => (dispatch) => {
+  axios.get("auth/my-profile").then((res) => {
+    console.log("Response PROFILE:", res.data.data.user);
+    if (res.data.status_code === 200) {
+      dispatch({
+        type: USER_PROFILE,
+        payload: res.data.data.user,
+      });
+    }
+  });
 };
 
 // export const logout = async () => {
@@ -50,6 +62,7 @@ export const getUserSessions = () => async (dispatch) => {
     const token = await AsyncStorage.getItem("Token");
     const user = await AsyncStorage.getItem("User");
     token && dispatch(isAuthenticated({ user: JSON.parse(user), token }));
+    dispatch(getProfile());
   } catch (error) {
     console.error("error is ", error);
   }

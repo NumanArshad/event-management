@@ -1,5 +1,5 @@
 import UserItem from "components/UserItem";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -14,18 +14,35 @@ import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
 import Color from "../../ultis/color/index";
 import { LinearGradient } from "expo-linear-gradient";
-import { updateProfile, SetItem_AsynsStorage } from "redux/auth/auth.actions";
+import {
+  updateProfile,
+  SetItem_AsynsStorage,
+  getProfile,
+} from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
-
+import { useDispatch, useSelector } from "react-redux";
+import store from "../../redux/store";
 const Profile = memo(() => {
-  const [email, setemail] = useState("");
+  const { getState } = store;
+  const { login_User } = getState()?.auth;
+
+  const [email, setemail] = useState(login_User.email);
   const [password, setpassword] = useState("");
-  const [name, setname] = useState("");
+  const [name, setname] = useState(login_User.user_name);
   const { navigate } = useNavigation();
   const [preLoader, setpreLoader] = useState(false);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    GetUserProfile();
+    console.log("User OBJ", login_User);
+  }, []);
+
+  const GetUserProfile = () => {
+    dispatch(getProfile());
+  };
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;
@@ -47,12 +64,7 @@ const Profile = memo(() => {
       updateProfile(formData)
         .then((res) => {
           console.log("Response ", res.data);
-          //   if (res.data.status_code === 200) {
-          //     navigate(ROUTES.SelectCity);
-          //     setpreLoader(false);
-          //   }
-          // console.log("RESPONSE LOGIN TOKEN:", res.data.data.token);
-          // console.log("RESPONSE LOGIN USER:", res.data.data.user);
+          Alert.alert("", "Your Profile has been Updated Successfully!");
           setpreLoader(false);
         })
         .catch((err) => {
@@ -76,11 +88,13 @@ const Profile = memo(() => {
         style={styles.textInput}
         placeholder="soemone@gmail.com..."
         onChangeText={(data) => setemail(data)}
+        value={email}
       />
       <TextInput
         style={styles.textInput}
         placeholder="Name..."
         onChangeText={(data) => setname(data)}
+        value={name}
       />
       <TextInput
         style={styles.textInput}
