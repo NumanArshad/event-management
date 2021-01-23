@@ -5,42 +5,35 @@ import firebase from "ultis/services/FirebaseConfig";
 const usercollectionRef = firebase.firestore().collection("users");
 
 export const getAllUsers = (callBack) => {
-  return usercollectionRef.onSnapshot((res) => //console.log("res is ", res)
-  {
-    let usersList = [];
-    res.forEach(element => {
-     // console.log("singleis ", element?.data())
-      usersList.push({
-        id: element?.id,
-        ...element?.data()
-      })
-    });
-    callBack(usersList)
-
-  }
-
+  return usercollectionRef.onSnapshot(
+    (
+      res //console.log("res is ", res)
+    ) => {
+      let usersList = [];
+      res.forEach((element) => {
+        // console.log("singleis ", element?.data())
+        usersList.push({
+          id: element?.id,
+          ...element?.data(),
+        });
+      });
+      callBack(usersList);
+    }
   );
 };
 
-
-export const addFriend = (callBack) => {
-  return usercollectionRef.onSnapshot((res) => //console.log("res is ", res)
-  {
-    let usersList = [];
-    res.forEach(element => {
-     // console.log("singleis ", element?.data())
-      usersList.push({
-        id: element?.id,
-        ...element?.data()
-      })
+export const addFriend = (payload) => {
+  let followers = [];
+  followers.push(payload);
+  usercollectionRef
+    .doc("lCGhe5QtiDUZ7NyGxP8v")
+    .update({
+      followers,
+    })
+    .then((res) => {
+      console.log("Response ", res);
     });
-    callBack(usersList)
-
-  }
-
-  );
 };
-
 
 // export const getAllusers = async() => {
 //   // axios.get("event/saved-events").then((res) => {

@@ -1,33 +1,29 @@
 import React, { memo, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import UserItem from "components/UserItem";
-import {getAllUsers} from "redux/users/users.actions";
-
+import { getAllUsers } from "redux/users/users.actions";
 
 const MayBeYouKnow = memo(() => {
-
   const [users, setUsers] = useState([]);
 
-
   useEffect(() => {
-    getAllUsers(res => setUsers(res));
+    getAllUsers((res) => setUsers(res));
   }, []);
 
-  console.log(users)
+  console.log(users);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      
-      {users?.map(({name,followers})=>(
-      <UserItem
-      image={require("assets/Followers/img.jpg")}
-      name={name}
-      //@ts-ignore
-      numberFollower={followers?.length}
-    />   
-      ))
-
-      }
+      {users?.map(({ name, followers, id }, key) => (
+        <UserItem
+          key={key}
+          image={require("assets/Followers/img.jpg")}
+          name={name}
+          //@ts-ignore
+          numberFollower={followers?.length}
+          id={id}
+        />
+      ))}
       {/* <UserItem
         image={require("assets/Followers/img.jpg")}
         name={"Jose Lowe"}
