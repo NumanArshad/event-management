@@ -3,6 +3,10 @@ export const IS_AUTHENTICATED = "IS_AUTHENTICATED";
 export const NOT_AUTHORIZED = "NOT_AUTHORIZED";
 export const USER_PROFILE = "USER_PROFILE";
 
+////Users///
+export const GET_ALL_USERS = "GET_ALL_USERS";
+export const GET_SINGLE_USER = "GET_SINGLE_USER";
+
 ///Loading////
 export const START_LOADING = "START_LOADING";
 export const STOP_LOADING = "STOP_LOADING";
