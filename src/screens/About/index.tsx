@@ -18,16 +18,18 @@ const item2 = {
 
 const About = memo(() => {
   const { getState } = store;
-  const { login_Session: {user_name, earn_credits, followers, following} } = getState()?.auth;
+  const {
+    login_Session: { user_name, earn_credits, followers, following },
+  } = getState()?.auth;
   const item = {
     coverImage: require("assets/Profile/CoverImage.png"),
     avatar: require("assets/Profile/Avatar.png"),
-    userName: user_name,
+    userName: user_name ? user_name : "Jhon Doe",
     address: "Washington, DC",
     followers: followers?.length,
     following: following?.length,
     numberMessage: 2,
-    reward: earn_credits || "Zero",
+    reward: earn_credits || "00",
     interested: ["#art", "#festival", "#fashion", "#expo..."],
     notification: 1,
   };

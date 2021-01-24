@@ -53,8 +53,8 @@ export const getSingleUser = (user_id, isAuthCallBack) => {
         console.log("payload is", payload.data());
         userInfo = { ...payload.data(), user_doc_id: res.id };
       });
-      console.log("so useris", userInfo)
-     isAuthCallBack && isAuthCallBack(userInfo);
+      console.log("so useris", userInfo);
+      isAuthCallBack && isAuthCallBack(userInfo);
     });
 };
 
@@ -69,6 +69,10 @@ export const addFriend = (payload) => {
     .then((res) => {
       console.log("Response ", res);
     });
+};
+
+export const requestPayout = (data) => {
+  return axios.post("payout/send-request", data);
 };
 
 // export const getAllusers = async() => {

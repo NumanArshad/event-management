@@ -20,9 +20,9 @@ const TabProfile = memo(() => {
       }}
     >
       <Tab.Screen name={ROUTES.About} component={About} />
-      <Tab.Screen name={ROUTES.ProfileActivity} component={ProfileActivity} />
-      <Tab.Screen name={ROUTES.ProfileTickets} component={ProfileTickets} />
-      <Tab.Screen name={ROUTES.ProfileSaved} component={ProfileSaved} />
+      <Tab.Screen name={ROUTES.AccountSetting} component={ProfileActivity} />
+      <Tab.Screen name={ROUTES.EventList} component={ProfileSaved} />
+      <Tab.Screen name={ROUTES.Payout} component={ProfileTickets} />
     </Tab.Navigator>
   );
 });
