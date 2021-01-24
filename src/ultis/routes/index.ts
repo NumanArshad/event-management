@@ -58,6 +58,8 @@ const ROUTES = {
   Following: "Following",
 
   Settings: "Settings",
+  FriendList: "FriendList",
+  FriendRequest: "FriendRequest"
 };
 
 export default ROUTES;

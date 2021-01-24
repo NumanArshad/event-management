@@ -1,17 +1,28 @@
 import axios from "ultis/services/httpServices";
+import * as profileAxios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IS_AUTHENTICATED, NOT_AUTHORIZED, USER_PROFILE } from "../actionTypes";
+import { addUser, getSingleUser } from "redux/users/users.actions";
 
 export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
     if (res.data.status_code === 200) {
-      dispatch(setUserSessions(res.data.data));
+      console.log("response issss", res.data.data);
+      const {user, token} = res.data.data;
+      setUserSessions({user: user?.id, token});
+      getSingleUser(user?.id, (userInfo) =>
+        dispatch(isAuthenticated({...userInfo, auth_token:token}))
+      );
     }
   });
 };
 
-export const register = (data) => {
-  return axios.post("auth/register", data);
+export const register = (data) => (dispatch) => {
+  axios.post("auth/register", data).then((res) => {
+    if (res.data.status_code === 200) {
+      dispatch(getProfile(res.data.data.token));
+    }
+  });
 };
 
 export const forgotPassword = (data) => {
@@ -26,16 +37,26 @@ export const updateProfile = (data) => {
   return axios.post("auth/update-profile", data);
 };
 
-export const getProfile = () => (dispatch) => {
-  axios.get("auth/my-profile").then((res) => {
-    console.log("Response PROFILE:", res.data.data.user);
-    if (res.data.status_code === 200) {
-      dispatch({
-        type: USER_PROFILE,
-        payload: res.data.data.user,
-      });
-    }
-  });
+/////instantly call after singup for firestore collection///
+export const getProfile = (auth_token) => (dispatch) => {
+  profileAxios
+    .get("auth/my-profile", {
+      headers: { Authorization: `Bearer ${auth_token}` },
+    })
+    .then((res) => {
+      console.log("Response PROFILE:", res.data.data.user);
+      if (res.data.status_code === 200) {
+        const userPayload = {
+          ...res.data.data.user,
+          followers: [],
+          following: [],
+          friends: [],
+          groups: [],
+          deviceToken: "token",
+        };
+        dispatch(addUser(userPayload, auth_token));
+      }
+    });
 };
 
 // export const logout = async () => {
@@ -49,20 +70,24 @@ export const getProfile = () => (dispatch) => {
 //             we will respond within 1-2 minutes.
 
 ////set token in async storage////
-export const setUserSessions = (data) => (dispatch) => {
+export const setUserSessions = (data) => {
   const { user, token } = data;
-  AsyncStorage.setItem("User", JSON.stringify(user));
+  console.log("session user is", user)
   AsyncStorage.setItem("Token", token);
-  dispatch(isAuthenticated({ user, token }));
+  AsyncStorage.setItem("user", user.toString());
 };
 
 //// get token from async storage///
 export const getUserSessions = () => async (dispatch) => {
   try {
+    //getUser();
     const token = await AsyncStorage.getItem("Token");
-    const user = await AsyncStorage.getItem("User");
-    token && dispatch(isAuthenticated({ user: JSON.parse(user), token }));
-    dispatch(getProfile());
+    const userId = await AsyncStorage.getItem("user");
+    console.log("userid", userId, token)
+    token &&
+      getSingleUser(parseInt(userId), (userInfo) =>
+      dispatch(isAuthenticated({...userInfo, auth_token:token}))
+      );
   } catch (error) {
     console.error("error is ", error);
   }
@@ -77,6 +102,7 @@ export const SetItem_AsynsStorage = (key, data) => {
 };
 
 export const isAuthenticated = (payload) => (dispatch) => {
+  console.log("is aurh", payload)
   dispatch({
     type: IS_AUTHENTICATED,
     payload,

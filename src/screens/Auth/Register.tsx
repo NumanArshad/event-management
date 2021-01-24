@@ -19,8 +19,12 @@ import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
 import Logo from "../../assets/logo.jpg";
+import {useDispatch} from "react-redux"
 
 const Register = memo((navigation) => {
+
+  const dispatch = useDispatch();
+
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [name, setname] = useState("");
@@ -31,6 +35,8 @@ const Register = memo((navigation) => {
   const check = () => {
     Alert.alert("", email);
   };
+
+
 
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -55,7 +61,6 @@ const Register = memo((navigation) => {
       email != "" &&
       password != ""
     ) {
-      setpreLoader(true);
       const formData = new FormData();
       formData.append("email", email);
       formData.append("password", password);
@@ -63,24 +68,7 @@ const Register = memo((navigation) => {
       formData.append("name", name);
       formData.append("password_confirmation", cPassword);
       console.log("FORMDATA:", formData);
-      register(formData)
-        .then((res) => {
-          console.log("Response ", res.data);
-          if (res.data.status_code === 200) {
-            // SetItem_AsynsStorage("Token", res.data.data.token);
-            // SetItem_AsynsStorage("User", res.data.data.user);
-            navigate(ROUTES.Login);
-            setpreLoader(false);
-          }
-          // console.log("RESPONSE LOGIN TOKEN:", res.data.data.token);
-          // console.log("RESPONSE LOGIN USER:", res.data.data.user);
-          setpreLoader(false);
-        })
-        .catch((err) => {
-          console.log("ERror :", err.response.data.errors);
-          Alert.alert("", JSON.stringify(err.response.data.errors));
-          setpreLoader(false);
-        });
+      dispatch(register(formData))
     }
   };
   return (

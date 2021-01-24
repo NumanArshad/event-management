@@ -23,7 +23,7 @@ axios.interceptors.request.use(
 
       request.headers.common[
         "Authorization"
-      ] = `Bearer ${login_Session?.token}`;
+      ] = `Bearer ${login_Session?.auth_token}`;
     }
     return request;
   },

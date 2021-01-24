@@ -3,6 +3,8 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import ROUTES from 'ultis/routes';
 import MayBeYouKnow from 'screens/MayBeYouKnow';
 import Explorer from 'screens/Explorer';
+import FriendList from "screens/FriendList";
+import FriendRequest from "screens/FriendRequest";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -15,9 +17,14 @@ const PeopleTab = memo(() => {
         indicatorStyle: {
           backgroundColor: '#ED3269',
         },
+        labelStyle:{
+          fontSize:10
+        }
       }}>
       <Tab.Screen name={ROUTES.MaybeYouKnow} component={MayBeYouKnow} />
-      <Tab.Screen name={ROUTES.Explorer} component={Explorer} />
+      <Tab.Screen name={ROUTES.FriendList} component={MayBeYouKnow} />
+      <Tab.Screen name={ROUTES.FriendRequest} component={MayBeYouKnow} />
+
     </Tab.Navigator>
   );
 });
