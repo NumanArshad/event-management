@@ -1,11 +1,11 @@
-import React, {memo} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import FONTS from 'ultis/fonts';
-import {width_screen} from 'ultis/dimensions';
-import InactiveRate from 'components/inactiveRate';
+import React, { memo } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import FONTS from "ultis/fonts";
+import { width_screen } from "ultis/dimensions";
+import InactiveRate from "components/inactiveRate";
 
 interface EventNameProps {
-  tag?: string[];
+  tag?: string;
   eventName: string;
   rate?: number;
   reviewTimes?: number;
@@ -18,28 +18,21 @@ const EventName = memo((props: EventNameProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.tagRateView}>
-        {props.tag ? (
-          <View style={styles.flexRow}>
-            {props.tag.map((item: string, index: number) => (
-              <Text
-                style={[
-                  styles.textTag,
-                  {fontSize: fontSizeTag},
-                ]}
-                key={index}>
-                {item}
-              </Text>
-            ))}
-          </View>
-        ) : null}
+        <Text style={[styles.textTag, { fontSize: fontSizeTag }]}>
+          #{props?.tag}
+        </Text>
         {props.rate ? (
           <View style={styles.rateView}>
             <InactiveRate rate={props.rate || 0} />
-            <Text style={[styles.textReviewTimes,{fontSize: fontSizeTag}]}>{props.reviewTimes}K</Text>
+            <Text style={[styles.textReviewTimes, { fontSize: fontSizeTag }]}>
+              {props.reviewTimes}K
+            </Text>
           </View>
         ) : null}
       </View>
-      <Text style={[styles.textEventName,{fontSize: fontSizeName}]}>{props.eventName}</Text>
+      <Text style={[styles.textEventName, { fontSize: fontSizeName }]}>
+        {props.eventName}
+      </Text>
     </View>
   );
 });
@@ -48,37 +41,35 @@ export default EventName;
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: "100%",
   },
   textTag: {
-    color: '#7F8FA6',
+    color: "#7F8FA6",
     marginRight: 8,
     fontFamily: FONTS.Regular,
   },
   tagRateView: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 16,
-    width: '100%',
-    justifyContent: 'space-between',
+    width: "100%",
+    justifyContent: "space-between",
   },
   flexRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   textEventName: {
-
     lineHeight: 27,
     marginTop: 12,
     fontFamily: FONTS.Medium,
   },
   rateView: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   textReviewTimes: {
-
-    color: '#353B48',
+    color: "#353B48",
     marginLeft: 8,
     fontFamily: FONTS.Regular,
   },

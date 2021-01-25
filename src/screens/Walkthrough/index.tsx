@@ -42,7 +42,7 @@ const Walkthrough = memo(() => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const {navigate} = useNavigation();
   const onFb = useCallback(() => {
-    navigate(ROUTES.SelectCity);
+    navigate(ROUTES.MainBottomTab);
   }, [navigate]);
 
   return (

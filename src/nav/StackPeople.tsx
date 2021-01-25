@@ -1,11 +1,11 @@
-import React, {memo, useCallback} from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import ROUTES from 'ultis/routes';
-import {headerBackground} from 'nav/Main';
-import TabPeople from 'nav/TabPeople';
-import {StyleSheet, TouchableOpacity} from 'react-native';
-import SvgHeaderSearch from 'svgs/SvgHeaderSearch';
-import {useNavigation} from '@react-navigation/native';
+import React, { memo, useCallback } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import ROUTES from "ultis/routes";
+import headerBackground from "components/header/headerbackground";
+import TabPeople from "nav/TabPeople";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import SvgHeaderSearch from "svgs/SvgHeaderSearch";
+import { useNavigation } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 const StackPeople = memo(() => {
@@ -17,13 +17,14 @@ const StackPeople = memo(() => {
     <Stack.Navigator
       screenOptions={{
         headerBackground: headerBackground,
-        headerTintColor: '#FFF',
-      }}>
+        headerTintColor: "#FFF",
+      }}
+    >
       <Stack.Screen
         name={ROUTES.EvezForUStack}
         component={TabPeople}
         options={{
-          title: 'People',
+          title: "People",
           headerRight: () => (
             <TouchableOpacity style={styles.search} onPress={onSearchPeople}>
               <SvgHeaderSearch />
@@ -40,8 +41,8 @@ export default StackPeople;
 const styles = StyleSheet.create({
   search: {
     width: 50,
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

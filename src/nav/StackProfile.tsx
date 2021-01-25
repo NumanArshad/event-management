@@ -1,7 +1,7 @@
 import React, {memo, useCallback} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ROUTES from 'ultis/routes';
-import {headerBackground} from 'nav/Main';
+import headerBackground from "components/header/headerbackground";
 import TabProfile from 'nav/TabProfile';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import SvgNotificationIcon from 'svgs/Proflie/SvgNotificationIcon';
