@@ -1,4 +1,5 @@
 import axios from "axios";
+import { unAuthorized } from "redux/auth/auth.actions";
 import { startLoading, stopLoading } from "../../redux/loading/loading.actions";
 import store from "../../redux/store";
 
@@ -42,6 +43,9 @@ axios.interceptors.response.use(
   (error) => {
     dispatch(stopLoading());
     console.log("response is", error?.response?.status);
+    if (error?.response?.status === 401) {
+      dispatch(unAuthorized());
+    }
     //status code (404:Not found, 500 server, 401 token expire)
     return Promise.reject(error);
   }

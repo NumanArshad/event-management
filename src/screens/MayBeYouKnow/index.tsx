@@ -1,29 +1,37 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import UserItem from "components/UserItem";
-import { getAllUsers } from "redux/users/users.actions";
+import { getAllUsers, getUsersbyDocRefList } from "redux/users/users.actions";
+import { useSelector } from "react-redux";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
+import ROUTES from "ultis/routes";
 
 const MayBeYouKnow = memo(() => {
   const [users, setUsers] = useState([]);
+
+  const {
+    login_Session: { user_id, friends },
+  } = useSelector<any, any>((state) => state?.auth);
 
   useEffect(() => {
     getAllUsers((res) => setUsers(res));
   }, []);
 
-  console.log(users);
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      {users?.map(({ name, followers, id }, key) => (
-        <UserItem
-          key={key}
-          image={require("assets/Followers/img.jpg")}
-          name={name}
+      {users?.map(
+        (user, key) =>
           //@ts-ignore
-          numberFollower={followers?.length}
-          id={id}
-        />
-      ))}
+          user_id !== user?.user_id &&
+          !friends.includes(user?.id) && (
+            <UserItem
+              key={key}
+              {...user}
+              image={require("assets/Followers/img.jpg")}
+              actionButton="follow"
+            />
+          )
+      )}
       {/* <UserItem
         image={require("assets/Followers/img.jpg")}
         name={"Jose Lowe"}

@@ -8,13 +8,15 @@ import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import { addFriend } from "redux/users/users.actions";
 
-interface Props {
-  image: any;
-  name: string;
-  numberFollower: string;
-}
+// interface Props {
+//   user_id: any;
+//   user_name: string;
+//   numberFollower: string;
+//   id: string;
+//   actionButton?: string;
+// }
 
-const UserItem = memo((props: Props) => {
+const UserItem = memo((props: any) => {
   const [follow, setFollow] = useState(false);
   const onPress = useCallback(() => {
     setFollow(!follow);
@@ -22,21 +24,37 @@ const UserItem = memo((props: Props) => {
     addFriend(props.id);
   }, [follow]);
   const navigation = useNavigation();
+
+  const { actionButton, key, ...userInfo } = props;
+
+console.log("my infi is", userInfo)
+
   const onPeopleProfile = useCallback(() => {
-    navigation.navigate(ROUTES.PeopleProfile);
+    navigation.navigate(ROUTES.PeopleProfile, {
+      userInfo,
+    });
   }, [navigation]);
+
+  const { user_name, followers, image } = userInfo;
+
   return (
     <TouchableOpacity onPress={onPeopleProfile} style={styles.card}>
-      <Image style={styles.image} source={props.image} />
+      <Image style={styles.image} source={image} />
       <View style={styles.txtField}>
-        <Text style={styles.txtName}>{props.name}</Text>
+        <Text style={styles.txtName}>{user_name}</Text>
         <Text style={styles.txtNumberFollower}>
-          {props.numberFollower} followers
+          {followers?.length} followers
         </Text>
       </View>
-      <TouchableOpacity onPress={onPress} style={styles.svg_Follow}>
-        {follow ? <SvgFollowed /> : <SvgFollow />}
-      </TouchableOpacity>
+      {actionButton === "follow" ? (
+        <TouchableOpacity onPress={onPress} style={styles.svg_Follow}>
+          {follow ? <SvgFollowed /> : <SvgFollow />}
+        </TouchableOpacity>
+      ) : props.actionButton === "friendRequest" ? (
+        <TouchableOpacity onPress={onPress} style={styles.svg_Follow}>
+          <Text>accept or reject</Text>
+        </TouchableOpacity>
+      ) : null}
     </TouchableOpacity>
   );
 });

@@ -22,8 +22,8 @@ const PeopleTab = memo(() => {
         }
       }}>
       <Tab.Screen name={ROUTES.MaybeYouKnow} component={MayBeYouKnow} />
-      <Tab.Screen name={ROUTES.FriendList} component={MayBeYouKnow} />
-      <Tab.Screen name={ROUTES.FriendRequest} component={MayBeYouKnow} />
+      <Tab.Screen name={ROUTES.FriendList} component={FriendList} />
+      <Tab.Screen name={ROUTES.FriendRequest} component={FriendRequest} />
 
     </Tab.Navigator>
   );
