@@ -26,16 +26,19 @@ import { useDispatch, useSelector } from "react-redux";
 import store from "../../redux/store";
 const Profile = memo(() => {
   const { getState } = store;
-  const { login_Session:{
-    user_name, email: userEmail
-  } } = getState()?.auth;
+  const {
+    login_Session: { user_name, email: userEmail },
+  } = getState()?.auth;
 
   const [email, setemail] = useState(userEmail);
   const [password, setpassword] = useState("");
   const [name, setname] = useState(user_name);
   const { navigate } = useNavigation();
   const [preLoader, setpreLoader] = useState(false);
-  
+  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(getProfile());
+  // }, []);
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;

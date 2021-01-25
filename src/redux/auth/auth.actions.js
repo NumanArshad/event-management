@@ -8,10 +8,10 @@ export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
     if (res.data.status_code === 200) {
       console.log("response issss", res.data.data);
-      const {user, token} = res.data.data;
-      setUserSessions({user: user?.id, token});
+      const { user, token } = res.data.data;
+      setUserSessions({ user: user?.id, token });
       getSingleUser(user?.id, (userInfo) =>
-        dispatch(isAuthenticated({...userInfo, auth_token:token}))
+        dispatch(isAuthenticated({ ...userInfo, auth_token: token }))
       );
     }
   });
@@ -72,7 +72,7 @@ export const getProfile = (auth_token) => (dispatch) => {
 ////set token in async storage////
 export const setUserSessions = (data) => {
   const { user, token } = data;
-  console.log("session user is", user)
+  console.log("session user is", user);
   AsyncStorage.setItem("Token", token);
   AsyncStorage.setItem("user", user.toString());
 };
@@ -83,11 +83,12 @@ export const getUserSessions = () => async (dispatch) => {
     //getUser();
     const token = await AsyncStorage.getItem("Token");
     const userId = await AsyncStorage.getItem("user");
-    console.log("userid", userId, token)
+    console.log("userid", userId, token);
     token &&
-      getSingleUser(parseInt(userId), (userInfo) =>
-      dispatch(isAuthenticated({...userInfo, auth_token:token}))
-      );
+      getSingleUser(parseInt(userId), (userInfo) => {
+        dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
+        dispatch(getProfile(token));
+      });
   } catch (error) {
     console.error("error is ", error);
   }
@@ -102,7 +103,7 @@ export const SetItem_AsynsStorage = (key, data) => {
 };
 
 export const isAuthenticated = (payload) => (dispatch) => {
-  console.log("is aurh", payload)
+  console.log("is aurh", payload);
   dispatch({
     type: IS_AUTHENTICATED,
     payload,
