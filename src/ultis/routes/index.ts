@@ -59,7 +59,11 @@ const ROUTES = {
 
   Settings: "Settings",
   FriendList: "FriendList",
-  FriendRequest: "FriendRequest"
+  FriendRequest: "FriendRequest",
+
+  AccountSetting: "Settings",
+  Payout: "Payout",
+  EventList: "Events",
 };
 
 export default ROUTES;

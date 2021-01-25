@@ -1,37 +1,18 @@
-import React, {memo, useCallback} from 'react';
-import {StyleSheet, View, FlatList} from 'react-native';
-import EventItem from 'components/EventItem';
-import keyExtractor from 'ultis/keyExtractor';
+import React, { memo, useCallback } from "react";
+import { StyleSheet, View, FlatList } from "react-native";
+import EventItem from "components/EventItem";
+import keyExtractor from "ultis/keyExtractor";
+import { useDispatch, useSelector } from "react-redux";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { getAllSavedEvents } from "redux/events/events.actions";
 
 const data = [
   {
-    thumbnail: require('@assets/EventAroundU/around_u_2.png'),
-    tag: ['#fashion', '#convention'],
+    thumbnail: require("@assets/EventAroundU/around_u_2.png"),
+    tag: ["#fashion", "#convention"],
     reviewTimes: 2.4,
     eventName: 'Bottled Art" Wine Painting Nigh',
-    location: 'The Grand Connaught Rooms...',
-    distance: 3.5,
-    currentAttending: 2568,
-    maxAttending: 10000,
-    save: true,
-  },
-  {
-    thumbnail: require('@assets/EventAroundU/around_u_1.png'),
-    tag: ['#nightlife'],
-    reviewTimes: 1.3,
-    eventName: 'Quiet Clubbing VIP Heated Rooftop Party',
-    location: '605 W 48th Street, Manhattan...',
-    distance: 10,
-    currentAttending: 2500,
-    maxAttending: 10000,
-    save: true,
-  },
-  {
-    thumbnail: require('@assets/EventAroundU/around_u_3.png'),
-    tag: ['#Fashion', '#Convention'],
-    reviewTimes: 2.4,
-    eventName: 'Mahogany Bridal Fair 2016',
-    location: 'The Grand Connaught Rooms...',
+    location: "The Grand Connaught Rooms...",
     distance: 3.5,
     currentAttending: 2568,
     maxAttending: 10000,
@@ -40,36 +21,47 @@ const data = [
 ];
 
 const ProfileSaved = memo(() => {
-  const renderItem = useCallback(({item}) => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { all_saved_events } = useSelector<any, any>((state) => state.events);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getAllSavedEvents());
+    }, [dispatch])
+  );
+
+  const renderItem = useCallback(({ item }) => {
     const {
-      thumbnail,
-      tag,
-      reviewTimes,
-      eventName,
-      location,
-      distance,
-      currentAttending,
-      maxAttending,
-      save,
+      event_id,
+      event_name,
+      address,
+      start_time,
+      event_date,
+      lat_long,
+      rating,
+      type_name,
     } = item;
     return (
       <EventItem
-        thumbnail={thumbnail}
-        tag={tag}
-        reviewTimes={reviewTimes}
-        eventName={eventName}
-        location={location}
-        distance={distance}
-        currentAttending={currentAttending}
-        maxAttending={maxAttending}
-        save={save}
+        thumbnail={require("@assets/Trending/trending_3.png")}
+        tag={type_name}
+        id={event_id}
+        eventName={event_name}
+        location={address}
+        distance={lat_long}
+        timeCountDown="15 Days 06 Hours 27 Mins 44 secs"
+        eventTime={`${event_date}  -  ${start_time}`}
+        rate={rating}
+        save
       />
     );
   }, []);
+
   return (
     <View style={styles.container}>
       <FlatList
-        data={data}
+        data={all_saved_events}
         showsVerticalScrollIndicator={false}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
@@ -85,7 +77,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 24,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
   },
   contentContainerStyle: {
     paddingTop: 14,

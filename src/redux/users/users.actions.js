@@ -100,6 +100,10 @@ export const addFriend = (payload) => {
     });
 };
 
+export const requestPayout = (data) => {
+  return axios.post("payout/send-request", data);
+};
+
 // export const getAllusers = async() => {
 //   // axios.get("event/saved-events").then((res) => {
 //   //   if (res?.data?.status_code === 200) {

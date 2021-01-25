@@ -1,14 +1,17 @@
-import { 
-  GET_ALL_TRENDING_EVENTS, 
+import {
+  GET_ALL_TRENDING_EVENTS,
   GET_ALL_SAVED_EVENTS,
   GET_SINGLE_EVENT,
   CLEAR_SINGLE_EVENT,
-  CLEAR_ALL_EVENTS } from "../actionTypes";
+  CLEAR_ALL_EVENTS,
+} from "../actionTypes";
 import axios from "ultis/services/httpServices";
 
 export const getAllTrendingEvents = () => (dispatch) => {
   axios.get("event/upcomming-events").then((res) => {
     if (res?.data?.status_code === 200) {
+      console.log("ALL EENTS", res.data);
+
       dispatch({
         type: GET_ALL_TRENDING_EVENTS,
         payload: res?.data?.data,
@@ -30,7 +33,6 @@ export const getAllSavedEvents = () => (dispatch) => {
 
 /////////////Attend event and attendees/////
 
-
 export const getSingleEventDetail = (id) => (dispatch) => {
   axios.get(`event/event-detail?event_id=${id}`).then((res) => {
     if (res?.data?.status_code === 200) {
@@ -42,17 +44,15 @@ export const getSingleEventDetail = (id) => (dispatch) => {
   });
 };
 
-export const clearAllEvents = () => dispatch => {
+export const clearAllEvents = () => (dispatch) => {
   dispatch({
-    type: CLEAR_ALL_EVENTS
-  })
-}
+    type: CLEAR_ALL_EVENTS,
+  });
+};
 
-export const clearSingleEvent = () => dispatch => (
+export const clearSingleEvent = () => (dispatch) =>
   dispatch({
-    type: CLEAR_SINGLE_EVENT
-  })
-)
+    type: CLEAR_SINGLE_EVENT,
+  });
 
 ////////////////////////get event attendees///////////
-

@@ -12,7 +12,7 @@ export const login = (data) => (dispatch) => {
 
       setUserSessions({user: user?.id, token});
       getSingleUser(user?.id, (userInfo) =>
-        dispatch(isAuthenticated({...userInfo, auth_token:token}))
+        dispatch(isAuthenticated({ ...userInfo, auth_token: token }))
       );
     }
   });
@@ -86,9 +86,10 @@ export const getUserSessions = () => async (dispatch) => {
     const userId = await AsyncStorage.getItem("user");
   //  console.log("userid", userId, token)
     token &&
-      getSingleUser(parseInt(userId), (userInfo) =>
-      dispatch(isAuthenticated({...userInfo, auth_token:token}))
-      );
+      getSingleUser(parseInt(userId), (userInfo) => {
+        dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
+        dispatch(getProfile(token));
+      });
   } catch (error) {
     console.error("error is ", error);
   }

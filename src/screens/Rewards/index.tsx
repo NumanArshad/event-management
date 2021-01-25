@@ -1,41 +1,91 @@
-import React, {memo} from 'react';
+import React, { memo, useState } from "react";
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   TextInput,
-} from 'react-native';
-import {height_screen, width_screen} from 'ultis/dimensions';
-import FONTS from 'ultis/fonts';
-import HeaderReward from 'screens/Rewards/components/HeaderReward';
-import ButtonLinear from 'components/buttons/ButtonLinear';
+  Alert,
+  ActivityIndicator,
+} from "react-native";
+import { height_screen, width_screen } from "ultis/dimensions";
+import FONTS from "ultis/fonts";
+import HeaderReward from "screens/Rewards/components/HeaderReward";
+import ButtonLinear from "components/buttons/ButtonLinear";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { requestPayout } from "redux/users/users.actions";
+import ROUTES from "ultis/routes";
 
 const Rewards = memo(() => {
-  const [value, onChangeText] = React.useState('');
+  const [value, onChangeText] = React.useState("");
+  const navigate = useNavigation();
+  const route = useRoute();
+  const [preLoader, setpreLoader] = useState(false);
 
+  const handlePayoutRequest = () => {
+    if (value != "") {
+      setpreLoader(true);
+      const formData = new FormData();
+      formData.append("credits", value);
+      formData.append("account_number", "12321-98790");
+
+      console.log("FORMDATA:", formData);
+      requestPayout(formData)
+        .then((res) => {
+          console.log("Response ", res.data);
+          if (res.data.status_code === 200) {
+            setpreLoader(false);
+            Alert.alert("", res.data.message);
+          }
+          setpreLoader(false);
+        })
+        .catch((err) => {
+          console.log("ERror :", err.response.data.message);
+          // Alert.alert("",res.data.message)
+          Alert.alert("", err.response.data.message);
+          setpreLoader(false);
+        });
+    }
+  };
   return (
     <View style={styles.container}>
-      <HeaderReward amount={15} />
+      <HeaderReward amount={route.params.rewards} />
       <View style={styles.inputShape}>
         <TextInput
-          onChangeText={text => onChangeText(text)}
+          onChangeText={(text) => onChangeText(text)}
           value={value}
-          placeholder={'Enter your reward code...'}
+          placeholder={"Enter your Credits..."}
+          keyboardType="number-pad"
         />
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Text style={styles.txtApply}>APPLY</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
-      <Text style={styles.txtShare}>Share your discount code</Text>
+      {/* <Text style={styles.txtShare}>Share your discount code</Text> */}
       <ButtonLinear
-        title={'AMN83K'}
-        onPress={() => {}}
+        title={"Request Payout"}
+        onPress={handlePayoutRequest}
         style={styles.btnGetCode}
       />
-      <Text style={styles.txtCopy}>Tap to copy and share</Text>
-      <Text style={styles.txtWork}>How does it work?</Text>
-      <Text style={styles.txtDescription}>{txtDescription}</Text>
+      <Text style={styles.txtCopy}>
+        We'll Go Through Your Request and Then You Will Receieve Your Ammount in
+        your Account.Thank You!
+      </Text>
+      {/* <Text style={styles.txtWork}>How does it work?</Text>
+      <Text style={styles.txtDescription}>{txtDescription}</Text> */}
+      <View
+        style={{
+          position: "absolute",
+          left: height_screen * 0.2,
+          right: 0,
+          top: height_screen * 0.12,
+          bottom: 0,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <ActivityIndicator color="#fff" animating={preLoader} size="small" />
+      </View>
     </View>
   );
 });
@@ -43,44 +93,44 @@ const Rewards = memo(() => {
 export default Rewards;
 
 const txtDescription =
-  'Share your discount code with your friends!\n' +
-  'You will get $1.00 for every new user who introduces your code in their profile.\n' +
-  '\n' +
-  '\n' +
-  'They will get $4.00 to spend in Evez. When\n' +
-  'they spend their first $ in Evez., without\n' +
-  'discount coupons, you will get $4.00, up to a\n' +
-  'maximum of $35.00.';
+  "Share your discount code with your friends!\n" +
+  "You will get $1.00 for every new user who introduces your code in their profile.\n" +
+  "\n" +
+  "\n" +
+  "They will get $4.00 to spend in Evez. When\n" +
+  "they spend their first $ in Evez., without\n" +
+  "discount coupons, you will get $4.00, up to a\n" +
+  "maximum of $35.00.";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   inputShape: {
     fontFamily: FONTS.Medium,
     fontSize: 14,
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 0.06 * height_screen,
     borderRadius: 6,
     marginHorizontal: 0.065 * width_screen,
     marginTop: -0.03 * height_screen,
-    backgroundColor: '#fff',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    backgroundColor: "#fff",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 0.04 * width_screen,
   },
   txtApply: {
     fontFamily: FONTS.Medium,
     fontSize: 14,
-    color: '#ED3269',
+    color: "#ED3269",
   },
   txtShare: {
     marginTop: 0.04 * height_screen,
-    alignSelf: 'center',
+    alignSelf: "center",
     fontFamily: FONTS.Regular,
     fontSize: 14,
-    color: '#353B48',
+    color: "#353B48",
   },
   btnGetCode: {
     height: 0.06 * height_screen,
@@ -88,18 +138,20 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     marginTop: 0.02 * height_screen,
     marginBottom: 0.03 * height_screen,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   txtCopy: {
-    alignSelf: 'center',
+    alignSelf: "center",
     fontFamily: FONTS.Regular,
     fontSize: 14,
-    color: '#7F8FA6',
+    color: "#7F8FA6",
+    paddingHorizontal: width_screen * 0.1,
+    textAlign: "center",
   },
   txtWork: {
     fontFamily: FONTS.Medium,
     fontSize: 14,
-    color: '#353B48',
+    color: "#353B48",
     marginTop: 0.04 * height_screen,
     marginLeft: 0.065 * width_screen,
     marginBottom: 0.02 * height_screen,
@@ -107,7 +159,7 @@ const styles = StyleSheet.create({
   txtDescription: {
     fontFamily: FONTS.Regular,
     fontSize: 14,
-    color: '#7F8FA6',
+    color: "#7F8FA6",
     marginHorizontal: 0.065 * width_screen,
   },
 });

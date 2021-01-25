@@ -38,7 +38,9 @@ const HeaderProfile = memo((props: Props) => {
     navigation.navigate(ROUTES.Profile);
   }, [navigation]);
   const onRewards = useCallback(() => {
-    navigation.navigate(ROUTES.Rewards);
+    navigation.navigate(ROUTES.Rewards, {
+      rewards: props.rewards,
+    });
   }, [navigation]);
   const onFollower = useCallback(() => {
     navigation.navigate(ROUTES.TabFollowers);

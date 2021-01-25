@@ -5,6 +5,7 @@ import ProfileActivity from "screens/ProfileActivity";
 import ProfileTickets from "screens/ProfileTickets";
 import ProfileSaved from "screens/ProfileSaved";
 import About from "screens/About";
+import Donation from "screens/Donation/Donation";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -20,9 +21,9 @@ const TabProfile = memo(() => {
       }}
     >
       <Tab.Screen name={ROUTES.About} component={About} />
-      <Tab.Screen name={ROUTES.ProfileActivity} component={ProfileActivity} />
-      <Tab.Screen name={ROUTES.ProfileTickets} component={ProfileTickets} />
-      <Tab.Screen name={ROUTES.ProfileSaved} component={ProfileSaved} />
+      <Tab.Screen name={ROUTES.AccountSetting} component={ProfileActivity} />
+      <Tab.Screen name={ROUTES.EventList} component={ProfileSaved} />
+      <Tab.Screen name={ROUTES.Payout} component={Donation} />
     </Tab.Navigator>
   );
 });
