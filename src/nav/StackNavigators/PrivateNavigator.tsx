@@ -33,6 +33,7 @@ import Routes from "screens/Routes";
 import headerBackground from "components/header/headerbackground";
 import headerRight from "components/header/headerRight";
 import Profile from "screens/Auth/Profile";
+import DonatePoint from "screens/Donation/component/DonatePoint";
 
 const privateNavStack = createStackNavigator();
 
@@ -186,6 +187,12 @@ const PrivateNavigator = () => (
     <privateNavStack.Screen
       name={ROUTES.Profile}
       component={Profile}
+      options={{ headerBackTitleVisible: false }}
+    />
+
+    <privateNavStack.Screen
+      name={ROUTES.DonatePoint}
+      component={DonatePoint}
       options={{ headerBackTitleVisible: false }}
     />
   </privateNavStack.Navigator>

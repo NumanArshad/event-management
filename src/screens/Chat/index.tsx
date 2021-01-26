@@ -56,7 +56,7 @@ const Chat = () => {
 
   ///compare id's to preserve same pattern for private chat////
   const conversationId =
-    user_id < user_doc_id
+    user_id < rec_userId
       ? `${user_doc_id}_${rec_userDocId}`
       : `${rec_userDocId}_${user_doc_id}`;
 
@@ -77,7 +77,7 @@ const Chat = () => {
 
   useEffect(() => {
     getConversation(conversationId, messages, (res) => {
-     // console.log("great messages are", res);
+      // console.log("great messages are", res);
       //@ts-ignore
       let updateMessages = res.map(({ sentBy, text, id, createdAt }) => ({
         //@ts-ignore

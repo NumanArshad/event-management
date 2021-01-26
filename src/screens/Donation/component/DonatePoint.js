@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { StyleSheet, View, FlatList, Text } from "react-native";
 import keyExtractor from "ultis/keyExtractor";
 import TicketItem from "screens/ProfileTickets/components/TicketItem";
@@ -6,71 +6,50 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { height_screen, width_screen } from "ultis/dimensions";
 import { LinearGradient } from "expo-linear-gradient";
 import FONTS from "ultis/fonts";
-import { useNavigation } from "@react-navigation/native";
-import ROUTES from "ultis/routes";
+import { useSelector, useDispatch } from "react-redux";
+import { getCompanies } from "redux/donate/donate.actions";
+import store from "../../../redux/store";
 
-const Donation = memo(() => {
-  const navigation = useNavigation();
-  const moveToDonate = useCallback(() => {
-    navigation.navigate(ROUTES.DonatePoint);
+const DonatePoint = () => {
+  const dispatch = useDispatch();
+
+  const { getState } = store;
+  const { companies } = getState()?.donate;
+
+  useEffect(() => {
+    if (!companies) {
+      dispatch(getCompanies());
+    }
+    console.log("Comapnies", companies);
   }, []);
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
-        <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.btnStyle}
-        >
-          <Text style={styles.loginBtn}>Payout</Text>
-        </LinearGradient>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={moveToDonate}>
-        <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.btnStyle}
-        >
-          <Text style={styles.loginBtn}>Donate Point</Text>
-        </LinearGradient>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.btnStyle}
-        >
-          <Text style={styles.loginBtn}>Transaction History</Text>
-        </LinearGradient>
-      </TouchableOpacity>
-
-      {/* <View style={styles.CompanyView}>
-        <Text style={styles.companyText}>Company Name</Text>
-        <TouchableOpacity>
-          <LinearGradient
-            colors={["#ED3269", "#F05F3E"]}
-            start={{ x: 0, y: 1 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.btnStyle2}
-          >
-            <Text style={styles.companyBtn}>Donate</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View> */}
+      {companies.map((data, id) => (
+        <View style={styles.CompanyView} key={id}>
+          <Text style={styles.companyText}>{data?.name}</Text>
+          <TouchableOpacity>
+            <LinearGradient
+              colors={["#ED3269", "#F05F3E"]}
+              start={{ x: 0, y: 1 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.btnStyle2}
+            >
+              <Text style={styles.companyBtn}>Donate</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      ))}
     </View>
   );
-});
-export default Donation;
+};
+export default DonatePoint;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
-    paddingTop: height_screen * 0.03,
+    paddingTop: height_screen * 0.01,
   },
   contentContainerStyle: {
     paddingBottom: 20,

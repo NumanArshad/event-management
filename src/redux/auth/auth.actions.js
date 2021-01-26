@@ -7,10 +7,10 @@ import { addUser, getSingleUser } from "redux/users/users.actions";
 export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
     if (res.data.status_code === 200) {
-     // console.log("response issss", res.data.data);
-      const {user, token} = res.data.data;
+      // console.log("response issss", res.data.data);
+      const { user, token } = res.data.data;
 
-      setUserSessions({user: user?.id, token});
+      setUserSessions({ user: user?.id, token });
       getSingleUser(user?.id, (userInfo) =>
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }))
       );
@@ -45,7 +45,7 @@ export const getProfile = (auth_token) => (dispatch) => {
       headers: { Authorization: `Bearer ${auth_token}` },
     })
     .then((res) => {
-     // console.log("Response PROFILE:", res.data.data.user);
+      // console.log("Response PROFILE:", res.data.data.user);
       if (res.data.status_code === 200) {
         const userPayload = {
           ...res.data.data.user,
@@ -55,7 +55,7 @@ export const getProfile = (auth_token) => (dispatch) => {
           groups: [],
           deviceToken: "token",
         };
-        dispatch(addUser(userPayload, auth_token));
+        // dispatch(addUser(userPayload, auth_token));
       }
     });
 };
@@ -73,7 +73,7 @@ export const getProfile = (auth_token) => (dispatch) => {
 ////set token in async storage////
 export const setUserSessions = (data) => {
   const { user, token } = data;
- // console.log("session user is", user)
+  // console.log("session user is", user)
   AsyncStorage.setItem("Token", token);
   AsyncStorage.setItem("user", user.toString());
 };
@@ -84,7 +84,7 @@ export const getUserSessions = () => async (dispatch) => {
     //getUser();
     const token = await AsyncStorage.getItem("Token");
     const userId = await AsyncStorage.getItem("user");
-  //  console.log("userid", userId, token)
+    //  console.log("userid", userId, token)
     token &&
       getSingleUser(parseInt(userId), (userInfo) => {
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
@@ -104,7 +104,7 @@ export const SetItem_AsynsStorage = (key, data) => {
 };
 
 export const isAuthenticated = (payload) => (dispatch) => {
- // console.log("is aurh", payload)
+  // console.log("is aurh", payload)
   dispatch({
     type: IS_AUTHENTICATED,
     payload,

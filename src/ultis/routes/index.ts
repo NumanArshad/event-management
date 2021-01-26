@@ -64,6 +64,7 @@ const ROUTES = {
   AccountSetting: "Settings",
   Payout: "Payout",
   EventList: "Events",
+  DonatePoint: "DonatePoint",
 };
 
 export default ROUTES;

@@ -14,7 +14,7 @@ const Friendlist = memo(() => {
   } = useSelector<any, any>((state) => state?.auth);
 
   useEffect(() => {
-    getUsersbyDocRefList(friends, (res) => setUsers(res));
+    // getUsersbyDocRefList(friends, (res) => setUsers(res));
   }, []);
 
   return (
