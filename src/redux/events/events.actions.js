@@ -10,7 +10,7 @@ import axios from "ultis/services/httpServices";
 export const getAllTrendingEvents = () => (dispatch) => {
   axios.get("event/upcomming-events").then((res) => {
     if (res?.data?.status_code === 200) {
-      console.log("ALL EENTS", res.data);
+     // console.log("ALL EENTS", res.data);
 
       dispatch({
         type: GET_ALL_TRENDING_EVENTS,

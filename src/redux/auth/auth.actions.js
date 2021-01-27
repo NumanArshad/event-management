@@ -1,13 +1,12 @@
 import axios from "ultis/services/httpServices";
 import * as profileAxios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IS_AUTHENTICATED, NOT_AUTHORIZED, USER_PROFILE } from "../actionTypes";
+import { IS_AUTHENTICATED, NOT_AUTHORIZED } from "../actionTypes";
 import { addUser, getSingleUser } from "redux/users/users.actions";
 
 export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
     if (res.data.status_code === 200) {
-      // console.log("response issss", res.data.data);
       const { user, token } = res.data.data;
 
       setUserSessions({ user: user?.id, token });
@@ -45,7 +44,6 @@ export const getProfile = (auth_token) => (dispatch) => {
       headers: { Authorization: `Bearer ${auth_token}` },
     })
     .then((res) => {
-      // console.log("Response PROFILE:", res.data.data.user);
       if (res.data.status_code === 200) {
         const userPayload = {
           ...res.data.data.user,
@@ -55,17 +53,16 @@ export const getProfile = (auth_token) => (dispatch) => {
           groups: [],
           deviceToken: "token",
         };
-        // dispatch(addUser(userPayload, auth_token));
+        dispatch(addUser(userPayload, auth_token));
       }
     });
 };
 
-// export const logout = async () => {
-//   try {
-//   } catch (err) {
-//     console.log("logut error");
-//   }
-// };
+export const logout = () => dispatch => {
+  AsyncStorage.clear();
+  dispatch(unAuthorized())
+  
+};
 // No Worries! You can easily recover your account with the e-mail
 //             address you have on file with us. Please enter your email below and
 //             we will respond within 1-2 minutes.
@@ -73,7 +70,6 @@ export const getProfile = (auth_token) => (dispatch) => {
 ////set token in async storage////
 export const setUserSessions = (data) => {
   const { user, token } = data;
-  // console.log("session user is", user)
   AsyncStorage.setItem("Token", token);
   AsyncStorage.setItem("user", user.toString());
 };
@@ -81,14 +77,11 @@ export const setUserSessions = (data) => {
 //// get token from async storage///
 export const getUserSessions = () => async (dispatch) => {
   try {
-    //getUser();
     const token = await AsyncStorage.getItem("Token");
     const userId = await AsyncStorage.getItem("user");
-    //  console.log("userid", userId, token)
     token &&
       getSingleUser(parseInt(userId), (userInfo) => {
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
-        dispatch(getProfile(token));
       });
   } catch (error) {
     console.error("error is ", error);

@@ -58,7 +58,6 @@ const EvezTrending = memo(() => {
 
   const { login_Session } = useSelector<any, any>((state) => state.auth);
 
-  console.log("login session is ", login_Session)
 
   const onPressFilter = useCallback(() => {
     navigation.navigate(ROUTES.FilterEvez);

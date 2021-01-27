@@ -10,12 +10,15 @@ const Friendlist = memo(() => {
   const [users, setUsers] = useState([]);
 
   const {
-    login_Session: { friends },
+    login_Session:{friends} ,
   } = useSelector<any, any>((state) => state?.auth);
 
-  useEffect(() => {
-    // getUsersbyDocRefList(friends, (res) => setUsers(res));
-  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+     getUsersbyDocRefList(friends, (res) => setUsers(res));
+    }, [])
+  );
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>

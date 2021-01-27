@@ -62,7 +62,7 @@ const Chat = () => {
 
   useLayoutEffect(() => {
     setOptions({
-      title: rec_userName,
+      title: rec_userName,  
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -77,7 +77,6 @@ const Chat = () => {
 
   useEffect(() => {
     getConversation(conversationId, messages, (res) => {
-      // console.log("great messages are", res);
       //@ts-ignore
       let updateMessages = res.map(({ sentBy, text, id, createdAt }) => ({
         //@ts-ignore

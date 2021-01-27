@@ -25,7 +25,7 @@ export const getAllUsers = (callBack) => {
 };
 
 export const getUsersbyDocRefList = (fiendsListIds, callBack) => {
-
+console.log("frine id are", fiendsListIds)
   
   firebase
     .firestore()
@@ -45,7 +45,6 @@ export const getUsersbyDocRefList = (fiendsListIds, callBack) => {
       return Promise.resolve(lst);
     })
     .then((trResponse) => {
-      console.log("response is ", trResponse);
       callBack && callBack(trResponse);
     })
     .catch((err) => Promise.reject(err.message));
@@ -78,7 +77,7 @@ export const getSingleUser = (user_id, isAuthCallBack) => {
     .then((res) => {
       let userInfo = {};
       res.forEach((payload) => {
-        //     console.log("payload is", payload.data());
+            console.log("payload is", payload.data());
 
         userInfo = { ...payload.data(), user_doc_id: payload.id };
       });

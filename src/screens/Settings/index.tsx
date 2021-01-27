@@ -12,8 +12,14 @@ import SvgFeedBack from "svgs/ProfileSetting/SvgFeedBack";
 import SvgUpdate from "svgs/ProfileSetting/SvgUpdate";
 import Item from "screens/Settings/components/Item";
 import { width_screen } from "ultis/dimensions";
+import { useDispatch } from "react-redux";
+import { logout } from "redux/auth/auth.actions";
+
+
 
 const Settings = memo(() => {
+
+  const dispatch = useDispatch()
   return (
     <View style={styles.container}>
       <Item
@@ -39,13 +45,15 @@ const Settings = memo(() => {
         svgItem={<SvgNotification />}
         title={"Enable Notification"}
         switch={true}
+      
       />
       <Item
+      
         svgItem={<SvgOnLocation />}
         title={"Turn on Location"}
         switch={true}
       />
-      <Text style={styles.txtAboutUs}>ABOUT US</Text>
+      <Text style={styles.txtAboutUs} onPress={()=>dispatch(logout())}>ABOUT US</Text>
       <Item svgItem={<SvgAboutUs />} title={"About us"} svgBack={<SvgBack />} />
       <Item
         svgItem={<SvgFeedBack />}
