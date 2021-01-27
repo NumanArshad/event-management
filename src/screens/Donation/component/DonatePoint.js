@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { StyleSheet, View, FlatList, Text } from "react-native";
 import keyExtractor from "ultis/keyExtractor";
 import TicketItem from "screens/ProfileTickets/components/TicketItem";
@@ -12,34 +12,41 @@ import store from "../../../redux/store";
 
 const DonatePoint = () => {
   const dispatch = useDispatch();
-
+  const [companiesList, setcompaniesList] = useState([]);
   const { getState } = store;
-  const { companies } = getState()?.donate;
+  // const { companies } = getState()?.donate;
+  const { companies } = useSelector((state) => state.donate);
 
   useEffect(() => {
-    if (!companies) {
+    if (Array.isArray(companies) && companies.length > 0) {
+      // makeRow();
+    } else {
       dispatch(getCompanies());
+      console.log("Run", companies);
     }
-    console.log("Comapnies", companies);
-  }, []);
+  }, [dispatch, companies]);
 
   return (
     <View style={styles.container}>
-      {companies.map((data, id) => (
-        <View style={styles.CompanyView} key={id}>
-          <Text style={styles.companyText}>{data?.name}</Text>
-          <TouchableOpacity>
-            <LinearGradient
-              colors={["#ED3269", "#F05F3E"]}
-              start={{ x: 0, y: 1 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.btnStyle2}
-            >
-              <Text style={styles.companyBtn}>Donate</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
-      ))}
+      {Array.isArray(companies) && companies.length > 0 ? (
+        companies.map((data, id) => (
+          <View style={styles.CompanyView} key={id}>
+            <Text style={styles.companyText}>{data?.name}</Text>
+            <TouchableOpacity>
+              <LinearGradient
+                colors={["#ED3269", "#F05F3E"]}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.btnStyle2}
+              >
+                <Text style={styles.companyBtn}>Donate</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        ))
+      ) : (
+        <Text>NO DATA</Text>
+      )}
     </View>
   );
 };

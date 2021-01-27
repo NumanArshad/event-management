@@ -3,6 +3,12 @@ import * as profileAxios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IS_AUTHENTICATED, NOT_AUTHORIZED } from "../actionTypes";
 import { addUser, getSingleUser } from "redux/users/users.actions";
+import {
+  startAuthLoading,
+  startLoading,
+  stopAuthLoading,
+  stopLoading,
+} from "redux/loading/loading.actions";
 
 export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
@@ -58,10 +64,9 @@ export const getProfile = (auth_token) => (dispatch) => {
     });
 };
 
-export const logout = () => dispatch => {
+export const logout = () => (dispatch) => {
   AsyncStorage.clear();
-  dispatch(unAuthorized())
-  
+  dispatch(unAuthorized());
 };
 // No Worries! You can easily recover your account with the e-mail
 //             address you have on file with us. Please enter your email below and
@@ -76,12 +81,15 @@ export const setUserSessions = (data) => {
 
 //// get token from async storage///
 export const getUserSessions = () => async (dispatch) => {
+  dispatch(startAuthLoading());
   try {
     const token = await AsyncStorage.getItem("Token");
     const userId = await AsyncStorage.getItem("user");
     token &&
       getSingleUser(parseInt(userId), (userInfo) => {
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
+        dispatch(getProfile(token));
+        dispatch(stopAuthLoading());
       });
   } catch (error) {
     console.error("error is ", error);

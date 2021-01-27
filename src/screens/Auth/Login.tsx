@@ -20,13 +20,16 @@ import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
 import Logo from "../../assets/logo.jpg";
 import { useDispatch, useSelector } from "react-redux";
+import LoadingScreen from "./LoadingScreen";
 const Login = memo(() => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const { navigate } = useNavigation();
 
   const dispatch = useDispatch();
-  const { loading } = useSelector<any, any>((state) => state.loading);
+  const { loading, authloading } = useSelector<any, any>(
+    (state) => state.loading
+  );
 
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -48,78 +51,89 @@ const Login = memo(() => {
       dispatch(login(formData));
     }
   };
-  return (
-    <View style={styles.container}>
-      <Image
-        // source={{
-        //   uri:
-        //     "https://i.pinimg.com/originals/f6/db/9b/f6db9b785d37c154c2be26b7c32604b6.jpg",
-        // }}
-        source={Logo}
-        style={styles.imageProfile}
-      />
-      <TextInput
-        style={styles.textInput}
-        placeholder="Email..."
-        onChangeText={(data) => setemail(data)}
-      />
-      <TextInput
-        style={styles.textInput}
-        secureTextEntry={true}
-        placeholder="Password..."
-        textContentType="password"
-        onChangeText={(data) => setpassword(data)}
-      />
-      {/* <Text_Input
+
+  if (authloading) {
+    return <LoadingScreen />;
+  } else {
+    return (
+      <View style={styles.container}>
+        <Image
+          // source={{
+          //   uri:
+          //     "https://i.pinimg.com/originals/f6/db/9b/f6db9b785d37c154c2be26b7c32604b6.jpg",
+          // }}
+          source={Logo}
+          style={styles.imageProfile}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Email..."
+          onChangeText={(data) => setemail(data)}
+        />
+        <TextInput
+          style={styles.textInput}
+          secureTextEntry={true}
+          placeholder="Password..."
+          textContentType="password"
+          onChangeText={(data) => setpassword(data)}
+        />
+        {/* <Text_Input
         secureText={false}
         placeholder="Pakistan..."
         style={[styles.textInput, { backgroundColor: "red" }]}
         setdata={(data) => setemail(data)}
         placeholderColor="#a4a4a4"
       /> */}
-      <View style={styles.viewForgotPass}>
-        <TouchableOpacity onPress={() => navigate(ROUTES.ForgotPassword)}>
-          <Text style={{ color: "#ED3269", fontSize: 12, textAlign: "right" }}>
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.viewCreate}>
-        <Text style={{ color: "#ED3269" }}>
-          Don't have an Account?{" "}
-          <TouchableOpacity onPress={() => navigate(ROUTES.Register)}>
-            <Text style={{ textDecorationLine: "underline", fontSize: 12 }}>
-              Create
+        <View style={styles.viewForgotPass}>
+          <TouchableOpacity onPress={() => navigate(ROUTES.ForgotPassword)}>
+            <Text
+              style={{ color: "#ED3269", fontSize: 12, textAlign: "right" }}
+            >
+              Forgot Password?
             </Text>
           </TouchableOpacity>
-        </Text>
-      </View>
-      <TouchableOpacity onPress={handleLogin}>
-        <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 1 }}
-          style={{ borderRadius: 10, marginTop: height_screen * 0.03 }}
-        >
-          <Text style={styles.loginBtn}>Login</Text>
-          <View
-            style={{
-              position: "absolute",
-              left: height_screen * 0.09,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+        </View>
+
+        <View style={styles.viewCreate}>
+          <Text style={{ color: "#ED3269" }}>
+            Don't have an Account?{" "}
+            <TouchableOpacity onPress={() => navigate(ROUTES.Register)}>
+              <Text style={{ textDecorationLine: "underline", fontSize: 12 }}>
+                Create
+              </Text>
+            </TouchableOpacity>
+          </Text>
+        </View>
+        <TouchableOpacity onPress={handleLogin}>
+          <LinearGradient
+            colors={["#ED3269", "#F05F3E"]}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 1 }}
+            style={{ borderRadius: 10, marginTop: height_screen * 0.03 }}
           >
-            <ActivityIndicator color="#fff" animating={loading} size="small" />
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
-    </View>
-  );
+            <Text style={styles.loginBtn}>Login</Text>
+            <View
+              style={{
+                position: "absolute",
+                left: height_screen * 0.09,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <ActivityIndicator
+                color="#fff"
+                animating={loading}
+                size="small"
+              />
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 });
 
 export default Login;
