@@ -1,25 +1,28 @@
-import React, {memo, useCallback, useState} from 'react';
+import React, { memo, useCallback, useState } from "react";
 import {
+  Alert,
   Dimensions,
   Image,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import IconUnSave from 'svgs/IconUnSave';
-import FONTS from 'ultis/fonts';
-import HourGlass from 'svgs/HourGlass';
-import {width_screen} from 'ultis/dimensions';
-import EventName from 'components/EventItem/EventName';
-import EventBasicInfo from 'components/EventItem/EventBasicInfo';
-import ROUTES from 'ultis/routes';
-import {useNavigation} from '@react-navigation/native';
-import SvgSaved from 'svgs/IconSaved';
+} from "react-native";
+import IconUnSave from "svgs/IconUnSave";
+import FONTS from "ultis/fonts";
+import HourGlass from "svgs/HourGlass";
+import { width_screen } from "ultis/dimensions";
+import EventName from "components/EventItem/EventName";
+import EventBasicInfo from "components/EventItem/EventBasicInfo";
+import ROUTES from "ultis/routes";
+import { useNavigation } from "@react-navigation/native";
+import SvgSaved from "svgs/IconSaved";
+import { saveEvent, unSaveEvent } from "redux/events/events.actions";
+import { useDispatch } from "react-redux";
 
 interface EventItemProps {
   thumbnail: any;
-  id?:number;
+  id?: number;
   tag?: string[];
   reviewTimes?: number;
   eventName: string;
@@ -37,31 +40,38 @@ interface EventItemProps {
   isSmallItem?: boolean;
 }
 const EventItem = memo((props: EventItemProps) => {
-  const [isSave, setSave] = useState(props.save);
+  const [isSave, setSave] = useState(false);
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const onPressSave = useCallback(() => {
+    console.log("Before isSave Value", isSave);
     setSave(!isSave);
+    console.log("isSave Value", isSave);
+    if (!isSave) {
+      dispatch(saveEvent(props.id, Alert));
+    } else {
+      dispatch(unSaveEvent(props.id, Alert));
+    }
   }, [isSave]);
   const thumbnailDimension = {
-    width: props.isSmallItem ? '100%' : (327 / 375) * widthScreen,
+    width: props.isSmallItem ? "100%" : (327 / 375) * widthScreen,
     height: props.isSmallItem ? 220 * (375 / 327) * 0.7 : 220 * (375 / 327),
   };
   const countDownDimension = {
-    width: props.isSmallItem ? '100%' : (327 / 375) * widthScreen,
+    width: props.isSmallItem ? "100%" : (327 / 375) * widthScreen,
     height: props.isSmallItem ? 34 * (375 / 327) * 0.7 : 34 * (375 / 327),
   };
 
   const data = {
-    thumbnail: require("@assets/Trending/trending_1.png"),//props.thumbnail,
-    tag: props.tag  || '',
-    id: props.id || '',
-    reviewTimes: props.reviewTimes  || '',
+    thumbnail: require("@assets/Trending/trending_1.png"), //props.thumbnail,
+    tag: props.tag || "",
+    id: props.id || "",
+    reviewTimes: props.reviewTimes || "",
     eventName: props.eventName,
     location: props.location,
-    timeCountDown: props.timeCountDown || '',
+    timeCountDown: props.timeCountDown || "",
     distance: props.distance,
-    currentAttending: props.currentAttending  || 0,
+    currentAttending: props.currentAttending || 0,
     //maxAttending: props.maxAttending  || '',
     rate: props.rate || 0,
     price: props.price || 0,
@@ -84,7 +94,8 @@ const EventItem = memo((props: EventItemProps) => {
         },
       ]}
       onPress={onDetail}
-      activeOpacity={0.8}>
+      activeOpacity={0.8}
+    >
       <View style={styles.viewThumbnail}>
         <Image
           source={props.thumbnail}
@@ -96,9 +107,7 @@ const EventItem = memo((props: EventItemProps) => {
         {props.timeCountDown ? (
           <View style={[styles.labelCountDown, countDownDimension]}>
             <HourGlass />
-            <Text style={styles.textCountDown}>
-              {props.timeCountDown}
-            </Text>
+            <Text style={styles.textCountDown}>{props.timeCountDown}</Text>
           </View>
         ) : null}
       </View>
@@ -121,71 +130,71 @@ const EventItem = memo((props: EventItemProps) => {
 });
 
 export default EventItem;
-const widthScreen = Dimensions.get('window').width;
+const widthScreen = Dimensions.get("window").width;
 const styles = StyleSheet.create({
   itemContainer: {
     marginBottom: 36,
   },
   textReviewTimes: {
     fontSize: 14,
-    color: '#353B48',
+    color: "#353B48",
     marginLeft: 8,
     fontFamily: FONTS.Regular,
   },
   rateView: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   textTag: {
     fontSize: 14,
-    color: '#7F8FA6',
+    color: "#7F8FA6",
     marginRight: 8,
     fontFamily: FONTS.Regular,
   },
   tagRateView: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 16,
-    justifyContent: 'space-between',
-    width: '100%',
+    justifyContent: "space-between",
+    width: "100%",
   },
   viewThumbnail: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   thumbnail: {
-    justifyContent: 'flex-end',
-    flexDirection: 'row',
+    justifyContent: "flex-end",
+    flexDirection: "row",
     borderRadius: 10,
   },
   iconUnSave: {
-    position: 'absolute',
+    position: "absolute",
     right: 18,
     top: 18,
   },
   textEventName: {
     fontSize: 18,
-    fontWeight: '500',
+    fontWeight: "500",
     lineHeight: 27,
     marginTop: 12,
     fontFamily: FONTS.Medium,
   },
   location: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 8,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   textLocation: {
     marginLeft: 8,
     fontSize: 14,
-    color: '#7F8FA6',
+    color: "#7F8FA6",
     fontFamily: FONTS.Regular,
   },
   flexRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   viewAttending: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   avatar: {
     width: 18,
@@ -193,16 +202,16 @@ const styles = StyleSheet.create({
     marginLeft: -8,
     borderRadius: 9,
     borderWidth: 2,
-    borderColor: '#F2F2F2',
+    borderColor: "#F2F2F2",
   },
   labelCountDown: {
-    flexDirection: 'row',
-    position: 'absolute',
+    flexDirection: "row",
+    position: "absolute",
     bottom: 0,
     height: 34 * (375 / 327),
     width: (327 / 375) * widthScreen,
-    alignItems: 'center',
-    backgroundColor: '#1DA1F2',
+    alignItems: "center",
+    backgroundColor: "#1DA1F2",
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     paddingHorizontal: 16,
@@ -210,7 +219,7 @@ const styles = StyleSheet.create({
   textCountDown: {
     fontSize: 12,
     fontFamily: FONTS.Regular,
-    color: '#fff',
+    color: "#fff",
     marginLeft: 8,
   },
 });

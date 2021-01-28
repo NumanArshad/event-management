@@ -10,7 +10,7 @@ import axios from "ultis/services/httpServices";
 export const getAllTrendingEvents = () => (dispatch) => {
   axios.get("event/upcomming-events").then((res) => {
     if (res?.data?.status_code === 200) {
-     // console.log("ALL EENTS", res.data);
+      // console.log("ALL EENTS", res.data);
 
       dispatch({
         type: GET_ALL_TRENDING_EVENTS,
@@ -40,6 +40,24 @@ export const getSingleEventDetail = (id) => (dispatch) => {
         type: GET_SINGLE_EVENT,
         payload: res?.data?.data[0],
       });
+    }
+  });
+};
+
+export const saveEvent = (id, Alert) => (dispatch) => {
+  console.log("saveEvent", id);
+  axios.get(`event/save-event?event_id=${id}`).then((res) => {
+    if (res?.data?.status_code === 200) {
+      Alert.alert("", res.data.message);
+    }
+  });
+};
+
+export const unSaveEvent = (id, Alert) => (dispatch) => {
+  console.log("unSaveEvent", id);
+  axios.get(`event/unsave-event?event_id=${id}`).then((res) => {
+    if (res?.data?.status_code === 200) {
+      Alert.alert("", res.data.message);
     }
   });
 };
