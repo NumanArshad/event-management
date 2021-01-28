@@ -22,7 +22,7 @@ const RateDetail = (props: RateDetailProps) => {
 
   const { all_reviews } = useSelector<any, any>((state) => state.reviews);
 
-//console.log("eevnt id", props.eventId,all_reviews)
+  //console.log("eevnt id", props.eventId,all_reviews)
 
   useEffect(() => {
     dispatch(getEventAllReviews(props.eventId));
@@ -31,7 +31,7 @@ const RateDetail = (props: RateDetailProps) => {
   const onWriteReview = useCallback(() => {
     props.onPress();
   }, []);
-  
+
   return (
     <View style={[styles.container, { marginTop: marginTop }]}>
       <View style={styles.flexRow}>
@@ -44,7 +44,7 @@ const RateDetail = (props: RateDetailProps) => {
             </Text>
           </View>
           <Text style={styles.textReviewTimes}>
-            {all_reviews?.length || 0} review{(all_reviews?.length > 1) && `s`}
+            {all_reviews?.length || 0} review{all_reviews?.length > 1 && `s`}
           </Text>
         </View>
       </View>

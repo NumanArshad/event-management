@@ -1,9 +1,10 @@
-import { 
-  GET_SINGLE_EVENT_ALL_REVIEWS,CLEAR_SINGLE_EVENT_ALL_REVIEWS } from "../actionTypes";
+import {
+  GET_SINGLE_EVENT_ALL_REVIEWS,
+  CLEAR_SINGLE_EVENT_ALL_REVIEWS,
+} from "../actionTypes";
 import axios from "ultis/services/httpServices";
 
-export const getEventAllReviews = eventId => (dispatch) => {
-  
+export const getEventAllReviews = (eventId) => (dispatch) => {
   axios.get(`review/get-reviews?event_id=${eventId}`).then((res) => {
     if (res?.data?.status_code === 200) {
       dispatch({
@@ -14,19 +15,21 @@ export const getEventAllReviews = eventId => (dispatch) => {
   });
 };
 
-export const postEventReview = data => (dispatch) => {
-  axios.post("review/save-review",data).then((res) => {
+export const postEventReview = (data) => (dispatch) => {
+  console.log("postEventReview", data);
+  axios.post("review/rate-event", data).then((res) => {
     if (res?.data?.status_code === 200) {
-     dispatch(getEventAllReviews(data?.event_id))
+      dispatch(getEventAllReviews(data?.event_id));
+      console.log("Posted");
     }
   });
 };
 
-export const clearEventAllReviews = _ => dispatch => {
+export const clearEventAllReviews = (_) => (dispatch) => {
   dispatch({
-    type: CLEAR_SINGLE_EVENT_ALL_REVIEWS
-  })
-}
+    type: CLEAR_SINGLE_EVENT_ALL_REVIEWS,
+  });
+};
 // export const clearSingleEvent = () => dispatch => (
 //   dispatch({
 //     type: CLEAR_SINGLE_EVENT

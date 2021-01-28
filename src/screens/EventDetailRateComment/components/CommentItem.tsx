@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useState} from 'react';
+import React, { memo, useCallback, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -6,14 +6,14 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import {width_screen} from 'ultis/dimensions';
-import InactiveRate from 'components/inactiveRate';
-import FONTS from 'ultis/fonts';
-import SvgUnlike from 'svgs/EventDetailRateComment/SvgUnlike';
-import SvgLike from 'svgs/EventDetailRateComment/SvgLike';
-import SvgReply from 'svgs/EventDetailRateComment/SvgReply';
-import SvgReport from 'svgs/EventDetailRateComment/SvgReport';
+} from "react-native";
+import { width_screen } from "ultis/dimensions";
+import InactiveRate from "components/inactiveRate";
+import FONTS from "ultis/fonts";
+import SvgUnlike from "svgs/EventDetailRateComment/SvgUnlike";
+import SvgLike from "svgs/EventDetailRateComment/SvgLike";
+import SvgReply from "svgs/EventDetailRateComment/SvgReply";
+import SvgReport from "svgs/EventDetailRateComment/SvgReport";
 
 interface CommentProps {
   isLike: boolean;
@@ -45,10 +45,11 @@ const CommentItem = memo((props: CommentProps) => {
     <ScrollView
       horizontal={true}
       pagingEnabled={true}
-      showsHorizontalScrollIndicator={false}>
+      showsHorizontalScrollIndicator={false}
+    >
       <View style={styles.container}>
         <Image
-          source={require('@assets/EventAroundU/avatar_1.png')}
+          source={require("@assets/EventAroundU/avatar_1.png")}
           style={styles.bigAvatar}
         />
         <View style={styles.commentView}>
@@ -66,7 +67,11 @@ const CommentItem = memo((props: CommentProps) => {
           </View>
         </View>
         <Text style={styles.textNumberLikes}>{numberLike}</Text>
-        <TouchableOpacity style={styles.flexRow} onPress={onLike} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.flexRow}
+          onPress={onLike}
+          activeOpacity={0.8}
+        >
           {isLike ? <SvgLike /> : <SvgUnlike />}
         </TouchableOpacity>
       </View>
@@ -95,15 +100,15 @@ const styles = StyleSheet.create({
   textTime: {
     fontSize: 12,
     fontFamily: FONTS.Regular,
-    color: '#7F8FA6',
+    color: "#7F8FA6",
     lineHeight: 15,
     marginRight: 24,
   },
   container: {
     width: width_screen - 48,
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 24,
-    marginLeft: 24
+    marginLeft: 24,
   },
   commentView: {
     flex: 1,
@@ -111,42 +116,42 @@ const styles = StyleSheet.create({
   textName: {
     fontSize: 14,
     fontFamily: FONTS.Medium,
-    color: '#353B48',
+    color: "#353B48",
     lineHeight: 17,
     marginBottom: 8,
   },
   textComment: {
     fontSize: 14,
     fontFamily: FONTS.Regular,
-    color: '#353B48',
+    color: "#353B48",
     lineHeight: 24,
     marginTop: 8,
   },
   timeView: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 8,
   },
   textNumberLikes: {
     fontFamily: FONTS.Regular,
     fontSize: 12,
-    textAlign: 'right',
-    color: '#353B48',
+    textAlign: "right",
+    color: "#353B48",
     lineHeight: 15,
   },
   optionView: {
-    flexDirection: 'row',
+    flexDirection: "row",
     width: 128,
     flex: 1,
-    backgroundColor: '#ED3269',
+    backgroundColor: "#ED3269",
     marginLeft: 24,
     marginBottom: 24,
   },
   buttonOption: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   flexRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 });

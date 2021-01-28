@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,8 +14,7 @@ import SvgSend from "svgs/EventDetailRateComment/SvgSend";
 import FONTS from "ultis/fonts";
 import Rating from "components/Rating";
 import { useRoute } from "@react-navigation/native";
-
-
+import { postEventReview } from "redux/reviews/reviews.actions";
 
 interface reviewModel {
   review: string;
@@ -24,19 +23,40 @@ interface reviewModel {
 
 const EventDetailRateComment = memo(() => {
   const { all_reviews } = useSelector<any, any>((state) => state.reviews);
+  const [comment, setcomment] = useState("");
+  const [stars, setstars] = useState("");
+  const dispatch = useDispatch();
 
   //@ts-ignore
-  const {params:{eventId}} = useRoute();
+  const {
+    params: { eventId },
+  } = useRoute();
 
+  const getStars = (data) => {
+    setstars(data);
+    // console.log("Data", data);
+  };
+
+  const onClickListener = () => {
+    const data = {
+      event_id: eventId,
+      stars: stars,
+      comment: comment,
+    };
+    console.log("Post Review", data);
+    dispatch(postEventReview(data));
+    setcomment("");
+  };
   return (
     <KeyboardAvoidingView
-      keyboardVerticalOffset={52}
+      keyboardVerticalOffset={80}
       style={styles.keyAvoid}
       behavior={Platform.OS == "ios" ? "padding" : "height"}
     >
       <View style={styles.container}>
         <View style={styles.commentView}>
           <ScrollView showsVerticalScrollIndicator={false}>
+            {console.log("Reviews", all_reviews)}
             {all_reviews?.map(({ review, review_id }: reviewModel) => (
               <CommentItem
                 name={"Claudia Blake"}
@@ -51,14 +71,16 @@ const EventDetailRateComment = memo(() => {
           </ScrollView>
         </View>
         <View style={styles.writeComment}>
-          <Rating rate={4} />
+          <Rating rate={4} onPress={getStars} />
           <View style={styles.line} />
           <View style={styles.writeAndSend}>
             <TextInput
               style={styles.textInput}
-              placeholder={"Write a review"}
+              placeholder={"Write a review ..."}
+              onChangeText={(data) => setcomment(data)}
+              value={comment}
             />
-            <SvgSend />
+            <SvgSend onPress={onClickListener} />
           </View>
         </View>
       </View>
