@@ -99,7 +99,7 @@ const ChangePassword = memo((navigation) => {
       <View style={styles.viewCreate}>
         <Text style={{ color: "#ED3269", fontSize: 12 }}>
           Remember Password?{" "}
-          <TouchableOpacity onPress={() => navigate(ROUTES.Login)}>
+          <TouchableOpacity onPress={() => navigate(ROUTES.Profile)}>
             <Text style={{ textDecorationLine: "underline", fontSize: 12 }}>
               Back to Profile
             </Text>
