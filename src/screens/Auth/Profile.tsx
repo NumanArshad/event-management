@@ -14,7 +14,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
 import Color from "../../ultis/color/index";
 import { LinearGradient } from "expo-linear-gradient";
-import { updateProfile } from "redux/auth/auth.actions";
+import { getProfile, updateProfile } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
@@ -44,9 +44,9 @@ const Profile = memo(() => {
   const { navigate } = useNavigation();
   const [preLoader, setpreLoader] = useState(false);
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getProfile());
-  // }, []);
+  useEffect(() => {
+    // dispatch(getProfile());
+  }, []);
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;
@@ -59,28 +59,46 @@ const Profile = memo(() => {
     Alert.alert("", email);
   };
   const handleProfile = () => {
-    if (ValidateEmail() && email != "" && name != "") {
-      setpreLoader(true);
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("name", name);
-      console.log("FORMDATA:", formData);
-      updateProfile(formData)
-        .then((res) => {
-          console.log("Response ", res.data);
-          Alert.alert("", "Your Profile has been Updated Successfully!");
-          setpreLoader(false);
-        })
-        .catch((err) => {
-          console.log("ERror :", err.response.data.errors);
-          Alert.alert("", JSON.stringify(err.response.data.errors));
-          setpreLoader(false);
-        });
+    if (
+      email != "" &&
+      name != "" &&
+      firstName != "" &&
+      lastName != "" &&
+      stripAccount != "" &&
+      phone != ""
+    ) {
+      if (ValidateEmail()) {
+        setpreLoader(true);
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("name", name);
+        formData.append("first_name", firstName);
+        formData.append("last_name", lastName);
+        formData.append("stripe_account", stripAccount);
+        formData.append("contact", phone);
+        // formData.append("image", email);
+
+        console.log("FORMDATA:", formData);
+        updateProfile(formData)
+          .then((res) => {
+            console.log("Response ", res.data);
+            Alert.alert("", "Your Profile has been Updated Successfully!");
+            setpreLoader(false);
+          })
+          .catch((err) => {
+            console.log("ERror :", err.response.data.errors);
+            Alert.alert("", JSON.stringify(err.response.data.errors));
+            setpreLoader(false);
+          });
+      }
+    } else {
+      Alert.alert("", "Kindly Fill All The Inputs.");
     }
   };
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.container}>
+        {console.log("ACCOUNT", stripe_account_id)}
         <Image
           source={{
             uri:
@@ -99,26 +117,26 @@ const Profile = memo(() => {
           style={styles.textInput}
           placeholder="First Name..."
           onChangeText={(data) => setfirstName(data)}
-          value={name}
+          value={firstName}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Last Name..."
           onChangeText={(data) => setlastName(data)}
-          value={name}
+          value={lastName}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Strip Account Number..."
           onChangeText={(data) => setstripAccount(data)}
-          value={name}
+          value={stripAccount}
           secureTextEntry={true}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Phone Number..."
           onChangeText={(data) => setphone(data)}
-          value={name}
+          value={contact}
           keyboardType="number-pad"
         />
         <TextInput

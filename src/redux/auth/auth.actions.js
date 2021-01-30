@@ -20,6 +20,10 @@ export const login = (data) => (dispatch) => {
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }))
       );
     }
+
+    if (res.data.status_code === 422) {
+      console.log("Response 422", res.data);
+    }
   });
 };
 

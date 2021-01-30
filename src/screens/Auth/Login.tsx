@@ -28,9 +28,7 @@ const Login = memo(() => {
   const { navigate } = useNavigation();
 
   const dispatch = useDispatch();
-  const { authloading } = useSelector<any, any>(
-    (state) => state.loading
-  );
+  const { authloading } = useSelector<any, any>((state) => state.loading);
 
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -44,17 +42,21 @@ const Login = memo(() => {
     Alert.alert("", email);
   };
   const handleLogin = () => {
-    if (ValidateEmail() && email != "" && password != "") {
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("password", password);
-      console.log("FORMDATA:", formData);
-      dispatch(login(formData));
+    if (email != "" && password != "") {
+      if (ValidateEmail()) {
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("password", password);
+        console.log("FORMDATA:", formData);
+        dispatch(login(formData));
+      }
+    } else {
+      Alert.alert("", "Kindly Fill All The Inputs.");
     }
   };
 
   //console.log("auth loadin gi s", authloading)
- if (authloading) {
+  if (authloading) {
     return <LoadingScreen />;
   } else {
     return (
@@ -100,9 +102,7 @@ const Login = memo(() => {
           <Text style={{ color: "#ED3269" }}>
             Don't have an Account?{" "}
             <TouchableOpacity onPress={() => navigate(ROUTES.Register)}>
-              <Text style={{ textDecorationLine: "underline", fontSize: 12 }}>
-                Create
-              </Text>
+              <Text style={{ textDecorationLine: "underline" }}>Create</Text>
             </TouchableOpacity>
           </Text>
         </View>

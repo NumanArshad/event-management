@@ -55,26 +55,25 @@ const Register = memo((navigation) => {
   };
 
   const handleRegister = () => {
-    if (
-      ValidateEmail() &&
-      validatePassword() &&
-      email != "" &&
-      password != ""
-    ) {
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("user_type", "citizen");
-      formData.append("name", name);
-      formData.append("password_confirmation", cPassword);
-      // formData.append("image", {
-      //   uri: image,
-      //   name: name + ".jpg",
-      //   type: "image/jpg",
-      // });
+    if (email != "" && password != "" && name != "" && cPassword != "") {
+      if (ValidateEmail() && validatePassword()) {
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("user_type", "citizen");
+        formData.append("name", name);
+        formData.append("password_confirmation", cPassword);
+        // formData.append("image", {
+        //   uri: image,
+        //   name: name + ".jpg",
+        //   type: "image/jpg",
+        // });
 
-      console.log("FORMDATA:", formData);
-      dispatch(register(formData));
+        console.log("FORMDATA:", formData);
+        dispatch(register(formData));
+      }
+    } else {
+      Alert.alert("", "Kindly Fill All The Inputs.");
     }
   };
 
@@ -155,17 +154,15 @@ const Register = memo((navigation) => {
         textContentType="password"
         onChangeText={(data) => setcPassword(data)}
       />
-    <View style={styles.viewCreate}>
+      <View style={styles.viewCreate}>
         <Text style={{ color: "#ED3269" }}>
           Already have an Account?{" "}
           <TouchableOpacity onPress={() => navigate(ROUTES.Login)}>
-            <Text style={{ textDecorationLine: "underline", fontSize: 13 }}>
-              Login
-            </Text>
+            <Text style={{ textDecorationLine: "underline" }}>Login</Text>
           </TouchableOpacity>
         </Text>
       </View>
-      <SubmitButton  text="Sign Up" onPress={handleRegister}/>
+      <SubmitButton text="Sign Up" onPress={handleRegister} />
     </View>
   );
 });

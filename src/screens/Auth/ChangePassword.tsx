@@ -31,31 +31,30 @@ const ChangePassword = memo((navigation) => {
     return false;
   };
   const handleForgotPassword = () => {
-    if (
-      validatePassword() &&
-      currentPassword != "" &&
-      newPassword != "" &&
-      confirmPassword != ""
-    ) {
-      const formData = new FormData();
-      formData.append("current_password", currentPassword);
-      formData.append("password", newPassword);
+    if (currentPassword != "" && newPassword != "" && confirmPassword != "") {
+      if (validatePassword()) {
+        const formData = new FormData();
+        formData.append("current_password", currentPassword);
+        formData.append("password", newPassword);
 
-      formData.append("password_confirmation", confirmPassword);
+        formData.append("password_confirmation", confirmPassword);
 
-      //   console.log("FORMDATA:", formData);
-      forgotPassword(formData)
-        .then((res) => {
-          console.log("Response ", res.data);
-          if (res.data.status_code === 200) {
-            Alert.alert("", res.data.message);
-            navigate(ROUTES.Login);
-          }
-        })
-        .catch((err) => {
-          console.log("ERror :", err.response.data.errors);
-          Alert.alert("", JSON.stringify(err.response.data.errors));
-        });
+        //   console.log("FORMDATA:", formData);
+        forgotPassword(formData)
+          .then((res) => {
+            console.log("Response ", res.data);
+            if (res.data.status_code === 200) {
+              Alert.alert("", res.data.message);
+              navigate(ROUTES.Login);
+            }
+          })
+          .catch((err) => {
+            console.log("ERror :", err.response.data.errors);
+            Alert.alert("", JSON.stringify(err.response.data.errors));
+          });
+      }
+    } else {
+      Alert.alert("", "Kindly Fill All The Inputs.");
     }
   };
   return (
@@ -119,7 +118,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: height_screen * 0.01,
     paddingLeft: height_screen * 0.02,
-    
   },
   viewForgotPass: {
     flexDirection: "row",

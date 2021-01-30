@@ -17,9 +17,9 @@ export default function (state = initialState, action) {
     case STOP_LOADING:
       return { loading: false };
     case START_AUTH_LOADING:
-      return { authloading: true };
+      return { ...state, authloading: true };
     case STOP_AUTH_LOADING:
-      return { authloading: false };
+      return { ...state, authloading: false };
     default:
       return state;
   }
