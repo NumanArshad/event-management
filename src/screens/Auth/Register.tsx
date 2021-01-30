@@ -13,9 +13,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
-import Color from "../../ultis/color/index";
-import { LinearGradient } from "expo-linear-gradient";
-import { login, register, SetItem_AsynsStorage } from "redux/auth/auth.actions";
+import { register } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
@@ -23,6 +21,7 @@ import Logo from "../../assets/logo.jpg";
 import { useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import SubmitButton from "components/buttons/submitButton";
 
 const Register = memo((navigation) => {
   const dispatch = useDispatch();
@@ -156,62 +155,7 @@ const Register = memo((navigation) => {
         textContentType="password"
         onChangeText={(data) => setcPassword(data)}
       />
-
-      {/* <View style={styles.viewForgotPass}>
-        <TouchableOpacity>
-          <Text style={{ color: "#ED3269", fontSize: 12, textAlign: "right" }}>
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-      </View> */}
-
-      {/* <View>
-        <Text
-          style={{
-            color: "#ED3269",
-            marginTop: height_screen * 0.01,
-            textAlign: "center",
-            marginBottom: height_screen * 0.01,
-          }}
-        >
-          What best describe you?
-        </Text>
-        <View style={styles.viewToggle}>
-          <Text
-            onPress={() => setuserType("citizen")}
-            style={[
-              styles.toggleButton,
-              {
-                color: userType === "citizen" ? "#fff" : "#a4a4a4",
-                backgroundColor: userType === "citizen" ? "#ED3269" : "#fff",
-              },
-            ]}
-          >
-            Citizen
-          </Text>
-          <Text
-            onPress={() => setuserType("customer")}
-            style={[
-              styles.toggleButton,
-              {
-                color: userType === "customer" ? "#fff" : "#a4a4a4",
-                backgroundColor: userType === "customer" ? "#ED3269" : "#fff",
-              },
-            ]}
-          >
-            Customer
-          </Text>
-        </View>
-      </View> */}
-      {/* <Text_Input
-        secureText={false}
-        placeholder="Pakistan..."
-        style={[styles.textInput, { backgroundColor: "red" }]}
-        setdata={(data) => setemail(data)}
-        placeholderColor="#a4a4a4"
-      /> */}
-
-      <View style={styles.viewCreate}>
+    <View style={styles.viewCreate}>
         <Text style={{ color: "#ED3269" }}>
           Already have an Account?{" "}
           <TouchableOpacity onPress={() => navigate(ROUTES.Login)}>
@@ -221,33 +165,7 @@ const Register = memo((navigation) => {
           </TouchableOpacity>
         </Text>
       </View>
-      <TouchableOpacity onPress={handleRegister}>
-        <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 1 }}
-          style={{ borderRadius: 10, marginTop: height_screen * 0.03 }}
-        >
-          <Text style={styles.loginBtn}>Sign Up</Text>
-          <View
-            style={{
-              position: "absolute",
-              left: height_screen * 0.09,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <ActivityIndicator
-              color="#fff"
-              animating={preLoader}
-              size="small"
-            />
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
+      <SubmitButton  text="Sign Up" onPress={handleRegister}/>
     </View>
   );
 });
@@ -269,16 +187,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: height_screen * 0.01,
     paddingLeft: height_screen * 0.02,
-  },
-  loginBtn: {
-    height: height_screen * 0.055,
-    width: width_screen * 0.3,
-    backgroundColor: "transparent",
-    borderRadius: 10,
-    marginTop: height_screen * 0.01,
-    textAlign: "center",
-    paddingTop: height_screen * 0.012,
-    color: "#fff",
   },
   viewForgotPass: {
     flexDirection: "row",

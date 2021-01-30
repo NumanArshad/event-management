@@ -64,6 +64,23 @@ export const getProfile = (auth_token) => (dispatch) => {
     });
 };
 
+////auth user bank information ////
+export const getBankInfo = (authUserId, callBack) => {
+  axios.get(`bank/get-info?user_id=${authUserId}`).then((res) => {
+    if (res.data.status_code === 200) {
+      callBack(res.data.data);
+    }
+  });
+};
+
+export const updateBankInfo = (payload) => {
+  axios.post(`bank/update`, payload).then((res) => {
+    console.log("response is ", res);
+  });
+};
+
+////auth user bank information ////
+
 export const logout = () => (dispatch) => {
   AsyncStorage.clear();
   dispatch(unAuthorized());
@@ -85,27 +102,18 @@ export const getUserSessions = () => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("Token");
     const userId = await AsyncStorage.getItem("user");
+    dispatch(stopAuthLoading());
+
     token &&
       getSingleUser(parseInt(userId), (userInfo) => {
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
-        dispatch(getProfile(token));
-        dispatch(stopAuthLoading());
       });
   } catch (error) {
     console.error("error is ", error);
   }
 };
 
-export const SetItem_AsynsStorage = (key, data) => {
-  try {
-    AsyncStorage.setItem(key, data);
-  } catch (e) {
-    console.log("Error While Adding Data to AsyncStorage");
-  }
-};
-
 export const isAuthenticated = (payload) => (dispatch) => {
-  // console.log("is aurh", payload)
   dispatch({
     type: IS_AUTHENTICATED,
     payload,
@@ -117,7 +125,3 @@ export const unAuthorized = () => (dispatch) => {
     type: NOT_AUTHORIZED,
   });
 };
-
-// export const GetItem_AsynsStorage = async (key) => {
-//   return await AsyncStorage.getItem(key);
-// };
