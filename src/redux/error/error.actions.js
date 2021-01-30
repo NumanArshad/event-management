@@ -9,7 +9,10 @@ export const errorActions = (errorResponse) => {
   if (status === 401) {
     dispatch(unAuthorized());
   } else if (status === 422) {
-    alertMessage(JSON.stringify(data?.errors));
+    console.log("ERR", data?.errors[Object.keys(data?.errors)[0]]);
+    // obj[Object.keys(obj)[0]] return first key value
+    //Object.keys(data?.errors)[0] return first key
+    alertMessage(data?.errors[Object.keys(data?.errors)[0]]);
   } else {
     alertMessage(data?.message);
   }

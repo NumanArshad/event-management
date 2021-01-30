@@ -1,10 +1,12 @@
 import React, { memo, useCallback, useState } from "react";
-import { StyleSheet, View, FlatList, Button } from "react-native";
+import { StyleSheet, View, FlatList, Button, Text } from "react-native";
 import EventItem from "components/EventItem";
 import keyExtractor from "ultis/keyExtractor";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { getAllEvents } from "redux/events/events.actions";
+import { height_screen, width_screen } from "ultis/dimensions";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const data = [
   {
@@ -32,7 +34,6 @@ const ProfileSaved = memo(() => {
     }, [dispatch, eventStatus])
   );
 
-  
   const renderItem = useCallback(({ item }) => {
     const {
       event_id,
@@ -62,17 +63,56 @@ const ProfileSaved = memo(() => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-        <Button
-          title="Saved"
-          color={eventStatus === "saved" ? `black` : ``}
-          onPress={() => setEventStatus("saved")}
-        />
-        <Button
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-around",
+          marginTop: height_screen * 0.02,
+        }}
+      >
+        <TouchableOpacity onPress={() => setEventStatus("saved")}>
+          {/* <Button
+            title="Saved"
+            color={eventStatus === "saved" ? `black` : ``}
+            onPress={() => setEventStatus("saved")}
+          /> */}
+          <Text
+            style={[
+              styles.loginBtn,
+              {
+                backgroundColor: eventStatus === "saved" ? `#ED3269` : `#fff`,
+
+                color: eventStatus === "saved" ? `#fff` : `#ED3269`,
+              },
+            ]}
+          >
+            Saved
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setEventStatus("attended")}>
+          {/* <Button
+            title="Saved"
+            color={eventStatus === "saved" ? `black` : ``}
+            onPress={() => setEventStatus("saved")}
+          /> */}
+          <Text
+            style={[
+              styles.loginBtn,
+              {
+                backgroundColor:
+                  eventStatus === "attended" ? `#ED3269` : `#fff`,
+                color: eventStatus === "attended" ? `#fff` : `#ED3269`,
+              },
+            ]}
+          >
+            Attended
+          </Text>
+        </TouchableOpacity>
+        {/* <Button
           title="Attended"
           color={eventStatus === "attended" ? `black` : ``}
           onPress={() => setEventStatus("attended")}
-        />
+        /> */}
       </View>
 
       <FlatList
@@ -97,5 +137,17 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     paddingTop: 14,
     paddingBottom: 20,
+  },
+  loginBtn: {
+    height: height_screen * 0.06,
+    width: width_screen * 0.25,
+    backgroundColor: "#ED3269",
+    borderRadius: 10,
+    marginTop: height_screen * 0.01,
+    textAlign: "center",
+    paddingTop: height_screen * 0.015,
+    color: "#fff",
+    borderWidth: 0.5,
+    borderColor: "#ED3269",
   },
 });

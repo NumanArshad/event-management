@@ -14,13 +14,11 @@ export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
     if (res.data.status_code === 200) {
       const { user, token } = res.data.data;
-
       setUserSessions({ user: user?.id, token });
       getSingleUser(user?.id, (userInfo) =>
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }))
       );
     }
-
     if (res.data.status_code === 422) {
       console.log("Response 422", res.data);
     }
@@ -102,18 +100,20 @@ export const setUserSessions = (data) => {
 
 //// get token from async storage///
 export const getUserSessions = () => async (dispatch) => {
+  console.log("Runing getUserSessions");
   dispatch(startAuthLoading());
   try {
     const token = await AsyncStorage.getItem("Token");
     const userId = await AsyncStorage.getItem("user");
-    dispatch(stopAuthLoading());
 
     token &&
       getSingleUser(parseInt(userId), (userInfo) => {
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
       });
+    dispatch(stopAuthLoading());
   } catch (error) {
     console.error("error is ", error);
+    dispatch(stopAuthLoading());
   }
 };
 
@@ -122,10 +122,12 @@ export const isAuthenticated = (payload) => (dispatch) => {
     type: IS_AUTHENTICATED,
     payload,
   });
+  dispatch(stopAuthLoading());
 };
 
 export const unAuthorized = () => (dispatch) => {
   dispatch({
     type: NOT_AUTHORIZED,
   });
+  dispatch(stopAuthLoading());
 };
