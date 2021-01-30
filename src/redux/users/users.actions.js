@@ -3,52 +3,9 @@ import axios from "ultis/services/httpServices";
 import firebase from "ultis/services/FirebaseConfig";
 import { isAuthenticated, setUserSessions } from "redux/auth/auth.actions";
 import FriendList from "screens/FriendList";
+import isEmpty from "ultis/isEmpty";
 
 const userCollectionRef = firebase.firestore().collection("users");
-
-export const getAllUsers = (callBack) => {
-  userCollectionRef.onSnapshot(
-    (
-      res //console.log("res is ", res)
-    ) => {
-      let usersList = [];
-      res.forEach((element) => {
-        // console.log("singleis ", element?.data())
-        usersList.push({
-          id: element?.id,
-          ...element?.data(),
-        });
-      });
-      callBack(usersList);
-    }
-  );
-};
-
-export const getUsersbyDocRefList = (fiendsListIds, callBack) => {
-console.log("frine id are", fiendsListIds)
-  
-  firebase
-    .firestore()
-    .runTransaction((transaction) => {
-      let lst = [];
-      fiendsListIds.forEach((docId) => {
-        const docRef = userCollectionRef.doc(docId);
-        transaction.get(docRef).then((friendPayload) => {
-          if (friendPayload?.exists) {
-            lst.push({
-              id: friendPayload?.id,
-              ...friendPayload?.data(),
-            });
-          }
-        });
-      });
-      return Promise.resolve(lst);
-    })
-    .then((trResponse) => {
-      callBack && callBack(trResponse);
-    })
-    .catch((err) => Promise.reject(err.message));
-};
 
 ////New user signup store user in firestore collection///
 export const addUser = (payload, auth_token) => (dispatch) => {
@@ -77,40 +34,66 @@ export const getSingleUser = (user_id, isAuthCallBack) => {
     .then((res) => {
       let userInfo = {};
       res.forEach((payload) => {
-            console.log("payload is", payload.data());
-
+        
         userInfo = { ...payload.data(), user_doc_id: payload.id };
       });
-      console.log("so useris", userInfo);
       isAuthCallBack && isAuthCallBack(userInfo);
     });
 };
 
-export const addFriend = (payload) => {
-  let followers = [];
-  followers.push(payload);
+///except friend request and friend docs////
+export const getAllUsers = (exceptionalUser, callBack) => {
+  userCollectionRef.onSnapshot((res) => {
+    let usersList = [];
+    res.forEach((element) => {
+      if (!exceptionalUser.includes(element?.id)) {
+        usersList.push({
+          id: element?.id,
+          ...element?.data(),
+        });
+      }
+    });
+    callBack(usersList);
+  });
+};
+
+export const getUsersbyDocRefList = (usersDocIdsList, callBack) => {
+  if (usersDocIdsList?.length) {
+    userCollectionRef
+      .where("__name__", "in", usersDocIdsList)
+      .onSnapshot((res) => {
+        let usersList = [];
+        res.forEach((element) => {
+          usersList.push({
+            id: element?.id,
+            ...element?.data(),
+          });
+        });
+        callBack(usersList);
+      });
+  }
+};
+
+///update user and auth login session///
+export const sendFriendRequest = (
+  requestReceipentDocId,
+  friendRequests,
+  loginUserId
+) => {
+  console.log("param is ", requestReceipentDocId, friendRequests, loginUserId);
   userCollectionRef
-    .doc("lCGhe5QtiDUZ7NyGxP8v")
+    .doc(requestReceipentDocId)
     .update({
-      followers,
+      friendRequests,
     })
     .then((res) => {
-      console.log("Response ", res);
+      console.log("very good");
     });
 };
+
+///approve/reject friend request
+export const UpdateFriendRequestStatus = (payload) => {};
 
 export const requestPayout = (data) => {
   return axios.post("payout/send-request", data);
 };
-
-// export const getAllusers = async() => {
-//   // axios.get("event/saved-events").then((res) => {
-//   //   if (res?.data?.status_code === 200) {
-//   //     dispatch({
-//   //       type: GET_ALL_SAVED_EVENTS,
-//   //       payload: res?.data?.data,
-//   //     });
-//   //   }
-//   // });
-//   return await userCollectionRef.snapshot(res => )
-// };

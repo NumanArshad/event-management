@@ -1,12 +1,21 @@
 import React, { memo, useCallback, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Button,
+  Alert,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import SvgFollowed from "svgs/Followers/SvgFollowed";
 import SvgFollow from "svgs/Followers/SvgFollow";
 import { width_screen, height_screen } from "ultis/dimensions";
 import FONTS from "ultis/fonts";
 import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
-import { addFriend } from "redux/users/users.actions";
+import { sendFriendRequest } from "redux/users/users.actions";
+import { useDispatch } from "react-redux";
 
 // interface Props {
 //   user_id: any;
@@ -21,13 +30,12 @@ const UserItem = memo((props: any) => {
   const onPress = useCallback(() => {
     setFollow(!follow);
     console.log("ID CLICKED", props.id);
-   // addFriend(props.id);
+    // addFriend(props.id);
   }, [follow]);
   const navigation = useNavigation();
 
-  const { actionButton, key, ...userInfo } = props;
-
-//console.log("my infi is", userInfo)
+  ////user id and user doc is login user and user info is detail of item user info
+  const { actionButton, key, loginUser, ...userInfo } = props;
 
   const onPeopleProfile = useCallback(() => {
     navigation.navigate(ROUTES.PeopleProfile, {
@@ -35,8 +43,36 @@ const UserItem = memo((props: any) => {
     });
   }, [navigation]);
 
-  const { user_name, followers, image } = userInfo;
+  const { user_name, followers, image, id, friendRequests } = userInfo;
 
+  const friendRequestStatus = () => {
+    const { status } =
+      friendRequests?.find(
+        //@ts-ignore
+        ({ user_doc_id }) => user_doc_id === loginUser?.user_doc_id
+      ) || {};
+    return {
+      isPending: status === "pending",
+      isRejected: status === "rejected",
+    };
+  };
+
+  const handleFriendRequest = useCallback(() => {
+    let updatedFriendRequests = friendRequestStatus()?.isPending
+      ? friendRequests?.filter(
+          (recDocId: string) => recDocId !== loginUser?.user_doc_id
+        )
+      : [
+          ...friendRequests,
+          { user_doc_id: loginUser?.user_doc_id, status: "pending" },
+        ];
+    //@ts-ignore
+    sendFriendRequest(id, updatedFriendRequests);
+  }, [userInfo, loginUser, friendRequests, friendRequestStatus]);
+
+  const handleAcceptRejectRequest = useCallback(() => {}, [userInfo]);
+
+  console.log("people is", userInfo);
   return (
     <TouchableOpacity onPress={onPeopleProfile} style={styles.card}>
       <Image style={styles.image} source={image} />
@@ -46,14 +82,22 @@ const UserItem = memo((props: any) => {
           {followers?.length} followers
         </Text>
       </View>
-      {actionButton === "follow" ? (
-        <TouchableOpacity onPress={onPress} style={styles.svg_Follow}>
-          {follow ? <SvgFollowed /> : <SvgFollow />}
+      {actionButton === "addFriend" && !friendRequestStatus()?.isRejected ? (
+        <TouchableOpacity
+          onPress={() => handleFriendRequest()}
+          style={styles.svg_Follow}
+        >
+          {friendRequestStatus()?.isPending ? <SvgFollowed /> : <SvgFollow />}
         </TouchableOpacity>
       ) : props.actionButton === "friendRequest" ? (
-        <TouchableOpacity onPress={onPress} style={styles.svg_Follow}>
-          <Text>accept or reject</Text>
-        </TouchableOpacity>
+        <>
+          <TouchableOpacity onPress={() => Alert.alert("accept click")}>
+            <Text>Accept</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text>Reject</Text>
+          </TouchableOpacity>
+        </>
       ) : null}
     </TouchableOpacity>
   );

@@ -7,7 +7,6 @@ import { getUserSessions } from "redux/auth/auth.actions";
 import { useDispatch, useSelector } from "react-redux";
 
 const Main = memo(() => {
-  const [isAuthenticated, setAutenticated] = useState(false);
 
   const dispatch = useDispatch();
   const { is_authenticated } = useSelector<any, any>((state) => state.auth);

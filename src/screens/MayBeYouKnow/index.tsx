@@ -1,39 +1,40 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { ScrollView } from "react-native";
 import UserItem from "components/UserItem";
-import { getAllUsers, getUsersbyDocRefList } from "redux/users/users.actions";
+import { getAllUsers } from "redux/users/users.actions";
 import { useSelector } from "react-redux";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
-import ROUTES from "ultis/routes";
+import { useFocusEffect } from "@react-navigation/native";
 
 const MayBeYouKnow = memo(() => {
   const [users, setUsers] = useState([]);
 
   const {
-    login_Session: { user_id, friends },
+    login_Session: { user_id, user_doc_id, friends, friendRequests },
   } = useSelector<any, any>((state) => state?.auth);
+
+  //@ts-ignore
+  const destReqDocId = friendRequests?.map(({ user_doc_id }) => user_doc_id);
 
   useFocusEffect(
     useCallback(() => {
-      getAllUsers((res) => setUsers(res));
+     getAllUsers([...friends, ...destReqDocId, user_doc_id], (res) =>
+       setUsers(res)
+     );
     }, [])
   );
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      {users?.map(
-        (user, key) =>
+      {users?.map((user, key) => (
+        <UserItem
+          key={key}
           //@ts-ignore
-          user_id !== user?.user_id &&
-          !friends.includes(user?.id) && (
-            <UserItem
-              key={key}
-              {...user}
-              image={require("assets/Followers/img.jpg")}
-              actionButton="follow"
-            />
-          )
-      )}
+          loginUser={{ user_doc_id, user_id }}
+          {...user}
+          image={require("assets/Followers/img.jpg")}
+          actionButton="addFriend"
+        />
+      ))}
       {/* <UserItem
         image={require("assets/Followers/img.jpg")}
         name={"Jose Lowe"}

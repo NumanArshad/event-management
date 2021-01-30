@@ -1,21 +1,28 @@
-import React, { memo, useEffect, useState, useCallback } from "react";
+import React, { memo, useState, useCallback } from "react";
 import { ScrollView } from "react-native";
 import UserItem from "components/UserItem";
-import { getAllUsers } from "redux/users/users.actions";
+import { getUsersbyDocRefList } from "redux/users/users.actions";
 import { useFocusEffect } from "@react-navigation/native";
-
+import { useSelector } from "react-redux";
 
 const FriendRequest = memo(() => {
   const [users, setUsers] = useState([]);
+  const {
+    login_Session: { friendRequests },
+  } = useSelector((state) => state?.auth);
 
+  const pendingRequests = friendRequests
+    //@ts-ignore
+    ?.filter(({ status }) => status === "pending")
+    ?.map(({ user_doc_id }: { user_doc_id: string }) => {
+      user_doc_id;
+    });
 
   useFocusEffect(
     useCallback(() => {
-      getAllUsers((res) => setUsers(res));
+      getUsersbyDocRefList(pendingRequests, (res) => setUsers(res));
     }, [])
   );
-
-
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -27,46 +34,6 @@ const FriendRequest = memo(() => {
           actionButton="friendRequest"
         />
       ))}
-      {/* <UserItem
-        image={require("assets/Followers/img.jpg")}
-        name={"Jose Lowe"}
-        numberFollower={"179"}
-      />
-      <UserItem
-        image={require("assets/Followers/img.jpg")}
-        name={"Hulda James"}
-        numberFollower={"944"}
-      />
-      <UserItem
-        image={require("assets/Followers/img.jpg")}
-        name={"Louisa Lyons"}
-        numberFollower={"641"}
-      />
-      <UserItem
-        image={require("assets/Followers/img.jpg")}
-        name={"Bessie Mendoza"}
-        numberFollower={"998"}
-      />
-      <UserItem
-        image={require("assets/Followers/img.jpg")}
-        name={"Matilda McGuire"}
-        numberFollower={"748"}
-      />
-      <UserItem
-        image={require("assets/Followers/img.jpg")}
-        name={"Harriett Coleman"}
-        numberFollower={"245"}
-      />
-      <UserItem
-        image={require("assets/Followers/img.jpg")}
-        name={"Matilda McGuire"}
-        numberFollower={"748"}
-      />
-      <UserItem
-        image={require("assets/Followers/img.jpg")}
-        name={"Harriett Coleman"}
-        numberFollower={"245"}
-      /> */}
     </ScrollView>
   );
 });
