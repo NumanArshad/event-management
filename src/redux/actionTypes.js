@@ -1,7 +1,7 @@
 ////Auth////
 export const IS_AUTHENTICATED = "IS_AUTHENTICATED";
 export const NOT_AUTHORIZED = "NOT_AUTHORIZED";
-export const USER_PROFILE = "USER_PROFILE";
+export const UPDATE_AUTH_USER = "UPDATE_AUTH_USER";
 
 ////Users///
 export const GET_ALL_USERS = "GET_ALL_USERS";

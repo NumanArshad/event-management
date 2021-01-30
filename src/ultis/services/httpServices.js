@@ -45,6 +45,7 @@ axios.interceptors.response.use(
   (error) => {
     dispatch(stopLoading());
     const { status, data } = error?.response;
+    console.log("error response is ",  error?.response)
     //status code (404:Not found, 500 server, 401 token expire)
     if (status === 500) {
       toastMessages("Unexpected error!");

@@ -19,9 +19,8 @@ import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
 import { useDispatch, useSelector } from "react-redux";
-import store from "../../redux/store";
+
 const Profile = memo(() => {
-  const { getState } = store;
   const {
     login_Session: {
       user_name,
@@ -29,24 +28,22 @@ const Profile = memo(() => {
       first_name,
       last_name,
       contact,
-      stripe_account_id,
+      stripe_account,
     },
-  } = getState()?.auth;
+  } = useSelector(state => state?.auth);
 
   const [email, setemail] = useState(userEmail);
   const [password, setpassword] = useState("");
   const [name, setname] = useState(user_name);
   const [firstName, setfirstName] = useState(first_name);
   const [lastName, setlastName] = useState(last_name);
-  const [stripAccount, setstripAccount] = useState(stripe_account_id);
+  const [stripAccount, setstripAccount] = useState(stripe_account);
   const [phone, setphone] = useState(contact);
 
   const { navigate } = useNavigation();
   const [preLoader, setpreLoader] = useState(false);
   const dispatch = useDispatch();
-  useEffect(() => {
-    // dispatch(getProfile());
-  }, []);
+  
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;
@@ -76,20 +73,17 @@ const Profile = memo(() => {
         formData.append("last_name", lastName);
         formData.append("stripe_account", stripAccount);
         formData.append("contact", phone);
-        // formData.append("image", email);
 
+        const jsonData = {
+          email,
+          first_name: firstName,
+          last_name: lastName,
+          stripe_account: stripAccount,
+          contact: phone,
+        };
+        // formData.append("image", email);
         console.log("FORMDATA:", formData);
-        updateProfile(formData)
-          .then((res) => {
-            console.log("Response ", res.data);
-            Alert.alert("", "Your Profile has been Updated Successfully!");
-            setpreLoader(false);
-          })
-          .catch((err) => {
-            console.log("ERror :", err.response.data.errors);
-            Alert.alert("", JSON.stringify(err.response.data.errors));
-            setpreLoader(false);
-          });
+        dispatch(updateProfile(formData, jsonData));
       }
     } else {
       Alert.alert("", "Kindly Fill All The Inputs.");
@@ -98,7 +92,7 @@ const Profile = memo(() => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.container}>
-        {console.log("ACCOUNT", stripe_account_id)}
+        {console.log("ACCOUNT", stripe_account)}
         <Image
           source={{
             uri:
