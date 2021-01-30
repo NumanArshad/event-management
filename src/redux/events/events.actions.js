@@ -21,9 +21,9 @@ export const getAllTrendingEvents = () => (dispatch) => {
 };
 
 export const getAllSavedEvents = () => (dispatch) => {
-  axios.get("event/attended-events").then((res) => {
+  axios.get("event/saved-events").then((res) => {
     if (res?.data?.status_code === 200) {
-      console.log("attended are", res?.data?.data)
+      console.log("saved are", res?.data?.data)
       dispatch({
         type: GET_ALL_SAVED_EVENTS,
         payload: res?.data?.data,
