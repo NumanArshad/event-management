@@ -1,10 +1,10 @@
-import React, { memo, useCallback } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import React, { memo, useCallback, useState } from "react";
+import { StyleSheet, View, FlatList, Button } from "react-native";
 import EventItem from "components/EventItem";
 import keyExtractor from "ultis/keyExtractor";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { getAllSavedEvents } from "redux/events/events.actions";
+import { getAllEvents } from "redux/events/events.actions";
 
 const data = [
   {
@@ -24,13 +24,15 @@ const ProfileSaved = memo(() => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { all_saved_events } = useSelector<any, any>((state) => state.events);
+  const [eventStatus, setEventStatus] = useState("saved");
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(getAllSavedEvents());
-    }, [dispatch])
+      dispatch(getAllEvents(eventStatus));
+    }, [dispatch, eventStatus])
   );
 
+  
   const renderItem = useCallback(({ item }) => {
     const {
       event_id,
@@ -60,6 +62,19 @@ const ProfileSaved = memo(() => {
 
   return (
     <View style={styles.container}>
+      <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+        <Button
+          title="Saved"
+          color={eventStatus === "saved" ? `black` : ``}
+          onPress={() => setEventStatus("saved")}
+        />
+        <Button
+          title="Attended"
+          color={eventStatus === "attended" ? `black` : ``}
+          onPress={() => setEventStatus("attended")}
+        />
+      </View>
+
       <FlatList
         data={all_saved_events}
         showsVerticalScrollIndicator={false}

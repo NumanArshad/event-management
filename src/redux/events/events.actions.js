@@ -21,8 +21,9 @@ export const getAllTrendingEvents = () => (dispatch) => {
 };
 
 export const getAllSavedEvents = () => (dispatch) => {
-  axios.get("event/saved-events").then((res) => {
+  axios.get("event/attended-events").then((res) => {
     if (res?.data?.status_code === 200) {
+      console.log("attended are", res?.data?.data)
       dispatch({
         type: GET_ALL_SAVED_EVENTS,
         payload: res?.data?.data,
@@ -31,6 +32,18 @@ export const getAllSavedEvents = () => (dispatch) => {
   });
 };
 
+
+export const getAllEvents = (eventStatus = "upcoming") => dispatch => {
+  axios.get(`event/${eventStatus}-events`).then((res) => {
+    if (res?.data?.status_code === 200) {
+      console.log("attended are", res?.data?.data)
+      dispatch({
+        type: GET_ALL_SAVED_EVENTS,
+        payload: res?.data?.data,
+      });
+    }
+  });
+}
 /////////////Attend event and attendees/////
 
 export const getSingleEventDetail = (id) => (dispatch) => {
