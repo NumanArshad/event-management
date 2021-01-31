@@ -16,7 +16,7 @@ const EvezForUStack = memo(() => {
         name={ROUTES.EvezForUStack}
         component={EvezForUTab}
         options={{
-          title: "Plan in New York",
+          title: "Events",
         }}
       />
     </Stack.Navigator>

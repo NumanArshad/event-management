@@ -110,12 +110,12 @@ export const getUserSessions = () => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("Token");
     const userId = await AsyncStorage.getItem("user");
+    dispatch(stopAuthLoading());
 
     token &&
       getSingleUser(parseInt(userId), (userInfo) => {
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
       });
-    // dispatch(stopAuthLoading());
   } catch (error) {
     console.error("error is ", error);
     dispatch(stopAuthLoading());

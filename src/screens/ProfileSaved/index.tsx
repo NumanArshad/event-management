@@ -7,6 +7,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { getAllEvents } from "redux/events/events.actions";
 import { height_screen, width_screen } from "ultis/dimensions";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import isEmpty from "ultis/isEmpty";
 
 const data = [
   {
@@ -26,7 +27,11 @@ const ProfileSaved = memo(() => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { all_saved_events } = useSelector<any, any>((state) => state.events);
+  const { all_errors } = useSelector<any, any>((state) => state.errors);
+  const { loading } = useSelector<any, any>((state) => state.loading);
   const [eventStatus, setEventStatus] = useState("saved");
+
+
 
   useFocusEffect(
     useCallback(() => {
@@ -71,11 +76,6 @@ const ProfileSaved = memo(() => {
         }}
       >
         <TouchableOpacity onPress={() => setEventStatus("saved")}>
-          {/* <Button
-            title="Saved"
-            color={eventStatus === "saved" ? `black` : ``}
-            onPress={() => setEventStatus("saved")}
-          /> */}
           <Text
             style={[
               styles.loginBtn,
@@ -90,11 +90,6 @@ const ProfileSaved = memo(() => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setEventStatus("attended")}>
-          {/* <Button
-            title="Saved"
-            color={eventStatus === "saved" ? `black` : ``}
-            onPress={() => setEventStatus("saved")}
-          /> */}
           <Text
             style={[
               styles.loginBtn,
@@ -108,21 +103,21 @@ const ProfileSaved = memo(() => {
             Attended
           </Text>
         </TouchableOpacity>
-        {/* <Button
-          title="Attended"
-          color={eventStatus === "attended" ? `black` : ``}
-          onPress={() => setEventStatus("attended")}
-        /> */}
       </View>
-
-      <FlatList
-        data={all_saved_events}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        bounces={false}
-        contentContainerStyle={styles.contentContainerStyle}
-      />
+      {loading ? (
+        <Text>...loading</Text>
+      ) : !isEmpty(all_errors) ? (
+        <Text>{all_errors?.message}</Text>
+      ) : (
+        <FlatList
+          data={all_saved_events}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          bounces={false}
+          contentContainerStyle={styles.contentContainerStyle}
+        />
+      )}
     </View>
   );
 });

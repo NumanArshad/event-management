@@ -85,7 +85,6 @@ export const updateUser = (payload) => (dispatch, getState) => {
   };
 
 export const getSingleUser = (user_id, isAuthCallBack) => {
-  // console.log("userid ", user_id);
   userCollectionRef
     .where("user_id", "==", user_id)
     .limit(1)
@@ -93,11 +92,8 @@ export const getSingleUser = (user_id, isAuthCallBack) => {
     .then((res) => {
       let userInfo = {};
       res.forEach((payload) => {
-        console.log("payload is", payload.data());
-
         userInfo = { ...payload.data(), user_doc_id: payload.id };
       });
-      console.log("so useris", userInfo);
       isAuthCallBack && isAuthCallBack(userInfo);
     });
 };

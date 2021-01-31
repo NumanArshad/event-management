@@ -1,6 +1,5 @@
 import axios from "axios";
-import { unAuthorized } from "redux/auth/auth.actions";
-import { errorActions } from "redux/error/error.actions";
+import { clearErrors, errorActions } from "redux/error/error.actions";
 import { alertMessage, toastMessages } from "ultis/alertToastMessages";
 import { startLoading, stopLoading } from "../../redux/loading/loading.actions";
 import store from "../../redux/store";
@@ -12,6 +11,7 @@ const { dispatch, getState } = store;
 axios.interceptors.request.use(
   (request) => {
     dispatch(startLoading());
+    dispatch(clearErrors());
 
     const requestUrl = request?.url.split("/")[0];
     const isAuthUrl = [
@@ -50,7 +50,7 @@ axios.interceptors.response.use(
     if (status === 500) {
       toastMessages("Unexpected error!");
     } else {
-      errorActions({ status, data });
+      dispatch(errorActions({ status, data }));
     }
     return Promise.reject(error);
   }

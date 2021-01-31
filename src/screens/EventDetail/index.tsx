@@ -38,8 +38,8 @@ import {
   clearSingleEvent,
   getSingleEventDetail,
 } from "redux/events/events.actions";
-import {clearEventAllReviews} from "redux/reviews/reviews.actions";
-
+import { clearEventAllReviews } from "redux/reviews/reviews.actions";
+import isEmpty from "ultis/isEmpty";
 
 const EventDetail = memo(() => {
   const route = useRoute();
@@ -51,12 +51,10 @@ const EventDetail = memo(() => {
   const dispatch = useDispatch();
 
   const { single_event } = useSelector<any, any>((state) => state.events);
-  
-  const { loading } = useSelector<any, any>((state) => state.loading);
 
   useEffect(() => {
     dispatch(getSingleEventDetail(data?.id));
-    
+
     return () => {
       dispatch(clearSingleEvent());
       dispatch(clearEventAllReviews());
@@ -91,8 +89,8 @@ const EventDetail = memo(() => {
     navigation.navigate(ROUTES.EventDetailMap);
   }, []);
   const onReview = useCallback(() => {
-    navigation.navigate(ROUTES.EventDetailRateComment,{
-      eventId: data?.id
+    navigation.navigate(ROUTES.EventDetailRateComment, {
+      eventId: data?.id,
     });
   }, [navigation]);
 
@@ -103,7 +101,7 @@ const EventDetail = memo(() => {
     outputRange: [0, 1],
     extrapolate: "clamp",
   });
-
+  console.log("event det", single_event);
   return (
     <View style={styles.container}>
       <ScrollView
@@ -140,12 +138,14 @@ const EventDetail = memo(() => {
             <Text style={styles.textCountDown}>{data.timeCountDown}</Text>
           </View>
         ) : null}
-        {single_event && (
+        {isEmpty(single_event) ? (
+          <Text>...loading</Text>
+        ) : (
           <View style={styles.infoView}>
-            <EventName 
-            eventName={single_event.event_name}
-            //rate={single_event?.rating}
-            tag={single_event?.type_name} 
+            <EventName
+              eventName={single_event.event_name}
+              //rate={single_event?.rating}
+              tag={single_event?.type_name}
             />
             <EventBasicInfo
               currentAttending={single_event?.participants}
@@ -156,12 +156,12 @@ const EventDetail = memo(() => {
         <RateDetail
           eventId={data?.id}
           onPress={onReview}
-          rate={single_event?.rate}
-          reviewTimes={12}
+          rate={single_event?.rating}
+          // reviewTimes={12}
           marginTop={32}
           numberReviews={214}
         />
-        <View style={styles.contentView}>
+        {/* <View style={styles.contentView}>
           <Text style={styles.textTitle}>ABOUT</Text>
           <Text style={styles.aboutContent}>
             Why this party is for you {"\n"}
@@ -174,7 +174,7 @@ const EventDetail = memo(() => {
               <SvgArrowRight />
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
 
         {single_event && (
           <>
@@ -184,8 +184,9 @@ const EventDetail = memo(() => {
               </Text>
               <UserItem
                 image={require("@assets/Followers/img.jpg")}
-                name={single_event?.type_name}
-                numberFollower={"535"}
+                user_name={single_event?.sub_type_name}
+                //   user_type = {single_event?.type_name}
+                // numberFollower={"535"}
               />
             </View>
 
@@ -212,7 +213,7 @@ const EventDetail = memo(() => {
             </View>
           </>
         )}
-        <View style={styles.contentView}>
+        {/* <View style={styles.contentView}>
           <Text style={styles.textTitle}>CONTACT</Text>
           <Text style={styles.aboutContent}>
             Send us an email at{" "}
@@ -261,7 +262,7 @@ const EventDetail = memo(() => {
               isSmallItem={true}
             />
           </ScrollView>
-        </View>
+        </View> */}
 
         <View style={styles.buttonView}>
           {isAvailable ? (
@@ -384,6 +385,7 @@ const styles = StyleSheet.create({
 
   buttonView: {
     width: "100%",
+    marginTop: 15,
     paddingHorizontal: "6.4%",
   },
   bottomButton: {

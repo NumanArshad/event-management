@@ -1,10 +1,8 @@
 import { unAuthorized } from "redux/auth/auth.actions";
-import store from "redux/store";
+import { GET_ALL_ERRORS, CLEAR_ERRORS } from "../actionTypes";
 import { alertMessage } from "ultis/alertToastMessages";
 
-const { dispatch } = store;
-
-export const errorActions = (errorResponse) => {
+export const errorActions = (errorResponse) => (dispatch) => {
   const { status, data } = errorResponse;
   if (status === 401) {
     dispatch(unAuthorized());
@@ -18,6 +16,17 @@ export const errorActions = (errorResponse) => {
       console.log("ERR", data);
     }
   } else {
-    alertMessage(data?.message);
+    console.log("no found message is", data);
+    //alertMessage(data?.message);
+    dispatch({
+      type: GET_ALL_ERRORS,
+      payload: data,
+    });
   }
+};
+
+export const clearErrors = () => (dispatch) => {
+  dispatch({
+    type: CLEAR_ERRORS,
+  });
 };

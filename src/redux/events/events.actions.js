@@ -75,6 +75,11 @@ export const unSaveEvent = (id, Alert) => (dispatch) => {
   });
 };
 
+export const getEventAttendees = eventId => dispatch => {
+  
+}
+
+
 export const clearAllEvents = () => (dispatch) => {
   dispatch({
     type: CLEAR_ALL_EVENTS,

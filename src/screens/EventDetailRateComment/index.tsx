@@ -15,11 +15,16 @@ import FONTS from "ultis/fonts";
 import Rating from "components/Rating";
 import { useRoute } from "@react-navigation/native";
 import { postEventReview } from "redux/reviews/reviews.actions";
+import {alertMessage} from "ultis/alertToastMessages";
 
 interface reviewModel {
   review: string;
   review_id: number;
+  user_name: string;
+  user_image: string;
+
 }
+
 
 const EventDetailRateComment = memo(() => {
   const { all_reviews } = useSelector<any, any>((state) => state.reviews);
@@ -33,6 +38,8 @@ const EventDetailRateComment = memo(() => {
   } = useRoute();
 
   const getStars = (data) => {
+  //  alertMessage("njfbj")
+   // console.log("stars are", data)
     setstars(data);
     // console.log("Data", data);
   };
@@ -56,22 +63,25 @@ const EventDetailRateComment = memo(() => {
       <View style={styles.container}>
         <View style={styles.commentView}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            {console.log("Reviews", all_reviews)}
-            {all_reviews?.map(({ review, review_id }: reviewModel) => (
-              <CommentItem
-                name={"Claudia Blake"}
-                rate={4.5}
-                comment={review}
-                isLike={false}
-                numberLike={2}
-                numberReply={review_id}
-                time={"2 HOURS AGO"}
-              />
-            ))}
+            {/* {console.log("Reviews", all_reviews)} */}
+            {all_reviews?.map(
+              ({ review, review_id, user_name, user_image }: reviewModel) => (
+                <CommentItem
+                  name={user_name}  
+                  //    rate={4.5}
+                  comment={review}
+                  userImage={user_image}
+                  //  isLike={false}
+                  // numberLike={2}
+                  //  numberReply={review_id}
+                  //  time={"2 HOURS AGO"}
+                />
+              )
+            )}
           </ScrollView>
         </View>
         <View style={styles.writeComment}>
-          <Rating rate={4} onPress={getStars} />
+          <Rating rate={0} onPress={getStars} />
           <View style={styles.line} />
           <View style={styles.writeAndSend}>
             <TextInput
