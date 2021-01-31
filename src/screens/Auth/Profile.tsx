@@ -82,7 +82,7 @@ const Profile = memo(() => {
           contact: phone,
         };
         // formData.append("image", email);
-        console.log("FORMDATA:", formData);
+        ////console.log("FORMDATA:", formData);
         dispatch(updateProfile(formData, jsonData));
       }
     } else {
@@ -92,7 +92,6 @@ const Profile = memo(() => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.container}>
-        {console.log("ACCOUNT", stripe_account)}
         <Image
           source={{
             uri:

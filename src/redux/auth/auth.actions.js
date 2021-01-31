@@ -82,7 +82,7 @@ export const getBankInfo = (authUserId, callBack) => {
 
 export const updateBankInfo = (payload) => {
   axios.post(`bank/update`, payload).then((res) => {
-    console.log("response is ", res);
+    ////console.log("response is ", res);
   });
 };
 
@@ -105,7 +105,7 @@ export const setUserSessions = (data) => {
 
 //// get token from async storage///
 export const getUserSessions = () => async (dispatch) => {
-  console.log("Runing getUserSessions");
+  ////console.log("Runing getUserSessions");
   dispatch(startAuthLoading());
   try {
     const token = await AsyncStorage.getItem("Token");

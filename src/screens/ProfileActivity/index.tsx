@@ -20,7 +20,7 @@ const ProfileActivity = memo(() => {
     getBankInfo(user_id, setBankInfo);
   }, []);
 
-  console.log("bank infi is ", bankInfo);
+  //console.log("bank infi is ", bankInfo);
 
   const handleSubmit = () => {
     const {

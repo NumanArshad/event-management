@@ -11,7 +11,7 @@ import axios from "ultis/services/httpServices";
 export const getCompanies = () => (dispatch) => {
   axios.get("donation/non-business-organizations").then((res) => {
     if (res?.data?.status_code === 200) {
-      console.log("ALL getCompanies", res.data);
+      ////console.log("ALL getCompanies", res.data);
 
       dispatch({
         type: GET_ALL_COMPANIES,
@@ -22,7 +22,7 @@ export const getCompanies = () => (dispatch) => {
 };
 
 export const sendDonation = (data, Alert) => (dispatch) => {
-  console.log("sendDonation", data, Alert);
+  ////console.log("sendDonation", data, Alert);
   axios
     .post("donation/send-donation", data)
     .then((res) => {
@@ -31,7 +31,7 @@ export const sendDonation = (data, Alert) => (dispatch) => {
       }
     })
     .catch((err) => {
-      console.log("Error", err.response.data.message);
+      ////console.log("Error", err.response.data.message);
       Alert.alert("", err.response.data.message);
     });
 };

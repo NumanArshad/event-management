@@ -20,14 +20,14 @@ const UserItem = memo((props: any) => {
   const [follow, setFollow] = useState(false);
   const onPress = useCallback(() => {
     setFollow(!follow);
-    console.log("ID CLICKED", props.id);
+    ////console.log("ID CLICKED", props.id);
     // addFriend(props.id);
   }, [follow]);
   const navigation = useNavigation();
 
   const { actionButton, key, ...userInfo } = props;
 
-  //console.log("my infi is", userInfo)
+  //////console.log("my infi is", userInfo)
 
   const onPeopleProfile = useCallback(() => {
     navigation.navigate(ROUTES.PeopleProfile, {

@@ -7,7 +7,7 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case GET_ALL_COMPANIES:
-      console.log("REDUCER GET_ALL_COMPANIES", action.payload);
+      ////console.log("REDUCER GET_ALL_COMPANIES", action.payload);
       return {
         companies: action.payload,
       };

@@ -27,7 +27,7 @@ const PeopleProfile = memo(() => {
   const scrollY = new Animated.Value(0);
 
   const { params } = useRoute();
-  console.log("user info paramsi ", params?.userInfo);
+  //console.log("user info paramsi ", params?.userInfo);
 
   const {
     user_name,

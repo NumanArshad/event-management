@@ -13,7 +13,7 @@ const BillWithoutQR = memo((props: BillWithoutQRProps) => {
   const onPress = useCallback(() => {
     props.onGetIt();
   }, []);
-  console.log('height_screen', height_screen);
+  //console.log('height_screen', height_screen);
   return (
     <View style={styles.container}>
       <View style={[styles.bill, {marginTop: height_screen > 812 ? 118 : 36}]}>

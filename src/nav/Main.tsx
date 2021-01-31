@@ -23,7 +23,7 @@ const Main = memo(() => {
         translucent={true}
         backgroundColor={"transparent"}
       />
-      {/* {GetItem_AsynsStorage("Token").then((res) => console.log("ASYNC", res))} */}
+      {/* {GetItem_AsynsStorage("Token").then((res) => //console.log("ASYNC", res))} */}
       {is_authenticated ? <PrivateNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
