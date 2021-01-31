@@ -17,6 +17,7 @@ import SvgReport from "svgs/EventDetailRateComment/SvgReport";
 
 interface CommentProps {
   // isLike: boolean;
+  //reviewId: number;
   name: string;
   comment: string;
   userImage: string;
@@ -47,6 +48,7 @@ const CommentItem = memo((props: CommentProps) => {
       horizontal={true}
       pagingEnabled={true}
       showsHorizontalScrollIndicator={false}
+      //key={props.reviewId}
     >
       <View style={styles.container}>
       <Image
@@ -54,7 +56,7 @@ const CommentItem = memo((props: CommentProps) => {
          // source={{uri: props.userImage}}
           style={styles.bigAvatar}
         />
-                <View style={styles.commentView}>
+          <View style={styles.commentView}>
           <Text style={styles.textName}>{props.name}</Text>
           {/* <InactiveRate rate={props.rate} /> */}
           <Text style={styles.textComment}>{props.comment}</Text>

@@ -69,6 +69,7 @@ const EventDetailRateComment = memo(() => {
                 <CommentItem
                   name={user_name}  
                   //    rate={4.5}
+                  key={review_id}
                   comment={review}
                   userImage={user_image}
                   //  isLike={false}
