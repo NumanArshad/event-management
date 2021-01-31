@@ -1,14 +1,21 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState, useCallback } from "react";
 import { ScrollView } from "react-native";
 import UserItem from "components/UserItem";
 import { getAllUsers } from "redux/users/users.actions";
+import { useFocusEffect } from "@react-navigation/native";
+
 
 const FriendRequest = memo(() => {
   const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    getAllUsers((res) => setUsers(res));
-  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getAllUsers((res) => setUsers(res));
+    }, [])
+  );
+
+
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>

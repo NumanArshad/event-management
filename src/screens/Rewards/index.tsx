@@ -40,11 +40,13 @@ const Rewards = memo(() => {
           setpreLoader(false);
         })
         .catch((err) => {
-          console.log("ERror :", err.response.data.message);
-          // Alert.alert("",res.data.message)
-          Alert.alert("", err.response.data.message);
+          console.log("ERror :", err.response);
+          // // Alert.alert("",res.data.message)
+          // Alert.alert("", err.response);
           setpreLoader(false);
         });
+    } else {
+      Alert.alert("", "Write some Credits!Thank You.Don't leave it Empty.");
     }
   };
   return (
@@ -76,15 +78,15 @@ const Rewards = memo(() => {
       <View
         style={{
           position: "absolute",
-          left: height_screen * 0.2,
+          left: width_screen * 0.035,
           right: 0,
-          top: height_screen * 0.12,
+          top: height_screen * 0.25,
           bottom: 0,
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <ActivityIndicator color="#fff" animating={preLoader} size="small" />
+        <ActivityIndicator color="#ED3269" animating={preLoader} size="small" />
       </View>
     </View>
   );

@@ -16,6 +16,9 @@ import ButtonFilter from "components/buttons/ButtonFilter";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllSavedEvents, getAllTrendingEvents } from "redux/events/events.actions";
 import keyExtractor from "ultis/keyExtractor";
+import isEmpty from "ultis/isEmpty";
+
+
 
 const EventAroundYou = memo(() => {
   const navigation = useNavigation();
@@ -23,6 +26,7 @@ const EventAroundYou = memo(() => {
   const { all_saved_events } = useSelector<any, any>(
     (state) => state.events
   );
+  const { all_errors } = useSelector<any, any>((state) => state.errors);
 
   const onPressFilter = useCallback(() => {
     navigation.navigate(ROUTES.FilterEvez);
@@ -77,14 +81,20 @@ const EventAroundYou = memo(() => {
             See All Event Around You - 10km
           </Text>
         </TouchableOpacity>
-        <FlatList
-          style={styles.scroll}
-          data={all_saved_events}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.contentContainerStyle}
-        />
+        {
+         !isEmpty(all_saved_events) ?
+         <FlatList
+           style={styles.scroll}
+           data={all_saved_events}
+           renderItem={renderItem}
+           keyExtractor={keyExtractor}
+           showsVerticalScrollIndicator={false}
+           contentContainerStyle={styles.contentContainerStyle}
+         /> :
+        !isEmpty(all_errors) ? 
+           <Text>{all_errors?.message}</Text> :
+             <Text>...Loading</Text>
+      }
         {/* <EventItem
           thumbnail={require('@assets/EventAroundU/around_u_1.png')}
           tag={['#nightlife', '#party']}

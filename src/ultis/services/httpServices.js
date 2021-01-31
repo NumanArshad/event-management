@@ -1,5 +1,6 @@
 import axios from "axios";
-import { unAuthorized } from "redux/auth/auth.actions";
+import { clearErrors, errorActions } from "redux/error/error.actions";
+import { alertMessage, toastMessages } from "ultis/alertToastMessages";
 import { startLoading, stopLoading } from "../../redux/loading/loading.actions";
 import store from "../../redux/store";
 
@@ -10,6 +11,7 @@ const { dispatch, getState } = store;
 axios.interceptors.request.use(
   (request) => {
     dispatch(startLoading());
+    dispatch(clearErrors());
 
     const requestUrl = request?.url.split("/")[0];
     const isAuthUrl = [
@@ -42,11 +44,14 @@ axios.interceptors.response.use(
   },
   (error) => {
     dispatch(stopLoading());
-    console.log("response is", error?.response?.status);
-    if (error?.response?.status === 401) {
-      dispatch(unAuthorized());
-    }
+    const { status, data } = error?.response;
+    console.log("error response is ", error?.response.status);
     //status code (404:Not found, 500 server, 401 token expire)
+    if (status === 500) {
+      toastMessages("Unexpected error!");
+    } else {
+      dispatch(errorActions({ status, data }));
+    }
     return Promise.reject(error);
   }
 );

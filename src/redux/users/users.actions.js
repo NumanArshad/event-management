@@ -1,7 +1,11 @@
 import { GET_ALL_USERS, GET_SINGLE_USER } from "../actionTypes";
 import axios from "ultis/services/httpServices";
 import firebase from "ultis/services/FirebaseConfig";
-import { isAuthenticated, setUserSessions } from "redux/auth/auth.actions";
+import {
+  isAuthenticated,
+  setUserSessions,
+  updateAuthUser,
+} from "redux/auth/auth.actions";
 import FriendList from "screens/FriendList";
 
 const userCollectionRef = firebase.firestore().collection("users");
@@ -25,8 +29,8 @@ export const getAllUsers = (callBack) => {
 };
 
 export const getUsersbyDocRefList = (fiendsListIds, callBack) => {
+  console.log("frine id are", fiendsListIds);
 
-  
   firebase
     .firestore()
     .runTransaction((transaction) => {
@@ -45,7 +49,6 @@ export const getUsersbyDocRefList = (fiendsListIds, callBack) => {
       return Promise.resolve(lst);
     })
     .then((trResponse) => {
-      console.log("response is ", trResponse);
       callBack && callBack(trResponse);
     })
     .catch((err) => Promise.reject(err.message));
@@ -69,8 +72,19 @@ export const addUser = (payload, auth_token) => (dispatch) => {
     });
 };
 
+////Update auth user on profile update/////
+export const updateUser = (payload) => (dispatch, getState) => {
+  const {
+    login_Session: { user_doc_id },
+  } = getState()?.auth;
+
+  userCollectionRef
+    .doc(user_doc_id)
+    .update(payload)
+    .then((res) => dispatch(updateAuthUser(payload)))
+  };
+
 export const getSingleUser = (user_id, isAuthCallBack) => {
-  // console.log("userid ", user_id);
   userCollectionRef
     .where("user_id", "==", user_id)
     .limit(1)
@@ -78,11 +92,8 @@ export const getSingleUser = (user_id, isAuthCallBack) => {
     .then((res) => {
       let userInfo = {};
       res.forEach((payload) => {
-        //     console.log("payload is", payload.data());
-
         userInfo = { ...payload.data(), user_doc_id: payload.id };
       });
-      console.log("so useris", userInfo);
       isAuthCallBack && isAuthCallBack(userInfo);
     });
 };

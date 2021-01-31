@@ -21,6 +21,21 @@ export const getCompanies = () => (dispatch) => {
   });
 };
 
+export const sendDonation = (data, Alert) => (dispatch) => {
+  console.log("sendDonation", data, Alert);
+  axios
+    .post("donation/send-donation", data)
+    .then((res) => {
+      if (res?.data?.status_code === 200) {
+        Alert.alert("", res.data.message);
+      }
+    })
+    .catch((err) => {
+      console.log("Error", err.response.data.message);
+      Alert.alert("", err.response.data.message);
+    });
+};
+
 // export const clearCompanies = () => (dispatch) => {
 //   dispatch({
 //     type: CLEAR_ALL_EVENTS,

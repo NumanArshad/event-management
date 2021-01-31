@@ -8,26 +8,26 @@ import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import { addFriend } from "redux/users/users.actions";
 
-// interface Props {
-//   user_id: any;
-//   user_name: string;
-//   numberFollower: string;
-//   id: string;
-//   actionButton?: string;
-// }
+interface Props {
+  // user_id: any;
+  user_name: string;
+  user_type?: string;
+  // id: string;
+  actionButton?: string;
+}
 
 const UserItem = memo((props: any) => {
   const [follow, setFollow] = useState(false);
   const onPress = useCallback(() => {
     setFollow(!follow);
     console.log("ID CLICKED", props.id);
-    addFriend(props.id);
+    // addFriend(props.id);
   }, [follow]);
   const navigation = useNavigation();
 
   const { actionButton, key, ...userInfo } = props;
 
-console.log("my infi is", userInfo)
+  //console.log("my infi is", userInfo)
 
   const onPeopleProfile = useCallback(() => {
     navigation.navigate(ROUTES.PeopleProfile, {
@@ -35,26 +35,27 @@ console.log("my infi is", userInfo)
     });
   }, [navigation]);
 
-  const { user_name, followers, image } = userInfo;
+  const { user_name, image, user_type } = userInfo;
 
   return (
     <TouchableOpacity onPress={onPeopleProfile} style={styles.card}>
       <Image style={styles.image} source={image} />
       <View style={styles.txtField}>
         <Text style={styles.txtName}>{user_name}</Text>
-        <Text style={styles.txtNumberFollower}>
-          {followers?.length} followers
-        </Text>
+        {user_type && <Text style={styles.txtNumberFollower}>{user_type}</Text>}
       </View>
-      {actionButton === "follow" ? (
-        <TouchableOpacity onPress={onPress} style={styles.svg_Follow}>
-          {follow ? <SvgFollowed /> : <SvgFollow />}
-        </TouchableOpacity>
-      ) : props.actionButton === "friendRequest" ? (
-        <TouchableOpacity onPress={onPress} style={styles.svg_Follow}>
-          <Text>accept or reject</Text>
-        </TouchableOpacity>
-      ) : null}
+      {
+        // actionButton === "follow" ? (
+        //   <TouchableOpacity onPress={onPress} style={styles.svg_Follow}>
+        //     {follow ? <SvgFollowed /> : <SvgFollow />}
+        //   </TouchableOpacity>
+        // ) :
+        props.actionButton === "friendRequest" ? (
+          <TouchableOpacity onPress={onPress} style={styles.svg_Follow}>
+            <Text>accept or reject</Text>
+          </TouchableOpacity>
+        ) : null
+      }
     </TouchableOpacity>
   );
 });

@@ -1,15 +1,24 @@
 import axios from "ultis/services/httpServices";
 import * as profileAxios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { IS_AUTHENTICATED, NOT_AUTHORIZED, USER_PROFILE } from "../actionTypes";
-import { addUser, getSingleUser } from "redux/users/users.actions";
+import {
+  IS_AUTHENTICATED,
+  NOT_AUTHORIZED,
+  UPDATE_AUTH_USER,
+} from "../actionTypes";
+import { addUser, getSingleUser, updateUser } from "redux/users/users.actions";
+import {
+  startAuthLoading,
+  startLoading,
+  stopAuthLoading,
+  stopLoading,
+} from "redux/loading/loading.actions";
+import { alertMessage } from "ultis/alertToastMessages";
 
 export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
     if (res.data.status_code === 200) {
-      // console.log("response issss", res.data.data);
       const { user, token } = res.data.data;
-
       setUserSessions({ user: user?.id, token });
       getSingleUser(user?.id, (userInfo) =>
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }))
@@ -34,8 +43,11 @@ export const changePassword = (data) => {
   return axios.post("auth/update-password", data);
 };
 
-export const updateProfile = (data) => {
-  return axios.post("auth/update-profile", data);
+export const updateProfile = (data, jsonData) => (dispatch) => {
+  axios.post("auth/update-profile", data).then((res) => {
+    alertMessage("Your Profile has been Updated Successfully!");
+    dispatch(updateUser(jsonData));
+  });
 };
 
 /////instantly call after singup for firestore collection///
@@ -45,7 +57,6 @@ export const getProfile = (auth_token) => (dispatch) => {
       headers: { Authorization: `Bearer ${auth_token}` },
     })
     .then((res) => {
-      // console.log("Response PROFILE:", res.data.data.user);
       if (res.data.status_code === 200) {
         const userPayload = {
           ...res.data.data.user,
@@ -55,17 +66,32 @@ export const getProfile = (auth_token) => (dispatch) => {
           groups: [],
           deviceToken: "token",
         };
-        // dispatch(addUser(userPayload, auth_token));
+        dispatch(addUser(userPayload, auth_token));
       }
     });
 };
 
-// export const logout = async () => {
-//   try {
-//   } catch (err) {
-//     console.log("logut error");
-//   }
-// };
+////auth user bank information ////
+export const getBankInfo = (authUserId, callBack) => {
+  axios.get(`bank/get-info?user_id=${authUserId}`).then((res) => {
+    if (res.data.status_code === 200) {
+      callBack(res.data.data);
+    }
+  });
+};
+
+export const updateBankInfo = (payload) => {
+  axios.post(`bank/update`, payload).then((res) => {
+    console.log("response is ", res);
+  });
+};
+
+////auth user bank information ////
+
+export const logout = () => (dispatch) => {
+  AsyncStorage.clear();
+  dispatch(unAuthorized());
+};
 // No Worries! You can easily recover your account with the e-mail
 //             address you have on file with us. Please enter your email below and
 //             we will respond within 1-2 minutes.
@@ -73,50 +99,47 @@ export const getProfile = (auth_token) => (dispatch) => {
 ////set token in async storage////
 export const setUserSessions = (data) => {
   const { user, token } = data;
-  // console.log("session user is", user)
   AsyncStorage.setItem("Token", token);
   AsyncStorage.setItem("user", user.toString());
 };
 
 //// get token from async storage///
 export const getUserSessions = () => async (dispatch) => {
+  console.log("Runing getUserSessions");
+  dispatch(startAuthLoading());
   try {
-    //getUser();
     const token = await AsyncStorage.getItem("Token");
     const userId = await AsyncStorage.getItem("user");
-    //  console.log("userid", userId, token)
+    dispatch(stopAuthLoading());
+
     token &&
       getSingleUser(parseInt(userId), (userInfo) => {
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
-        dispatch(getProfile(token));
       });
   } catch (error) {
     console.error("error is ", error);
+    dispatch(stopAuthLoading());
   }
 };
 
-export const SetItem_AsynsStorage = (key, data) => {
-  try {
-    AsyncStorage.setItem(key, data);
-  } catch (e) {
-    console.log("Error While Adding Data to AsyncStorage");
-  }
+export const updateAuthUser = (payload) => (dispatch) => {
+  dispatch({
+    type: UPDATE_AUTH_USER,
+    payload,
+  });
 };
 
 export const isAuthenticated = (payload) => (dispatch) => {
-  // console.log("is aurh", payload)
   dispatch({
     type: IS_AUTHENTICATED,
     payload,
   });
+  dispatch(stopAuthLoading());
 };
 
 export const unAuthorized = () => (dispatch) => {
   dispatch({
     type: NOT_AUTHORIZED,
   });
+  dispatch(stopAuthLoading());
 };
-
-// export const GetItem_AsynsStorage = async (key) => {
-//   return await AsyncStorage.getItem(key);
-// };

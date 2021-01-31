@@ -1,9 +1,10 @@
-import React, {memo, useCallback, useState} from 'react';
-import Star from 'components/Rating/Star';
-import {StyleSheet, View} from 'react-native';
+import React, { memo, useCallback, useState } from "react";
+import Star from "components/Rating/Star";
+import { StyleSheet, View } from "react-native";
 
 interface RatingProps {
   rate?: number;
+  onPress: (index: number) => void;
 }
 
 const Rating = memo((props: RatingProps) => {
@@ -11,8 +12,9 @@ const Rating = memo((props: RatingProps) => {
   const onRate = useCallback(
     (index: number) => {
       setRate(index);
+      props.onPress(index);
     },
-    [setRate],
+    [setRate]
   );
   return (
     <View style={styles.container}>
@@ -28,6 +30,6 @@ const Rating = memo((props: RatingProps) => {
 export default Rating;
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 });

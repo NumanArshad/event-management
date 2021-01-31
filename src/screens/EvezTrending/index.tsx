@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import ROUTES from "ultis/routes";
@@ -7,6 +7,7 @@ import ButtonFilter from "components/buttons/ButtonFilter";
 import EventItem from "components/EventItem";
 import keyExtractor from "ultis/keyExtractor";
 import { getAllTrendingEvents } from "redux/events/events.actions";
+import isEmpty from "ultis/isEmpty";
 
 const data = [
   {
@@ -56,9 +57,9 @@ const EvezTrending = memo(() => {
     (state) => state.events
   );
 
-  const { login_Session } = useSelector<any, any>((state) => state.auth);
-
-  console.log("login session is ", login_Session)
+  const { all_errors } = useSelector<any, any>((state) => state.errors);
+  const { loading } = useSelector<any, any>((state) => state.loading);
+  //const { login_Session } = useSelector<any, any>((state) => state.auth);
 
   const onPressFilter = useCallback(() => {
     navigation.navigate(ROUTES.FilterEvez);
@@ -104,19 +105,25 @@ const EvezTrending = memo(() => {
         //  //maxAttending={//maxAttending}
         save={false}
       />
-    );
+    );  
   }, []);
 
   return (
     <View style={styles.container}>
-      <FlatList
-        style={styles.scroll}
-        data={all_trending_events}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.contentContainerStyle}
-      />
+      {
+        !isEmpty(all_trending_events) ?
+        <FlatList
+          style={styles.scroll}
+          data={all_trending_events}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.contentContainerStyle}
+        /> :
+       !isEmpty(all_errors) ? 
+          <Text>{all_errors?.message}</Text> :
+            <Text>...Loading</Text>
+      }
       <ButtonFilter onPress={onPressFilter} />
     </View>
   );

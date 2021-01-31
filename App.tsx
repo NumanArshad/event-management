@@ -51,4 +51,5 @@ const Evez = () => {
     </Provider>
   );
 };
+
 export default Evez;

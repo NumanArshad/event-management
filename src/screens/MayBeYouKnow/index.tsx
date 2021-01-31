@@ -13,9 +13,11 @@ const MayBeYouKnow = memo(() => {
     login_Session: { user_id, friends },
   } = useSelector<any, any>((state) => state?.auth);
 
-  useEffect(() => {
-    getAllUsers((res) => setUsers(res));
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getAllUsers((res) => setUsers(res));
+    }, [])
+  );
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
