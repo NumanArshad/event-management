@@ -20,8 +20,3 @@ jobs:
       - run: npm install
       - run: expo install
       - run: expo build:android -t apk
-      - uses: unsplash/comment-on-pr@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-        with:
-          msg: Apk is generated successfully!, you can [download from here](https://expo.io/@numanarshad.dev/projects/ReactNativeDemo).
