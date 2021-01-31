@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
+import { alertMessage } from "ultis/alertToastMessages";
 
 interface Props {
   coverImage: any;
@@ -85,7 +86,11 @@ const HeaderProfile = memo((props: Props) => {
         </Text>
         <Text style={styles.address}>{props.address}</Text>
         <View style={styles.btn}>
-          <TouchableOpacity onPress={onInbox} style={styles.inbox}>
+          <TouchableOpacity
+            // onPress={onInbox}
+            onPress={() => alertMessage("Working...")}
+            style={styles.inbox}
+          >
             <Text style={styles.txtInbox}>INBOX</Text>
             <View style={styles.numberMessage}>
               <Text style={styles.txtNumberMessage}>{props.numberMessage}</Text>
@@ -95,7 +100,7 @@ const HeaderProfile = memo((props: Props) => {
             <Text style={styles.txtRewards}>REWARD - ${props.rewards}</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.followStyle}>
+        {/* <View style={styles.followStyle}>
           <TouchableOpacity onPress={onFollower}>
             <Text style={styles.followers}>
               {props.followers}
@@ -108,18 +113,18 @@ const HeaderProfile = memo((props: Props) => {
               <Text style={styles.txtFollow}> following</Text>
             </Text>
           </TouchableOpacity>
-        </View>
-        <Text style={styles.interested}>Interested in:</Text>
+        </View> */}
+        {/* <Text style={styles.interested}>Interested in:</Text>
         <View style={styles.tagStyle}>
           {props.interested.map((item) => (
             <Text style={styles.txtInterested}>{item}</Text>
           ))}
-        </View>
-        <TouchableOpacity onPress={startAnimation} style={styles.arrDown}>
+        </View> */}
+        {/* <TouchableOpacity onPress={startAnimation} style={styles.arrDown}>
           <Animated.View style={animatedStyles}>
             <SvgArrDown />
           </Animated.View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </>
   );

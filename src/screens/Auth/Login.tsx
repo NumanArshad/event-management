@@ -55,7 +55,7 @@ const Login = memo(() => {
     }
   };
 
-  //console.log("auth loadin gi s", authloading)
+  console.log("auth loadin gi s", authloading);
   if (authloading) {
     return <LoadingScreen />;
   } else {

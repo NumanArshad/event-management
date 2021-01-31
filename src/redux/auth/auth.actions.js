@@ -115,7 +115,7 @@ export const getUserSessions = () => async (dispatch) => {
       getSingleUser(parseInt(userId), (userInfo) => {
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
       });
-    dispatch(stopAuthLoading());
+    // dispatch(stopAuthLoading());
   } catch (error) {
     console.error("error is ", error);
     dispatch(stopAuthLoading());
