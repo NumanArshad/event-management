@@ -20,10 +20,29 @@ export const getAllTrendingEvents = () => (dispatch) => {
   });
 };
 
+// EventTypes
+// Consultation
+// lead
+// Participation
+// Entertainment
+
+export const getFilteredEvents = (location, type) => (dispatch) => {
+  axios
+    .get(`event/filter?location=${location}&organization_id=&type=${type}`)
+    .then((res) => {
+      if (res?.data?.status_code === 200) {
+        dispatch({
+          type: GET_ALL_TRENDING_EVENTS,
+          payload: res?.data?.data,
+        });
+      }
+    });
+};
+
 export const getAllSavedEvents = () => (dispatch) => {
   axios.get("event/saved-events").then((res) => {
     if (res?.data?.status_code === 200) {
-      console.log("saved are", res?.data?.data)
+      console.log("saved are", res?.data?.data);
       dispatch({
         type: GET_ALL_SAVED_EVENTS,
         payload: res?.data?.data,
@@ -32,18 +51,17 @@ export const getAllSavedEvents = () => (dispatch) => {
   });
 };
 
-
-export const getAllEvents = (eventStatus = "upcoming") => dispatch => {
+export const getAllEvents = (eventStatus = "upcoming") => (dispatch) => {
   axios.get(`event/${eventStatus}-events`).then((res) => {
     if (res?.data?.status_code === 200) {
-      console.log("attended are", res?.data?.data)
+      console.log("attended are", res?.data?.data);
       dispatch({
         type: GET_ALL_SAVED_EVENTS,
         payload: res?.data?.data,
       });
     }
   });
-}
+};
 /////////////Attend event and attendees/////
 
 export const getSingleEventDetail = (id) => (dispatch) => {
@@ -75,10 +93,7 @@ export const unSaveEvent = (id, Alert) => (dispatch) => {
   });
 };
 
-export const getEventAttendees = eventId => dispatch => {
-  
-}
-
+export const getEventAttendees = (eventId) => (dispatch) => {};
 
 export const clearAllEvents = () => (dispatch) => {
   dispatch({

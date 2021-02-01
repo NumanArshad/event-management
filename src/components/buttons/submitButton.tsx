@@ -51,7 +51,6 @@ const SubmitButton = memo(
 export default SubmitButton;
 
 const styles = StyleSheet.create({
-
   submitBtn: {
     height: height_screen * 0.055,
     width: width_screen * 0.3,
@@ -61,5 +60,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingTop: height_screen * 0.012,
     color: "#fff",
+    alignSelf: "center",
   },
 });

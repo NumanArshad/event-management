@@ -14,10 +14,13 @@ const Donation = memo(() => {
   const moveToDonate = useCallback(() => {
     navigation.navigate(ROUTES.DonatePoint);
   }, []);
+  const onRewards = useCallback(() => {
+    navigation.navigate(ROUTES.Rewards);
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onRewards}>
         <LinearGradient
           colors={["#ED3269", "#F05F3E"]}
           start={{ x: 0, y: 1 }}
