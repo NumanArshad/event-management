@@ -32,7 +32,9 @@ export const CLEAR_SINGLE_EVENT_ALL_REVIEWS = "CLEAR_SINGLE_EVENT_ALL_REVIEWS";
 
 export const GET_ALL_COMPANIES = "GET_ALL_COMPANIES";
 
-
 //////////////GET_ALL_ERRORS/////
 export const GET_ALL_ERRORS = "GET_ALL_ERRORS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+
+//////////////GET_ALL_Earnings/////
+export const GET_ALL_EARNINGS = "GET_ALL_EARNINGS";

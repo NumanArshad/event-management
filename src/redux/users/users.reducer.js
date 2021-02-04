@@ -3,12 +3,14 @@ import {
   GET_ALL_SAVED_EVENTS,
   GET_SINGLE_EVENT,
   CLEAR_SINGLE_EVENT,
+  GET_ALL_EARNINGS,
 } from "../actionTypes";
 
 const initialState = {
   all_trending_events: null,
   all_saved_events: null,
   single_event: null,
+  my_earnings: null,
 };
 
 export default function (state = initialState, action) {
@@ -18,11 +20,11 @@ export default function (state = initialState, action) {
         ...state,
         all_trending_events: action.payload,
       };
-      case GET_ALL_SAVED_EVENTS:
-        return {
-          ...state,
-          all_saved_events: action.payload,
-        };
+    case GET_ALL_SAVED_EVENTS:
+      return {
+        ...state,
+        all_saved_events: action.payload,
+      };
     case GET_SINGLE_EVENT:
       return {
         ...state,
@@ -33,6 +35,12 @@ export default function (state = initialState, action) {
         ...state,
         single_event: null,
       };
+    case GET_ALL_EARNINGS:
+      return {
+        ...state,
+        my_earnings: action.payload,
+      };
+
     default:
       return state;
   }
