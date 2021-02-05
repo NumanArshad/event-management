@@ -10,7 +10,7 @@ export const isConversationInitiated = (conversionDocId, initialMsg) => {
     .get()
     .then((res) => {
       if (!res.docs.length) {
-        console.log("not exist");
+        ////console.log("not exist");
         ///Intital chat message/////
         sendMessage(conversionDocId, initialMsg);
       }
@@ -29,7 +29,7 @@ export const getConversation = (conversionDocId, myMessages, callBack) => {
   chatMessagesRef(conversionDocId).orderBy("createdAt").onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((changes) => {
       if (changes.type === "added") {
-        console.log("chnage data is", changes.doc.data());
+        ////console.log("chnage data is", changes.doc.data());
         myMessages.unshift({
           ...changes.doc.data(),
           id: changes.doc.id,

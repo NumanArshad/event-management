@@ -12,7 +12,7 @@ export default function (state = initialState, action) {
       };
 
     case CLEAR_ERRORS:
-    console.log("clearing error called")
+    ////console.log("clearing error called")
       return {
         all_errors: null,
       };

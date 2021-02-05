@@ -69,7 +69,7 @@ const Register = memo((navigation) => {
         //   type: "image/jpg",
         // });
 
-        console.log("FORMDATA:", formData);
+        ////console.log("FORMDATA:", formData);
         dispatch(register(formData));
       }
     } else {
@@ -101,7 +101,7 @@ const Register = memo((navigation) => {
       quality: 1,
     });
 
-    console.log(result);
+    ////console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);

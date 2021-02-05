@@ -16,11 +16,11 @@ export const getEventAllReviews = (eventId) => (dispatch) => {
 };
 
 export const postEventReview = (data) => (dispatch) => {
-  console.log("postEventReview", data);
+  ////console.log("postEventReview", data);
   axios.post("review/rate-event", data).then((res) => {
     if (res?.data?.status_code === 200) {
       dispatch(getEventAllReviews(data?.event_id));
-      console.log("Posted");
+      ////console.log("Posted");
     }
   });
 };

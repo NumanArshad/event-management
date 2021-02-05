@@ -13,10 +13,10 @@ export const errorActions = (errorResponse) => (dispatch) => {
       alertMessage(data?.errors[Object.keys(data?.errors)[0]]);
     } else {
       alertMessage(data.message);
-      console.log("ERR", data);
+      ////console.log("ERR", data);
     }
   } else {
-    console.log("no found message is", data);
+    ////console.log("no found message is", data);
     //alertMessage(data?.message);
     dispatch({
       type: GET_ALL_ERRORS,

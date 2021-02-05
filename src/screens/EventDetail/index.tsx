@@ -101,7 +101,7 @@ const EventDetail = memo(() => {
     outputRange: [0, 1],
     extrapolate: "clamp",
   });
-  console.log("event det", single_event);
+  //console.log("event det", single_event);
   return (
     <View style={styles.container}>
       <ScrollView

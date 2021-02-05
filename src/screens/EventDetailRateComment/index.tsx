@@ -39,9 +39,9 @@ const EventDetailRateComment = memo(() => {
 
   const getStars = (data) => {
   //  alertMessage("njfbj")
-   // console.log("stars are", data)
+   // //console.log("stars are", data)
     setstars(data);
-    // console.log("Data", data);
+    // //console.log("Data", data);
   };
 
   const onClickListener = () => {
@@ -50,7 +50,7 @@ const EventDetailRateComment = memo(() => {
       stars: stars,
       comment: comment,
     };
-    console.log("Post Review", data);
+    //console.log("Post Review", data);
     dispatch(postEventReview(data));
     setcomment("");
   };
@@ -63,12 +63,13 @@ const EventDetailRateComment = memo(() => {
       <View style={styles.container}>
         <View style={styles.commentView}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            {/* {console.log("Reviews", all_reviews)} */}
+            {/* {//console.log("Reviews", all_reviews)} */}
             {all_reviews?.map(
               ({ review, review_id, user_name, user_image }: reviewModel) => (
                 <CommentItem
                   name={user_name}  
                   //    rate={4.5}
+                  key={review_id}
                   comment={review}
                   userImage={user_image}
                   //  isLike={false}

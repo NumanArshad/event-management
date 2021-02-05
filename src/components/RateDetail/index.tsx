@@ -10,7 +10,7 @@ interface RateDetailProps {
   eventId: number;
   marginTop?: number;
   rate: number;
-  reviewTimes: number;
+  reviewTimes?: number;
   numberReviews: number;
   onPress: () => void;
 }

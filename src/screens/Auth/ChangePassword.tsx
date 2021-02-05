@@ -39,17 +39,17 @@ const ChangePassword = memo((navigation) => {
 
         formData.append("password_confirmation", confirmPassword);
 
-        //   console.log("FORMDATA:", formData);
+        //   ////console.log("FORMDATA:", formData);
         forgotPassword(formData)
           .then((res) => {
-            console.log("Response ", res.data);
+            ////console.log("Response ", res.data);
             if (res.data.status_code === 200) {
               Alert.alert("", res.data.message);
               navigate(ROUTES.Login);
             }
           })
           .catch((err) => {
-            console.log("ERror :", err.response.data.errors);
+            ////console.log("ERror :", err.response.data.errors);
             Alert.alert("", JSON.stringify(err.response.data.errors));
           });
       }

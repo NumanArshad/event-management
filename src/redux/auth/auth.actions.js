@@ -108,7 +108,7 @@ export const setUserSessions = (data) => {
 
 //// get token from async storage///
 export const getUserSessions = () => async (dispatch) => {
-  console.log("Runing getUserSessions");
+  ////console.log("Runing getUserSessions");
   dispatch(startAuthLoading());
   try {
     const token = await AsyncStorage.getItem("Token");

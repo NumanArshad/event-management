@@ -33,10 +33,10 @@ const Rewards = memo(() => {
       formData.append("credits", value);
       formData.append("account_number", "12321-98790");
 
-      console.log("FORMDATA:", formData);
+      //console.log("FORMDATA:", formData);
       requestPayout(formData)
         .then((res) => {
-          console.log("Response ", res.data);
+          //console.log("Response ", res.data);
           if (res.data.status_code === 200) {
             setpreLoader(false);
             Alert.alert("", res.data.message);
@@ -44,7 +44,7 @@ const Rewards = memo(() => {
           setpreLoader(false);
         })
         .catch((err) => {
-          console.log("ERror :", err.response);
+          //console.log("ERror :", err.response);
           // // Alert.alert("",res.data.message)
           // Alert.alert("", err.response);
           setpreLoader(false);
