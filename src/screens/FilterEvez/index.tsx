@@ -29,8 +29,20 @@ const FilterEvez = memo(() => {
   const navigation = useNavigation();
   const [typeEvents, settypeEvents] = useState("No");
   const [location, setLocation] = useState("");
+  const [activeTag, setactiveTag] = useState("");
   const dispatch = useDispatch();
 
+  const eventTags = [
+    "Participation",
+    "Entertainment",
+    "Consultation",
+    "Deals",
+    "Cash-Back",
+  ];
+
+  const handleActiveTag = (data) => {
+    setactiveTag(activeTag === data ? "" : data);
+  };
   const onValuesDistanceChange = useCallback((values) => {
     setValuesDistance(values);
   }, []);
@@ -44,7 +56,7 @@ const FilterEvez = memo(() => {
   const setEventsType = (data) => {
     console.log("Data Type", data);
 
-    setEventsType(data);
+    settypeEvents(data);
   };
   const onPressShowAllEvent = useCallback(() => {
     // AdMobInterstitial.setAdUnitID(adsVideoId);
@@ -57,8 +69,9 @@ const FilterEvez = memo(() => {
     //       price: valuesPriceDistance,
     //     });
     //   });
-    // dispatch(getFilteredEvents(typeEvents));
-    console.log("Data Type", typeEvents);
+    dispatch(getFilteredEvents(activeTag));
+    console.log("Data Type", activeTag);
+    navigation.goBack();
   }, []);
 
   return (
@@ -72,26 +85,32 @@ const FilterEvez = memo(() => {
         </View>
         <View style={styles.hashTagView}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <ItemTag
+            {eventTags
+              ? eventTags.map((tag, id) => (
+                  <ItemTag
+                    active={tag === activeTag}
+                    onPress={() => handleActiveTag(tag)}
+                    tagName={tag}
+                    key={id}
+                  />
+                ))
+              : null}
+            {/* <ItemTag
               active={false}
-              // onPress={setEventsType}
+              onPress={() => settypeEvents("Consultation")}
               tagName={"Consultation"}
             />
-            <ItemTag
-              active={true}
-              // onPress={setEventsType}
-              tagName={"Lead"}
-            />
+            <ItemTag active={true} onPress={setEventsType} tagName={"Lead"} />
             <ItemTag
               active={false}
-              // onPress={setEventsType}
+              onPress={setEventsType}
               tagName={"Participation"}
             />
             <ItemTag
               active={false}
-              // onPress={setEventsType}
+              onPress={setEventsType}
               tagName={"Entertainment"}
-            />
+            /> */}
           </ScrollView>
         </View>
 
