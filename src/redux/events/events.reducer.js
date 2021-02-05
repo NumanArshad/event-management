@@ -1,6 +1,7 @@
 import {
   GET_ALL_TRENDING_EVENTS,
   GET_ALL_SAVED_EVENTS,
+  CLEAR_ALL_EVENTS,
   GET_SINGLE_EVENT,
   CLEAR_SINGLE_EVENT,
 } from "../actionTypes";
@@ -19,6 +20,7 @@ export default function (state = initialState, action) {
         all_trending_events: action.payload,
       };
       case GET_ALL_SAVED_EVENTS:
+        console.log("hey", action.payload?.length)
         return {
           ...state,
           all_saved_events: action.payload,
@@ -28,6 +30,11 @@ export default function (state = initialState, action) {
         ...state,
         single_event: action.payload,
       };
+      case CLEAR_ALL_EVENTS:
+        return {
+          ...state,
+          all_trending_events: null,
+        };
     case CLEAR_SINGLE_EVENT:
       return {
         ...state,

@@ -10,7 +10,7 @@ import axios from "ultis/services/httpServices";
 export const getAllTrendingEvents = () => (dispatch) => {
   axios.get("event/upcomming-events").then((res) => {
     if (res?.data?.status_code === 200) {
-      // console.log("ALL EENTS", res.data);
+      //console.log("ALL EENTS", res.data.data?.length);
 
       dispatch({
         type: GET_ALL_TRENDING_EVENTS,
@@ -27,9 +27,12 @@ export const getAllTrendingEvents = () => (dispatch) => {
 // Entertainment
 
 export const getFilteredEvents = (location, type) => (dispatch) => {
+ 
+ //console.log("heheh", location)
   axios
     .get(`event/filter?location=${location}&organization_id=&type=${type}`)
     .then((res) => {
+      //console.log("called response is ", res?.data)
       if (res?.data?.status_code === 200) {
         dispatch({
           type: GET_ALL_TRENDING_EVENTS,
@@ -42,7 +45,7 @@ export const getFilteredEvents = (location, type) => (dispatch) => {
 export const getAllSavedEvents = () => (dispatch) => {
   axios.get("event/saved-events").then((res) => {
     if (res?.data?.status_code === 200) {
-      console.log("saved are", res?.data?.data);
+      //console.log("saved are", res?.data?.data);
       dispatch({
         type: GET_ALL_SAVED_EVENTS,
         payload: res?.data?.data,
@@ -54,7 +57,7 @@ export const getAllSavedEvents = () => (dispatch) => {
 export const getAllEvents = (eventStatus = "upcoming") => (dispatch) => {
   axios.get(`event/${eventStatus}-events`).then((res) => {
     if (res?.data?.status_code === 200) {
-      console.log("attended are", res?.data?.data);
+      //console.log("attended are", res?.data?.data);
       dispatch({
         type: GET_ALL_SAVED_EVENTS,
         payload: res?.data?.data,
@@ -76,7 +79,7 @@ export const getSingleEventDetail = (id) => (dispatch) => {
 };
 
 export const saveEvent = (id, Alert) => (dispatch) => {
-  console.log("saveEvent", id);
+  //console.log("saveEvent", id);
   axios.get(`event/save-event?event_id=${id}`).then((res) => {
     if (res?.data?.status_code === 200) {
       Alert.alert("", res.data.message);
@@ -85,7 +88,7 @@ export const saveEvent = (id, Alert) => (dispatch) => {
 };
 
 export const unSaveEvent = (id, Alert) => (dispatch) => {
-  console.log("unSaveEvent", id);
+  //console.log("unSaveEvent", id);
   axios.get(`event/unsave-event?event_id=${id}`).then((res) => {
     if (res?.data?.status_code === 200) {
       Alert.alert("", res.data.message);

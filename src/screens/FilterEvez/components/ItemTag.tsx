@@ -4,7 +4,7 @@ import FONTS from "ultis/fonts";
 interface ItemTag {
   active: boolean;
   tagName: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 const ItemTag = memo((props: ItemTag) => {
   let stylesTag;
@@ -18,7 +18,7 @@ const ItemTag = memo((props: ItemTag) => {
   }
 
   return (
-    <TouchableOpacity style={stylesTag} onPress={props.onPress}>
+    <TouchableOpacity style={stylesTag} onPress={props?.onPress}>
       <Text style={[styles.textTagName, { color: colorText }]}>
         {props.tagName}
       </Text>

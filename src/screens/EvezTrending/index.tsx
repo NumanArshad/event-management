@@ -1,12 +1,19 @@
 import React, { memo, useCallback } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import ROUTES from "ultis/routes";
 import ButtonFilter from "components/buttons/ButtonFilter";
 import EventItem from "components/EventItem";
 import keyExtractor from "ultis/keyExtractor";
-import { getAllTrendingEvents } from "redux/events/events.actions";
+import {
+  getAllTrendingEvents,
+  getFilteredEvents,
+} from "redux/events/events.actions";
 import isEmpty from "ultis/isEmpty";
 import { getDistanceByLatLong } from "ultis/functions";
 
@@ -53,6 +60,8 @@ const data = [
 const EvezTrending = memo(() => {
   const navigation = useNavigation();
 
+  const { params } = useRoute();
+
   const dispatch = useDispatch();
   const { all_trending_events } = useSelector<any, any>(
     (state) => state.events
@@ -63,16 +72,21 @@ const EvezTrending = memo(() => {
   //const { login_Session } = useSelector<any, any>((state) => state.auth);
 
   const onPressFilter = useCallback(() => {
-    navigation.navigate(ROUTES.FilterEvez);
-  }, [navigation]);
+    navigation.navigate(ROUTES.FilterEvez, {
+      activeFilter: params,
+    });
+  }, [navigation, params]);
 
   useFocusEffect(
     useCallback(() => {
-    //  if()
-      // getCurrentPosition();
-      console.log(getDistanceByLatLong(-8.853059, 63.976067));
-      dispatch(getAllTrendingEvents());
-    }, [dispatch, navigation])
+      //@ts-ignore
+      const { eventLocation, eventType } = params || {};
+      dispatch(
+        (eventLocation || eventType)
+          ? getFilteredEvents(eventLocation, eventType)
+          : getAllTrendingEvents()
+      );
+    }, [dispatch, navigation, params])
   );
 
   const renderItem = useCallback(({ item }) => {
