@@ -4,6 +4,7 @@ import {
   GET_SINGLE_EVENT,
   CLEAR_SINGLE_EVENT,
   CLEAR_ALL_EVENTS,
+  GET_ALL_RESERVED_EVENTS,
 } from "../actionTypes";
 import axios from "ultis/services/httpServices";
 
@@ -45,6 +46,18 @@ export const getAllSavedEvents = () => (dispatch) => {
       console.log("saved are", res?.data?.data);
       dispatch({
         type: GET_ALL_SAVED_EVENTS,
+        payload: res?.data?.data,
+      });
+    }
+  });
+};
+
+export const getAllReserverEvents = () => (dispatch) => {
+  axios.get("event/reserved-spot-events").then((res) => {
+    if (res?.data?.status_code === 200) {
+      console.log("getAllReserverEvents are", res?.data?.data);
+      dispatch({
+        type: GET_ALL_RESERVED_EVENTS,
         payload: res?.data?.data,
       });
     }
