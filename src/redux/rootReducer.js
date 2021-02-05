@@ -6,6 +6,7 @@ import reviewsReducer from "./reviews/reviews.reducer";
 import eventAttendance from "./attendEvent/attendEvent.reducer";
 import donateReducer from "./donate/donate.Reducer";
 import errorReducer from "./error/error.reducer";
+import usersReducer from "./users/users.reducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   attendance: eventAttendance,
   donate: donateReducer,
   errors: errorReducer,
+  users: usersReducer,
 });
 
 export default rootReducer;

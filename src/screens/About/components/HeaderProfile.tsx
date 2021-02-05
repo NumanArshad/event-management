@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import {
   Animated,
   Image,
@@ -16,6 +16,10 @@ import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
 import { alertMessage } from "ultis/alertToastMessages";
+import { useDispatch, useSelector } from "react-redux";
+import store from "redux/store";
+import { getMyEarning } from "redux/users/users.actions";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface Props {
   coverImage: any;
@@ -32,6 +36,7 @@ interface Props {
 
 const HeaderProfile = memo((props: Props) => {
   const navigation = useNavigation();
+  const [earnings, setearnings] = useState("");
   const onInbox = useCallback(() => {
     navigation.navigate(ROUTES.Inbox);
   }, [navigation]);
@@ -39,9 +44,7 @@ const HeaderProfile = memo((props: Props) => {
     navigation.navigate(ROUTES.Profile);
   }, [navigation]);
   const onRewards = useCallback(() => {
-    navigation.navigate(ROUTES.Rewards, {
-      rewards: props.rewards,
-    });
+    navigation.navigate(ROUTES.Rewards);
   }, [navigation]);
   const onFollower = useCallback(() => {
     navigation.navigate(ROUTES.TabFollowers);
@@ -54,6 +57,19 @@ const HeaderProfile = memo((props: Props) => {
     inputRange: [0, 360],
     outputRange: ["0deg", "360deg"],
   });
+
+  const dispatch = useDispatch();
+  const { my_earnings } = useSelector<any, any>((state) => state.users);
+
+  useEffect(() => {
+    if (Array.isArray(my_earnings) && my_earnings.length > 0) {
+      // makeRow();
+    } else {
+      dispatch(getMyEarning());
+      console.log("Run", my_earnings);
+    }
+  }, [dispatch, my_earnings]);
+
   const startAnimation = useCallback(() => {
     Animated.timing(spin, {
       toValue: 180,
@@ -100,6 +116,35 @@ const HeaderProfile = memo((props: Props) => {
             <Text style={styles.txtRewards}>REWARD - ${props.rewards}</Text>
           </TouchableOpacity>
         </View>
+
+        <ScrollView>
+          {Array.isArray(my_earnings) && my_earnings.length > 0
+            ? my_earnings.map((data, id) => (
+                <LinearGradient
+                  colors={["#ED3269", "#F05F3E"]}
+                  start={{ x: 0, y: 1 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.mainCard}
+                >
+                  <View style={styles.earningDetails}>
+                    <Text style={styles.EventName}>
+                      {data ? data.event_name : "Event Name"}
+                    </Text>
+                    <Text style={styles.EventAttend}>
+                      {data ? data.earning_type : "Attendant"}
+                    </Text>
+                  </View>
+                  <View style={styles.earningCredits}>
+                    <Text style={styles.creditText}>Credits</Text>
+                    <Text style={styles.creditNumber}>
+                      {data ? data.earn_credits : "00"}
+                    </Text>
+                  </View>
+                </LinearGradient>
+              ))
+            : null}
+        </ScrollView>
+
         {/* <View style={styles.followStyle}>
           <TouchableOpacity onPress={onFollower}>
             <Text style={styles.followers}>
@@ -306,5 +351,38 @@ const styles = StyleSheet.create({
     width: width_screen * 0.08,
     borderRadius: 100,
     padding: "15%",
+  },
+  mainCard: {
+    width: "100%",
+    marginTop: height_screen * 0.01,
+    flexDirection: "row",
+    padding: "3%",
+    borderRadius: 10,
+  },
+  earningDetails: {
+    width: "70%",
+    fontFamily: FONTS.Regular,
+  },
+  earningCredits: {
+    width: "30%",
+    fontFamily: FONTS.Regular,
+  },
+  EventName: {
+    color: "#fff",
+    fontFamily: FONTS.Regular,
+  },
+  EventAttend: {
+    fontFamily: FONTS.Regular,
+    color: "#fff",
+  },
+  creditText: {
+    fontFamily: FONTS.Regular,
+    textAlign: "center",
+    color: "#fff",
+  },
+  creditNumber: {
+    fontFamily: FONTS.Regular,
+    textAlign: "center",
+    color: "#fff",
   },
 });

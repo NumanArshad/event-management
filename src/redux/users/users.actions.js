@@ -1,4 +1,8 @@
-import { GET_ALL_USERS, GET_SINGLE_USER } from "../actionTypes";
+import {
+  GET_ALL_EARNINGS,
+  GET_ALL_USERS,
+  GET_SINGLE_USER,
+} from "../actionTypes";
 import axios from "ultis/services/httpServices";
 import firebase from "ultis/services/FirebaseConfig";
 import {
@@ -81,8 +85,8 @@ export const updateUser = (payload) => (dispatch, getState) => {
   userCollectionRef
     .doc(user_doc_id)
     .update(payload)
-    .then((res) => dispatch(updateAuthUser(payload)))
-  };
+    .then((res) => dispatch(updateAuthUser(payload)));
+};
 
 export const getSingleUser = (user_id, isAuthCallBack) => {
   userCollectionRef
@@ -113,6 +117,17 @@ export const addFriend = (payload) => {
 
 export const requestPayout = (data) => {
   return axios.post("payout/send-request", data);
+};
+
+export const getMyEarning = () => (dispatch) => {
+  axios.get(`earning/my-earnings`).then((res) => {
+    if (res?.data?.status_code === 200) {
+      dispatch({
+        type: GET_ALL_EARNINGS,
+        payload: res?.data?.data,
+      });
+    }
+  });
 };
 
 // export const getAllusers = async() => {

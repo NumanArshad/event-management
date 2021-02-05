@@ -143,7 +143,7 @@ const EventDetail = memo(() => {
         ) : (
           <View style={styles.infoView}>
             <EventName
-              eventName={single_event.event_name}
+              eventName={single_event?.event_name}
               //rate={single_event?.rating}
               tag={single_event?.type_name}
             />
@@ -157,7 +157,7 @@ const EventDetail = memo(() => {
           eventId={data?.id}
           onPress={onReview}
           rate={single_event?.rating}
-          // reviewTimes={12}
+          reviewTimes={12}
           marginTop={32}
           numberReviews={214}
         />

@@ -15,13 +15,17 @@ import ButtonLinear from "components/buttons/ButtonLinear";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { requestPayout } from "redux/users/users.actions";
 import ROUTES from "ultis/routes";
+import store from "../../redux/store";
 
 const Rewards = memo(() => {
   const [value, onChangeText] = React.useState("");
   const navigate = useNavigation();
   const route = useRoute();
   const [preLoader, setpreLoader] = useState(false);
-
+  const { getState } = store;
+  const {
+    login_Session: { user_name, earn_credits, followers, following, email },
+  } = getState()?.auth;
   const handlePayoutRequest = () => {
     if (value != "") {
       setpreLoader(true);
@@ -51,7 +55,7 @@ const Rewards = memo(() => {
   };
   return (
     <View style={styles.container}>
-      <HeaderReward amount={route.params.rewards} />
+      <HeaderReward amount={earn_credits} />
       <View style={styles.inputShape}>
         <TextInput
           onChangeText={(text) => onChangeText(text)}
