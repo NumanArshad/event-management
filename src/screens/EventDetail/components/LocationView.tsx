@@ -1,14 +1,18 @@
 import React, {memo} from 'react';
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import FONTS from 'ultis/fonts';
+import { getDistanceByLatLong, splitLatLongStr } from 'ultis/functions';
 
 interface LocationViewProps {
   location: string;
-  distance: number;
+  distance: string;
   style?: ViewStyle;
 }
 
 const LocationView = memo((props: LocationViewProps) => {
+
+const {latitude, longitude} = splitLatLongStr(props.distance) || {}
+
   return (
     <View style={props.style}>
       <Text style={[styles.textLocation, {marginTop: 16}]}>Stage 48</Text>
@@ -16,7 +20,7 @@ const LocationView = memo((props: LocationViewProps) => {
         {props.location}
       </Text>
       <Text style={[styles.textLocation, {fontFamily: FONTS.Regular}]}>
-        {props.distance} km nearby
+        {getDistanceByLatLong(latitude, longitude)} km nearby
       </Text>
     </View>
   );

@@ -149,6 +149,7 @@ const EventDetail = memo(() => {
             />
             <EventBasicInfo
               currentAttending={single_event?.participants}
+              distance={single_event?.lat_long}
               eventTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
             />
           </View>

@@ -53,6 +53,8 @@ const EventAroundYou = memo(() => {
       rating,
       type_name,
     } = item;
+
+   // console.log("egr", lat_long)
     return (
       <EventItem
         thumbnail={require("@assets/Trending/trending_3.png")}

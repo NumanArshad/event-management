@@ -10,10 +10,11 @@ import { formatK } from "help/formatNumber/formatK";
 import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import isEmpty from "ultis/isEmpty";
+import { getDistanceByLatLong, splitLatLongStr } from "ultis/functions";
 
 interface EventBasicInfoProps {
   location?: string;
-  distance?: number;
+  distance?: string;
   currentAttending?: number;
   //maxAttending?: number;
   eventTime?: string;
@@ -31,6 +32,8 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
     navigation.navigate(ROUTES.ListAttending);
   };
 
+  const {latitude, longitude} =  splitLatLongStr(props?.distance) || {}
+
   return (
     <View style={styles.container}>
       {props.location ? (
@@ -42,7 +45,7 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
             </Text>
           </View>
           <Text style={[styles.textTag, { color: colorTextLocation }]}>
-            {props.distance}km
+            {getDistanceByLatLong(latitude, longitude)} km
           </Text>
         </View>
       ) : null}

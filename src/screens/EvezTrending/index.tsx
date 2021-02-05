@@ -8,6 +8,7 @@ import EventItem from "components/EventItem";
 import keyExtractor from "ultis/keyExtractor";
 import { getAllTrendingEvents } from "redux/events/events.actions";
 import isEmpty from "ultis/isEmpty";
+import { getDistanceByLatLong } from "ultis/functions";
 
 const data = [
   {
@@ -66,7 +67,12 @@ const EvezTrending = memo(() => {
   }, [navigation]);
 
   useFocusEffect(
-    useCallback(() => dispatch(getAllTrendingEvents()), [dispatch])
+    useCallback(() => {
+    //  if()
+      // getCurrentPosition();
+      console.log(getDistanceByLatLong(-8.853059, 63.976067));
+      dispatch(getAllTrendingEvents());
+    }, [dispatch, navigation])
   );
 
   const renderItem = useCallback(({ item }) => {
@@ -105,13 +111,12 @@ const EvezTrending = memo(() => {
         //  //maxAttending={//maxAttending}
         save={false}
       />
-    );  
+    );
   }, []);
 
   return (
     <View style={styles.container}>
-      {
-        !isEmpty(all_trending_events) ?
+      {!isEmpty(all_trending_events) ? (
         <FlatList
           style={styles.scroll}
           data={all_trending_events}
@@ -119,11 +124,12 @@ const EvezTrending = memo(() => {
           keyExtractor={keyExtractor}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainerStyle}
-        /> :
-       !isEmpty(all_errors) ? 
-          <Text>{all_errors?.message}</Text> :
-            <Text>...Loading</Text>
-      }
+        />
+      ) : !isEmpty(all_errors) ? (
+        <Text>{all_errors?.message}</Text>
+      ) : (
+        <Text>...Loading</Text>
+      )}
       <ButtonFilter onPress={onPressFilter} />
     </View>
   );

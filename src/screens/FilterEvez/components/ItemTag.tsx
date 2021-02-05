@@ -16,10 +16,6 @@ const ItemTag = memo((props: ItemTag) => {
     stylesTag = [styles.tagItemContainer, styles.colorInactive];
     colorText = "#7F8FA6";
   }
-  // const onChoice = useCallback(() => {
-  //   setActive(!isActive);
-  //   props.onPress(props.tagName);
-  // }, [isActive]);
 
   return (
     <TouchableOpacity style={stylesTag} onPress={props.onPress}>

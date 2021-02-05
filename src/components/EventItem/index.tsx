@@ -28,7 +28,7 @@ interface EventItemProps {
   eventName: string;
   location: string;
   timeCountDown?: string; //time left for event in days hour minute second
-  distance: number;
+  distance: string;
   currentAttending?: number;
   save: boolean;
   rate?: number;
