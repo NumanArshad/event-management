@@ -3,6 +3,7 @@ import {
   Animated,
   FlatList,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -20,8 +21,11 @@ import headerRight from "components/header/headerRight";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllReserverEvents } from "redux/events/events.actions";
-// const rightIcon = <AwsIcon name="chevron-right" size={22} color="#4fe3b7" />;
-// const lefttIcon = <AwsIcon name="chevron-left" size={22} color="#4fe3b7" />;
+import { LinearGradient } from "expo-linear-gradient";
+import { height_screen } from "ultis/dimensions";
+import FONTS from "ultis/fonts";
+import PinLocation from "svgs/PinLocation";
+import { ScrollView } from "react-native-gesture-handler";
 
 const data = [
   {
@@ -105,6 +109,7 @@ const EvezNews = memo(() => {
   const navigation = useNavigation();
   const [dateChange, setdateChange] = useState("");
   const [listDate, setlistDate] = useState("");
+  const [checkEvent, setcheckEvent] = useState("");
   const onNewDetail = useCallback(() => {
     navigation.navigate(ROUTES.NewDetail);
   }, [navigation]);
@@ -128,12 +133,31 @@ const EvezNews = memo(() => {
     (state) => state.events
   );
 
+  const getDateConsole = (date) => {
+    const d = moment(date).format("MM/DD/YYYY"); //02/14/2021
+    console.log("DATE ", d);
+    setdateChange(d);
+    const result = all_reserved_events?.filter(
+      (event) => event.event_date.toString() === d
+    );
+    console.log("RESULT ON CLICK", result);
+    setcheckEvent(result);
+  };
+
   useEffect(() => {
-    dispatch(getAllReserverEvents());
     if (Array.isArray(all_reserved_events)) {
       makeCustom();
+    } else {
+      dispatch(getAllReserverEvents());
     }
-  }, [dispatch]);
+  }, [dispatch, all_reserved_events]);
+
+  const onDetail = useCallback((id) => {
+    console.log("ID", id);
+    navigation.navigate(ROUTES.EventDetail, {
+      data: id,
+    });
+  }, []);
 
   // const headerList = useCallback(() => <HeaderEvezNew />, []);
   // const scrollY = new Animated.Value(0);
@@ -153,43 +177,72 @@ const EvezNews = memo(() => {
           }))
         : null;
     setlistDate(data);
+
     console.log("EVENTS DARA", data);
   };
-  // let customDatesStyles = [
-  //   {
-  //     date: "02/14/2021",
-  //     // Random colors
-  //     style: {
-  //       backgroundColor: "#F05F3E",
-  //     },
-  //     textStyle: { color: "#fff" }, // sets the font color
-  //     containerStyle: [
-  //     ], // extra styling for day container
-
-  //   },
-  // ];
 
   let customDatesStyles = [{}];
 
   return (
     <View style={styles.container}>
       {/* <Header onPress={onSearchNews} svg={<SvgSearch />} scrollY={scrollY} /> */}
+      <ScrollView>
+        <CalendarPicker
+          onDateChange={(e) => getDateConsole(e)}
+          selectedDayColor="#ED3269"
+          textStyle={{
+            fontSize: 16,
+            lineHeight: 60,
+          }}
+          weekdays={["S", "M", "T", "W", "T", "F", "S"]}
+          todayBackgroundColor="#ED3269"
+          // nextTitle={rightIcon}
+          // previousTitle={lefttIcon}
+          dayLabelsWrapper={{ borderTopWidth: 0, borderBottomWidth: 0 }}
+          customDatesStyles={listDate}
+        />
 
-      <CalendarPicker
-        onDateChange={setdateChange}
-        selectedDayColor="#ED3269"
-        textStyle={{
-          fontSize: 16,
-          lineHeight: 60,
-        }}
-        weekdays={["S", "M", "T", "W", "T", "F", "S"]}
-        todayBackgroundColor="#ED3269"
-        // nextTitle={rightIcon}
-        // previousTitle={lefttIcon}
-        dayLabelsWrapper={{ borderTopWidth: 0, borderBottomWidth: 0 }}
-        customDatesStyles={listDate}
-      />
-      {/* <Animated.ScrollView
+        {Array.isArray(checkEvent) && checkEvent.length > 0
+          ? checkEvent.map((data, id) => (
+              <TouchableOpacity onPress={() => onDetail(data.event_id)}>
+                <LinearGradient
+                  colors={["#ED3269", "#F05F3E"]}
+                  start={{ x: 0, y: 1 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{
+                    width: "95%",
+                    alignSelf: "center",
+                    borderRadius: 10,
+                  }}
+                  key={id}
+                >
+                  <Text style={styles.EventName2}>
+                    Event Reserved on {data?.event_date}
+                  </Text>
+
+                  <View style={styles.mainCard}>
+                    <View style={styles.earningDetails}>
+                      <Text style={styles.EventName}>
+                        {data ? data.event_name : "Event Name"}
+                      </Text>
+                      <Text style={styles.EventAttend}>
+                        {data ? data.address : "Address"}
+                      </Text>
+                    </View>
+                    <View style={styles.earningCredits}>
+                      <Text style={styles.creditText}>
+                        {data ? data.start_time : "12:00 PM"}
+                      </Text>
+                      <Text style={styles.creditNumber}>
+                        {data ? data.event_date : "02/02/2021"}
+                      </Text>
+                    </View>
+                  </View>
+                </LinearGradient>
+              </TouchableOpacity>
+            ))
+          : null}
+        {/* <Animated.ScrollView
         showsVerticalScrollIndicator={false}
         overScrollMode={'never'}
         style={{zIndex: 10}}
@@ -210,11 +263,12 @@ const EvezNews = memo(() => {
           bounces={false}
         />
       </Animated.ScrollView> */}
-      {/* <AdMobBanner
+        {/* <AdMobBanner
         adSize="fullBanner"
         adUnitID={adsBannerId}
         onAdFailedToLoad={error => console.error(error)}
       /> */}
+      </ScrollView>
     </View>
   );
 });
@@ -225,5 +279,48 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
+  },
+  mainCard: {
+    width: "95%",
+    marginTop: height_screen * 0.01,
+    flexDirection: "row",
+    padding: "3%",
+    borderRadius: 10,
+    alignSelf: "center",
+  },
+  earningDetails: {
+    width: "70%",
+    fontFamily: FONTS.Regular,
+  },
+  earningCredits: {
+    width: "30%",
+    fontFamily: FONTS.Regular,
+  },
+  EventName: {
+    color: "#fff",
+    fontFamily: FONTS.Regular,
+  },
+  EventName2: {
+    color: "#fff",
+    fontFamily: FONTS.Regular,
+    textAlign: "center",
+    marginTop: "1%",
+  },
+  EventAttend: {
+    fontFamily: FONTS.Regular,
+    color: "#fff",
+    fontSize: 13,
+  },
+  creditText: {
+    fontFamily: FONTS.Regular,
+    textAlign: "center",
+    color: "#fff",
+    fontSize: 13,
+  },
+  creditNumber: {
+    fontFamily: FONTS.Regular,
+    textAlign: "center",
+    color: "#fff",
+    fontSize: 13,
   },
 });
