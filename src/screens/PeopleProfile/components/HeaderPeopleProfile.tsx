@@ -21,7 +21,7 @@ interface Props {
 
 const HeaderPeopleProfile = memo((props: Props) => {
 
-  console.log("user id", props?.user_id)
+  //console.log("user id", props?.user_id)
   const navigation = useNavigation();
   const onChat = useCallback(() => {
     navigation.navigate(ROUTES.Chat, {

@@ -47,7 +47,7 @@ const Login = memo(() => {
         const formData = new FormData();
         formData.append("email", email);
         formData.append("password", password);
-        console.log("FORMDATA:", formData);
+        ////console.log("FORMDATA:", formData);
         dispatch(login(formData));
       }
     } else {
@@ -55,7 +55,7 @@ const Login = memo(() => {
     }
   };
 
-  console.log("auth loadin gi s", authloading);
+  ////console.log("auth loadin gi s", authloading);
   if (authloading) {
     return <LoadingScreen />;
   } else {

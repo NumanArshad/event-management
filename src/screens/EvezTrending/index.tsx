@@ -1,13 +1,21 @@
 import React, { memo, useCallback } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import ROUTES from "ultis/routes";
 import ButtonFilter from "components/buttons/ButtonFilter";
 import EventItem from "components/EventItem";
 import keyExtractor from "ultis/keyExtractor";
-import { getAllTrendingEvents } from "redux/events/events.actions";
+import {
+  getAllTrendingEvents,
+  getFilteredEvents,
+} from "redux/events/events.actions";
 import isEmpty from "ultis/isEmpty";
+import { getDistanceByLatLong } from "ultis/functions";
 
 const data = [
   {
@@ -52,6 +60,8 @@ const data = [
 const EvezTrending = memo(() => {
   const navigation = useNavigation();
 
+  const { params } = useRoute();
+
   const dispatch = useDispatch();
   const { all_trending_events } = useSelector<any, any>(
     (state) => state.events
@@ -62,11 +72,21 @@ const EvezTrending = memo(() => {
   //const { login_Session } = useSelector<any, any>((state) => state.auth);
 
   const onPressFilter = useCallback(() => {
-    navigation.navigate(ROUTES.FilterEvez);
-  }, [navigation]);
+    navigation.navigate(ROUTES.FilterEvez, {
+      activeFilter: params,
+    });
+  }, [navigation, params]);
 
   useFocusEffect(
-    useCallback(() => dispatch(getAllTrendingEvents()), [dispatch])
+    useCallback(() => {
+      //@ts-ignore
+      const { eventLocation, eventType } = params || {};
+      dispatch(
+        (eventLocation || eventType)
+          ? getFilteredEvents(eventLocation, eventType)
+          : getAllTrendingEvents()
+      );
+    }, [dispatch, navigation, params])
   );
 
   const renderItem = useCallback(({ item }) => {
@@ -105,13 +125,12 @@ const EvezTrending = memo(() => {
         //  //maxAttending={//maxAttending}
         save={false}
       />
-    );  
+    );
   }, []);
 
   return (
     <View style={styles.container}>
-      {
-        !isEmpty(all_trending_events) ?
+      {!isEmpty(all_trending_events) ? (
         <FlatList
           style={styles.scroll}
           data={all_trending_events}
@@ -119,11 +138,12 @@ const EvezTrending = memo(() => {
           keyExtractor={keyExtractor}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainerStyle}
-        /> :
-       !isEmpty(all_errors) ? 
-          <Text>{all_errors?.message}</Text> :
-            <Text>...Loading</Text>
-      }
+        />
+      ) : !isEmpty(all_errors) ? (
+        <Text>{all_errors?.message}</Text>
+      ) : (
+        <Text>...Loading</Text>
+      )}
       <ButtonFilter onPress={onPressFilter} />
     </View>
   );

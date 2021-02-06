@@ -18,8 +18,6 @@ import { getAllSavedEvents, getAllTrendingEvents } from "redux/events/events.act
 import keyExtractor from "ultis/keyExtractor";
 import isEmpty from "ultis/isEmpty";
 
-
-
 const EventAroundYou = memo(() => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -28,9 +26,9 @@ const EventAroundYou = memo(() => {
   );
   const { all_errors } = useSelector<any, any>((state) => state.errors);
 
-  const onPressFilter = useCallback(() => {
-    navigation.navigate(ROUTES.FilterEvez);
-  }, [navigation]);
+  // const onPressFilter = useCallback(() => {
+  //   navigation.navigate(ROUTES.FilterEvez);
+  // }, [navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -53,6 +51,7 @@ const EventAroundYou = memo(() => {
       rating,
       type_name,
     } = item;
+
     return (
       <EventItem
         thumbnail={require("@assets/Trending/trending_3.png")}
@@ -95,46 +94,9 @@ const EventAroundYou = memo(() => {
            <Text>{all_errors?.message}</Text> :
              <Text>...Loading</Text>
       }
-        {/* <EventItem
-          thumbnail={require('@assets/EventAroundU/around_u_1.png')}
-          tag={['#nightlife', '#party']}
-          reviewTimes={1.3}
-          eventName={'Quiet Clubbing VIP Heated Rooftop Party'}
-          location={'605 W 48th Street, Manhattan...'}
-          distance={10}
-          currentAttending={2500}
-          save={false}
-          rate={4.5}
-          price={20}
-        />
-        <EventItem
-          thumbnail={require('@assets/EventAroundU/around_u_2.png')}
-          tag={['#fashion', '#convention']}
-          reviewTimes={2.4}
-          eventName={'Bottled Art" Wine Painting Nigh'}
-          location={'The Grand Connaught Rooms...'}
-          distance={3.5}
-          currentAttending={2568}
-          save={true}
-          rate={4.5}
-          timeCountDown={'7 Days 06 Hours 27 Mins 44 secs'}
-          price={0}
-        />
-        <EventItem
-          thumbnail={require('@assets/EventAroundU/around_u_3.png')}
-          tag={['#Fashion', '#Convention']}
-          reviewTimes={2.4}
-          eventName={'Mahogany Bridal Fair 2016'}
-          location={'The Grand Connaught Rooms...'}
-          distance={3.5}
-          currentAttending={10000}
-          save={false}
-          rate={3.5}
-          timeCountDown={'7 Days 06 Hours 27 Mins 44 secs'}
-          price={120}
-        /> */}
+
       </ScrollView>
-      <ButtonFilter onPress={onPressFilter} />
+      {/* <ButtonFilter onPress={onPressFilter} /> */}
     </View>
   );
 });

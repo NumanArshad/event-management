@@ -28,7 +28,7 @@ interface EventItemProps {
   eventName: string;
   location: string;
   timeCountDown?: string; //time left for event in days hour minute second
-  distance: number;
+  distance: string;
   currentAttending?: number;
   save: boolean;
   rate?: number;
@@ -44,9 +44,9 @@ const EventItem = memo((props: EventItemProps) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const onPressSave = useCallback(() => {
-    console.log("Before isSave Value", isSave);
+    ////console.log("Before isSave Value", isSave);
     setSave(!isSave);
-    console.log("isSave Value", isSave);
+    ////console.log("isSave Value", isSave);
     if (!isSave) {
       dispatch(saveEvent(props.id, Alert));
     } else {

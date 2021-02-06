@@ -39,10 +39,10 @@ const ForgotPassword = memo((navigation) => {
       setpreLoader(true);
       const formData = new FormData();
       formData.append("email", email);
-      console.log("FORMDATA:", formData);
+      ////console.log("FORMDATA:", formData);
       forgotPassword(formData)
         .then((res) => {
-          console.log("Response ", res.data);
+          ////console.log("Response ", res.data);
           if (res.data.status_code === 200) {
             navigate(ROUTES.Login);
             setpreLoader(false);
@@ -50,7 +50,7 @@ const ForgotPassword = memo((navigation) => {
           setpreLoader(false);
         })
         .catch((err) => {
-          console.log("ERror :", err.response.data.errors);
+          ////console.log("ERror :", err.response.data.errors);
           Alert.alert("", JSON.stringify(err.response.data.errors));
           setpreLoader(false);
         });

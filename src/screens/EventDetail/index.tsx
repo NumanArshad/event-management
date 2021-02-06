@@ -101,7 +101,7 @@ const EventDetail = memo(() => {
     outputRange: [0, 1],
     extrapolate: "clamp",
   });
-  console.log("event det", single_event);
+  //console.log("event det", single_event);
   return (
     <View style={styles.container}>
       <ScrollView
@@ -149,6 +149,7 @@ const EventDetail = memo(() => {
             />
             <EventBasicInfo
               currentAttending={single_event?.participants}
+              distance={single_event?.lat_long}
               eventTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
             />
           </View>

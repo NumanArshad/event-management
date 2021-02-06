@@ -21,7 +21,7 @@ const EventName = memo((props: EventNameProps) => {
         <Text style={[styles.textTag, { fontSize: fontSizeTag }]}>
           #{props?.tag}
         </Text>
-        {props.rate ? (
+        {props?.rate ? (
           <View style={styles.rateView}>
             <InactiveRate rate={props.rate || 0} />
             <Text style={[styles.textReviewTimes, { fontSize: fontSizeTag }]}>

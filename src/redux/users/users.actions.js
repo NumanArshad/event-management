@@ -17,11 +17,11 @@ const userCollectionRef = firebase.firestore().collection("users");
 export const getAllUsers = (callBack) => {
   userCollectionRef.onSnapshot(
     (
-      res //console.log("res is ", res)
+      res ////console.log("res is ", res)
     ) => {
       let usersList = [];
       res.forEach((element) => {
-        // console.log("singleis ", element?.data())
+        // //console.log("singleis ", element?.data())
         usersList.push({
           id: element?.id,
           ...element?.data(),
@@ -33,7 +33,7 @@ export const getAllUsers = (callBack) => {
 };
 
 export const getUsersbyDocRefList = (fiendsListIds, callBack) => {
-  console.log("frine id are", fiendsListIds);
+  //console.log("frine id are", fiendsListIds);
 
   firebase
     .firestore()
@@ -111,7 +111,7 @@ export const addFriend = (payload) => {
       followers,
     })
     .then((res) => {
-      console.log("Response ", res);
+      //console.log("Response ", res);
     });
 };
 

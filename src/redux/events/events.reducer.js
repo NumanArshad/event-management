@@ -1,6 +1,7 @@
 import {
   GET_ALL_TRENDING_EVENTS,
   GET_ALL_SAVED_EVENTS,
+  CLEAR_ALL_EVENTS,
   GET_SINGLE_EVENT,
   CLEAR_SINGLE_EVENT,
   GET_ALL_RESERVED_EVENTS,
@@ -34,6 +35,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         single_event: action.payload,
+      };
+    case CLEAR_ALL_EVENTS:
+      return {
+        ...state,
+        all_trending_events: null,
       };
     case CLEAR_SINGLE_EVENT:
       return {
