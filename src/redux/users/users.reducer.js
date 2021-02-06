@@ -1,6 +1,6 @@
 import {
   GET_ALL_TRENDING_EVENTS,
-  GET_ALL_SAVED_EVENTS,
+  GET_ALL_ATTENDED_EVENTS,
   GET_SINGLE_EVENT,
   CLEAR_SINGLE_EVENT,
   GET_ALL_EARNINGS,
@@ -8,7 +8,7 @@ import {
 
 const initialState = {
   all_trending_events: null,
-  all_saved_events: null,
+  all_attended_events: null,
   single_event: null,
   my_earnings: null,
 };
@@ -20,10 +20,10 @@ export default function (state = initialState, action) {
         ...state,
         all_trending_events: action.payload,
       };
-    case GET_ALL_SAVED_EVENTS:
+    case GET_ALL_ATTENDED_EVENTS:
       return {
         ...state,
-        all_saved_events: action.payload,
+        all_attended_events: action.payload,
       };
     case GET_SINGLE_EVENT:
       return {

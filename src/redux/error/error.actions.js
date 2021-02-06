@@ -1,11 +1,11 @@
-import { unAuthorized } from "redux/auth/auth.actions";
+import { unAuthorized, logout } from "redux/auth/auth.actions";
 import { GET_ALL_ERRORS, CLEAR_ERRORS } from "../actionTypes";
 import { alertMessage } from "ultis/alertToastMessages";
 
 export const errorActions = (errorResponse) => (dispatch) => {
   const { status, data } = errorResponse;
   if (status === 401) {
-    dispatch(unAuthorized());
+    dispatch(logout());
   } else if (status === 422) {
     if (data?.errors) {
       // obj[Object.keys(obj)[0]] return first key value

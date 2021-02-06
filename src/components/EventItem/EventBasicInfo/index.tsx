@@ -13,6 +13,7 @@ import isEmpty from "ultis/isEmpty";
 import { getDistanceByLatLong, splitLatLongStr } from "ultis/functions";
 
 interface EventBasicInfoProps {
+  eventId?: number;
   location?: string;
   distance?: string;
   currentAttending?: number;
@@ -29,8 +30,12 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
   const textInfo = [styles.textLocation, { color: color }];
   const navigation = useNavigation();
   const onAttending = () => {
-    navigation.navigate(ROUTES.ListAttending);
+    navigation.navigate(ROUTES.ListAttending,{
+      eventId: props.eventId
+    });
   };
+
+  console.log("id is", props.eventId)
 
   const {latitude, longitude} =  splitLatLongStr(props?.distance) || {}
 
@@ -61,7 +66,8 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
       ) : null}
 
       {props.currentAttending && (
-        <View style={styles.location}>
+        <View style={styles.location}
+        onTouchStart={onAttending}>
           <View style={styles.flexRow}>
             <TicketIcon />
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>

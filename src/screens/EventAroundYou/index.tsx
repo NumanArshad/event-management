@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import {
   FlatList,
   ScrollView,
@@ -14,27 +14,31 @@ import ROUTES from "ultis/routes";
 import EventItem from "components/EventItem";
 import ButtonFilter from "components/buttons/ButtonFilter";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllSavedEvents, getAllTrendingEvents } from "redux/events/events.actions";
+import { getAllReservedEvents, getAllAttendedEvents, getAllTrendingEvents, getAllSavedEvents } from "redux/events/events.actions";
 import keyExtractor from "ultis/keyExtractor";
 import isEmpty from "ultis/isEmpty";
 
 const EventAroundYou = memo(() => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { all_saved_events } = useSelector<any, any>(
+
+  useEffect(()=>{
+      dispatch(getAllReservedEvents())
+      dispatch(getAllSavedEvents())
+  },[dispatch])
+
+  const { all_attended_events, all_saved_events } = useSelector<any, any>(
     (state) => state.events
   );
   const { all_errors } = useSelector<any, any>((state) => state.errors);
 
-  // const onPressFilter = useCallback(() => {
-  //   navigation.navigate(ROUTES.FilterEvez);
-  // }, [navigation]);
-
   useFocusEffect(
     useCallback(() => {
-      dispatch(getAllSavedEvents());
+      dispatch(getAllAttendedEvents());
     }, [dispatch])
   );
+
+console.log("save is", all_saved_events)
 
   const onPressAllEventAroundYou = useCallback(() => {
     navigation.navigate(ROUTES.AllEventAroundYou);
@@ -63,7 +67,7 @@ const EventAroundYou = memo(() => {
         timeCountDown="7 Days 06 Hours 27 Mins 44 secs"
         eventTime={`${event_date}  -  ${start_time}`}
         rate={rating}
-        save
+       // save
       />
     );
   }, []);
@@ -81,10 +85,10 @@ const EventAroundYou = memo(() => {
           </Text>
         </TouchableOpacity>
         {
-         !isEmpty(all_saved_events) ?
+         !isEmpty(all_attended_events) ?
          <FlatList
            style={styles.scroll}
-           data={all_saved_events}
+           data={all_attended_events}
            renderItem={renderItem}
            keyExtractor={keyExtractor}
            showsVerticalScrollIndicator={false}

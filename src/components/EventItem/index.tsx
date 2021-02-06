@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -18,7 +18,7 @@ import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import SvgSaved from "svgs/IconSaved";
 import { saveEvent, unSaveEvent } from "redux/events/events.actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 interface EventItemProps {
   thumbnail: any;
@@ -30,7 +30,7 @@ interface EventItemProps {
   timeCountDown?: string; //time left for event in days hour minute second
   distance: string;
   currentAttending?: number;
-  save: boolean;
+  save?: boolean;
   rate?: number;
   marginLeft?: number;
   onPress?: () => void;
@@ -39,20 +39,31 @@ interface EventItemProps {
   colorAttending?: string;
   isSmallItem?: boolean;
 }
+
 const EventItem = memo((props: EventItemProps) => {
   const [isSave, setSave] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const {all_saved_events} = useSelector(state => state.events)
+
+useEffect(() => {
+  const isEventSaved = all_saved_events?.find(
+    ({ event_id }: { event_id: number }) => event_id === props.id
+  );
+  setSave(!!isEventSaved);
+}, [all_saved_events, props]);
+
   const onPressSave = useCallback(() => {
-    ////console.log("Before isSave Value", isSave);
     setSave(!isSave);
-    ////console.log("isSave Value", isSave);
     if (!isSave) {
-      dispatch(saveEvent(props.id, Alert));
+      dispatch(saveEvent(props.id));
     } else {
-      dispatch(unSaveEvent(props.id, Alert));
+      dispatch(unSaveEvent(props.id));
     }
   }, [isSave]);
+
+
   const thumbnailDimension = {
     width: props.isSmallItem ? "100%" : (327 / 375) * widthScreen,
     height: props.isSmallItem ? 220 * (375 / 327) * 0.7 : 220 * (375 / 327),

@@ -37,6 +37,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   clearSingleEvent,
   getSingleEventDetail,
+  reserveEvent,
+  saveEvent,
+  unReserveEvent,
+  unSaveEvent,
 } from "redux/events/events.actions";
 import { clearEventAllReviews } from "redux/reviews/reviews.actions";
 import isEmpty from "ultis/isEmpty";
@@ -49,45 +53,58 @@ const EventDetail = memo(() => {
   const data = route.params?.data;
 
   const dispatch = useDispatch();
+  const [isSaved, setSaved] = useState(data.save);
 
-  const { single_event } = useSelector<any, any>((state) => state.events);
+  const { 
+    single_event, 
+    all_reserved_events, 
+    all_saved_events } = useSelector<any, any>((state) => state.events);
+
+  const {loading} = useSelector<any, any>(state => state.loading);
 
   useEffect(() => {
     dispatch(getSingleEventDetail(data?.id));
+    const isEventSaved = all_saved_events?.find(
+      ({ event_id }: { event_id: number }) => event_id === data?.id
+    );
+    setSaved(!!isEventSaved);
+  }, [dispatch, all_saved_events, data]);
 
+  useEffect(() => {
     return () => {
       dispatch(clearSingleEvent());
       dispatch(clearEventAllReviews());
     };
   }, [dispatch]);
 
-  const [isSaved, setSaved] = useState(data.save);
-  let textBuyButton = "";
-  let isAvailable;
-  // if (data.currentAttending < data.maxAttending) {
-  isAvailable = true;
-  if (data.price && data.price > 0) {
-    textBuyButton = `FROM $${data.price} - GET IT`;
-  } else {
-    textBuyButton = "JOIN IT FREE";
+
+  const isEventReservedByUser = () => {
+    return all_reserved_events?.find(
+      ({ event_id }: { event_id: number }) => event_id === data?.id
+    );
+  };
+
+  const handleReserveEvent = () => {
+    dispatch(isEventReservedByUser() ?
+      unReserveEvent(data?.id) :
+      reserveEvent(data?.id)
+    )
   }
-  //}
-  // else {
-  //   textBuyButton = "The list is full. Please select other time";
-  //   isAvailable = false;
-  // }
-  const onSaved = useCallback(() => {
-    setSaved(!isSaved);
-  }, [isSaved]);
+
   const onBack = useCallback(() => {
     navigation.goBack();
   }, []);
-  const onBuy = useCallback(() => {
-    navigation.navigate(ROUTES.TicketDetail);
-  }, []);
+
+  const handleSavedEvent = () => {
+    setSaved(!!isSaved);
+    dispatch(isSaved ? unSaveEvent(data?.id) : saveEvent(data?.id));
+  };
+
+
   const onDirection = useCallback(() => {
     navigation.navigate(ROUTES.EventDetailMap);
   }, []);
+
   const onReview = useCallback(() => {
     navigation.navigate(ROUTES.EventDetailRateComment, {
       eventId: data?.id,
@@ -101,7 +118,7 @@ const EventDetail = memo(() => {
     outputRange: [0, 1],
     extrapolate: "clamp",
   });
-  //console.log("event det", single_event);
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -118,21 +135,21 @@ const EventDetail = memo(() => {
           activeDotColor={"#fff"}
         >
           <View>
-            <Image source={data.thumbnail} style={styles.thumbnail} />
+            <Image source={data?.thumbnail} style={styles.thumbnail} />
           </View>
           <View>
-            <Image source={data.thumbnail} style={styles.thumbnail} />
+            <Image source={data?.thumbnail} style={styles.thumbnail} />
           </View>
           <View>
-            <Image source={data.thumbnail} style={styles.thumbnail} />
+            <Image source={data?.thumbnail} style={styles.thumbnail} />
           </View>
           <View>
-            <Image source={data.thumbnail} style={styles.thumbnail} />
+            <Image source={data?.thumbnail} style={styles.thumbnail} />
           </View>
         </Swiper>
 
         {/* 7 Days 06 Hours 27 Mins 44 secs */}
-        {data.timeCountDown !== "" ? (
+        {data?.timeCountDown !== "" ? (
           <View style={styles.countDownView}>
             <HourGlass />
             <Text style={styles.textCountDown}>{data.timeCountDown}</Text>
@@ -148,6 +165,7 @@ const EventDetail = memo(() => {
               tag={single_event?.type_name}
             />
             <EventBasicInfo
+              eventId={data?.id}
               currentAttending={single_event?.participants}
               distance={single_event?.lat_long}
               eventTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
@@ -158,9 +176,7 @@ const EventDetail = memo(() => {
           eventId={data?.id}
           onPress={onReview}
           rate={single_event?.rating}
-          reviewTimes={12}
           marginTop={32}
-          numberReviews={214}
         />
         {/* <View style={styles.contentView}>
           <Text style={styles.textTitle}>ABOUT</Text>
@@ -186,8 +202,6 @@ const EventDetail = memo(() => {
               <UserItem
                 image={require("@assets/Followers/img.jpg")}
                 user_name={single_event?.sub_type_name}
-                //   user_type = {single_event?.type_name}
-                // numberFollower={"535"}
               />
             </View>
 
@@ -266,7 +280,16 @@ const EventDetail = memo(() => {
         </View> */}
 
         <View style={styles.buttonView}>
-          {isAvailable ? (
+
+        <ButtonLinear
+              title={` ${loading
+                ? `...loading` : 
+                isEventReservedByUser() ? 'Unreserve' : `Reserve`}`}
+              style={styles.bottomButton}
+              isDisabled={loading}
+              onPress={handleReserveEvent}
+            />
+          {/* {isAvailable ? (
             <ButtonLinear
               title={textBuyButton}
               style={styles.bottomButton}
@@ -276,7 +299,7 @@ const EventDetail = memo(() => {
             <View style={styles.buttonSoldOut}>
               <Text style={styles.textSoldOut}>{textBuyButton}</Text>
             </View>
-          )}
+          )} */}
         </View>
       </ScrollView>
       <View style={styles.buttonTopView}>
@@ -287,7 +310,7 @@ const EventDetail = memo(() => {
           <TouchableOpacity>
             <IconShare />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonSave} onPress={onSaved}>
+          <TouchableOpacity style={styles.buttonSave} onPress={handleSavedEvent}>
             {isSaved ? <SvgSaved /> : <IconUnSave />}
           </TouchableOpacity>
         </View>

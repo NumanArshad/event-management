@@ -10,7 +10,7 @@ import {
 import keyExtractor from "ultis/keyExtractor";
 import NewsItem from "screens/SearchNews/components/NewsItem";
 import HeaderEvezNew from "screens/EvezNews/components/HeaderEvezNew";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import Header from "screens/PeopleProfile/components/Header";
 import SvgSearch from "svgs/EvezNews/SvgSearch";
@@ -18,14 +18,16 @@ import { adsBannerId } from "data/ads";
 import { AdMobBanner } from "expo-ads-admob";
 import CalendarPicker from "react-native-calendar-picker";
 import headerRight from "components/header/headerRight";
-import moment from "moment";
+//import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllReserverEvents } from "redux/events/events.actions";
 import { LinearGradient } from "expo-linear-gradient";
 import { height_screen } from "ultis/dimensions";
 import FONTS from "ultis/fonts";
 import PinLocation from "svgs/PinLocation";
 import { ScrollView } from "react-native-gesture-handler";
+import { getAllReservedEvents } from "redux/events/events.actions";
+import moment from "moment";
+
 
 const data = [
   {
@@ -148,21 +150,19 @@ const EvezNews = memo(() => {
     if (Array.isArray(all_reserved_events)) {
       makeCustom();
     } else {
-      dispatch(getAllReserverEvents());
+      dispatch(getAllReservedEvents());
     }
   }, [dispatch, all_reserved_events]);
 
   const onDetail = useCallback((id) => {
-    console.log("ID", id);
     navigation.navigate(ROUTES.EventDetail, {
-      data: id,
+      data: {id},
     });
   }, []);
 
   // const headerList = useCallback(() => <HeaderEvezNew />, []);
   // const scrollY = new Animated.Value(0);
 
-  console.log("RESERVERD EVENTS", all_reserved_events);
   const makeCustom = () => {
     var data =
       Array.isArray(all_reserved_events) && all_reserved_events.length > 0
@@ -177,8 +177,6 @@ const EvezNews = memo(() => {
           }))
         : null;
     setlistDate(data);
-
-    console.log("EVENTS DARA", data);
   };
 
   let customDatesStyles = [{}];

@@ -63,9 +63,11 @@ const EvezTrending = memo(() => {
   const { params } = useRoute();
 
   const dispatch = useDispatch();
-  const { all_trending_events } = useSelector<any, any>(
+  const { all_trending_events, all_saved_events } = useSelector<any, any>(
     (state) => state.events
   );
+
+console.log("all is",all_saved_events)
 
   const { all_errors } = useSelector<any, any>((state) => state.errors);
   const { loading } = useSelector<any, any>((state) => state.loading);
@@ -123,7 +125,7 @@ const EvezTrending = memo(() => {
         eventTime={`${event_date}  -  ${start_time}`}
         rate={rating}
         //  //maxAttending={//maxAttending}
-        save={false}
+       // save={false}
       />
     );
   }, []);
