@@ -82,7 +82,6 @@ export const getBankInfo = (authUserId, callBack) => {
 
 export const updateBankInfo = (payload) => {
   axios.post(`bank/update`, payload).then((res) => {
-    console.log("response is ", res.data);
     if (res.data.status_code === 200) {
       alertMessage(res.data.message);
     }

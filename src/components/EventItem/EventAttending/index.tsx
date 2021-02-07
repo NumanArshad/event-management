@@ -3,7 +3,7 @@ import {Image, StyleSheet, View} from 'react-native';
 
 interface EventAttendingProps {
   location?: string;
-  eventTime?: string;
+  eventDateTime?: string;
 }
 
 const EventAttending = memo((props: EventAttendingProps) => {
@@ -33,7 +33,7 @@ const EventAttending = memo((props: EventAttendingProps) => {
           />
         </View>
       ) : null}
-      {props.eventTime ? (
+      {props.eventDateTime ? (
         <View style={[styles.location, {marginLeft: 24}]}>
           <View style={styles.flexRow}>
             <Image

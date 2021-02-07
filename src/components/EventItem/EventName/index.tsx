@@ -15,13 +15,14 @@ interface EventNameProps {
 const EventName = memo((props: EventNameProps) => {
   const fontSizeTag = props.isSmallItem ? 12 : 14;
   const fontSizeName = props.isSmallItem ? 14 : 18;
+
   return (
     <View style={styles.container}>
       <View style={styles.tagRateView}>
         <Text style={[styles.textTag, { fontSize: fontSizeTag }]}>
-          #{props?.tag}
+          # {props.tag}
         </Text>
-        {props.rate ? (
+        {props?.rate ? (
           <View style={styles.rateView}>
             <InactiveRate rate={props.rate || 0} />
             <Text style={[styles.textReviewTimes, { fontSize: fontSizeTag }]}>

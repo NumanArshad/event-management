@@ -117,7 +117,7 @@ const HeaderProfile = memo((props: Props) => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView>
+        <ScrollView style={{ flex: 1, height: 400 }}>
           {Array.isArray(my_earnings) && my_earnings.length > 0
             ? my_earnings.map((data, id) => (
                 <LinearGradient
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   },
   mask: {
     width: 0.87 * width_screen,
-    height: 340,
+    height: 400,
     backgroundColor: "#FFF",
     alignSelf: "center",
     marginTop: -0.06 * height_screen,

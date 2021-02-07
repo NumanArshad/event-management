@@ -41,7 +41,7 @@ const EventDetailMap = memo(() => {
         <LocationView
           style={styles.locationView}
           location={'605 W 48th Street, Manhattan, 10036'}
-          distance={3.5}
+          distance={`30.97787`,`74.78677`}
         />
         <MapButton
           onBack={onBack}

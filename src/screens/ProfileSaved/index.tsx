@@ -26,12 +26,10 @@ const data = [
 const ProfileSaved = memo(() => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { all_saved_events } = useSelector<any, any>((state) => state.events);
+  const { all_attended_events } = useSelector<any, any>((state) => state.events);
   const { all_errors } = useSelector<any, any>((state) => state.errors);
   const { loading } = useSelector<any, any>((state) => state.loading);
   const [eventStatus, setEventStatus] = useState("saved");
-
-
 
   useFocusEffect(
     useCallback(() => {
@@ -59,7 +57,7 @@ const ProfileSaved = memo(() => {
         location={address}
         distance={lat_long}
         timeCountDown="15 Days 06 Hours 27 Mins 44 secs"
-        eventTime={`${event_date}  -  ${start_time}`}
+        eventDateTime={`${event_date}  -  ${start_time}`}
         rate={rating}
         save
       />
@@ -110,7 +108,7 @@ const ProfileSaved = memo(() => {
         <Text>{all_errors?.message}</Text>
       ) : (
         <FlatList
-          data={all_saved_events}
+          data={all_attended_events}
           showsVerticalScrollIndicator={false}
           keyExtractor={keyExtractor}
           renderItem={renderItem}

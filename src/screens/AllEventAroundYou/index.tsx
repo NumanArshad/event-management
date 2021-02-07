@@ -88,7 +88,7 @@ const AllEventAroundYou = memo(() => {
             distance={15}
             currentAttending={19}
             //maxAttending={5000}
-            save={false}
+           // save={false}
             rate={4.5}
             marginLeft={24}
             isSmallItem={true}

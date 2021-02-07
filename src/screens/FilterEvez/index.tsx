@@ -3,6 +3,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -10,56 +11,50 @@ import FONTS from "ultis/fonts";
 import IconArrowDown from "svgs/IconArrowDown";
 import ItemTag from "screens/FilterEvez/components/ItemTag";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
-import { width_screen } from "ultis/dimensions";
+import { height_screen, width_screen } from "ultis/dimensions";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 import ButtonLinear from "components/buttons/ButtonLinear";
 import CheckBox from "components/CheckBox";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import Rating from "components/Rating";
 import { adsVideoId } from "data/ads";
 import { AdMobInterstitial } from "expo-ads-admob";
 import { useDispatch } from "react-redux";
-import { getFilteredEvents } from "redux/events/events.actions";
+import { clearAllEvents, getFilteredEvents } from "redux/events/events.actions";
 
 const FilterEvez = memo(() => {
-  const [valuesDistance, setValuesDistance] = useState([1]);
-  const [valuesPriceDistance, setValuesPriceDistance] = useState([10, 250]);
-  const [isFree, setFree] = useState(false);
   const navigation = useNavigation();
-  const [typeEvents, settypeEvents] = useState("No");
-  const [location, setLocation] = useState("");
+
+  //@ts-ignore
+  const {params:{activeFilter}} = useRoute();
+
+  const [activeTag, setactiveTag] = useState(activeFilter?.eventType || "");
+  const [eventLocation, setEventLocation] = useState(activeFilter?.eventLocation || "");
+
   const dispatch = useDispatch();
 
-  const onValuesDistanceChange = useCallback((values) => {
-    setValuesDistance(values);
-  }, []);
-  const onValuesPriceChange = useCallback((values) => {
-    setValuesPriceDistance(values);
-  }, []);
-  const onPressCheck = useCallback(() => {
-    setFree(!isFree);
-  }, [isFree]);
+  const eventTags = [
+    "Participation",
+    "Entertainment",
+    "Consultation",
+    "Leads",
+    "Cash-Back",
+  ];
 
-  const setEventsType = (data) => {
-    console.log("Data Type", data);
-
-    setEventsType(data);
+  const handleActiveTag = (data: string) => {
+    setactiveTag(activeTag === data ? "" : data);
   };
-  const onPressShowAllEvent = useCallback(() => {
-    // AdMobInterstitial.setAdUnitID(adsVideoId);
-    // AdMobInterstitial.requestAdAsync()
-    //   .then(() => AdMobInterstitial.showAdAsync())
-    //   .finally(() => {
-    //     const radius = valuesDistance[0];
-    //     navigation.navigate(ROUTES.AllEventAroundYou, {
-    //       radius: radius,
-    //       price: valuesPriceDistance,
-    //     });
-    //   });
-    // dispatch(getFilteredEvents(typeEvents));
-    console.log("Data Type", typeEvents);
-  }, []);
+
+  const onPressShowAllEvent = () => {
+    (eventLocation || activeTag || activeFilter?.eventType || activeFilter?.eventLocation) && 
+    (eventLocation!==activeFilter?.eventLocation || activeTag!==activeFilter?.eventType)  
+    &&  dispatch(clearAllEvents());
+   navigation.navigate(ROUTES.EvezTrending,{
+       eventLocation,
+       eventType: activeTag
+   })
+  }
 
   return (
     <View style={styles.container}>
@@ -72,90 +67,27 @@ const FilterEvez = memo(() => {
         </View>
         <View style={styles.hashTagView}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <ItemTag
-              active={false}
-              // onPress={setEventsType}
-              tagName={"Consultation"}
-            />
-            <ItemTag
-              active={true}
-              // onPress={setEventsType}
-              tagName={"Lead"}
-            />
-            <ItemTag
-              active={false}
-              // onPress={setEventsType}
-              tagName={"Participation"}
-            />
-            <ItemTag
-              active={false}
-              // onPress={setEventsType}
-              tagName={"Entertainment"}
-            />
+            {eventTags
+              ? eventTags.map((tag, id) => (
+                  <ItemTag
+                    active={tag === activeTag}
+                    onPress={() => handleActiveTag(tag)}
+                    tagName={tag}
+                    key={id}
+                  />
+                ))
+              : null}
           </ScrollView>
-        </View>
+         </View>
 
-        {/* <View style={styles.optionHeader}>
-          <Text style={styles.textOptionHeader}>HashTag</Text>
-          <TouchableOpacity>
-            <IconArrowDown />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.hashTagView}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <ItemTag active={false} tagName={"All hashtag"} />
-            <ItemTag active={true} tagName={"#music"} />
-            <ItemTag active={true} tagName={"#festival"} />
-            <ItemTag active={false} tagName={"#food"} />
-          </ScrollView>
-        </View> */}
-
-        {/* <Text style={styles.textOptionHeader}>Rating</Text>
-        <View style={styles.rateStar}>
-          <Rating rate={3} />
-        </View> */}
-
-        {/* <View style={styles.distanceHeader}>
-          <Text style={styles.textOptionHeader}>Distance</Text>
-          <Text style={styles.textDistance}>{valuesDistance[0]}mil</Text>
-        </View> */}
-        {/* <MultiSlider
-          min={1}
-          max={50}
-          containerStyle={styles.slider}
-          trackStyle={styles.trackStyle}
-          selectedStyle={styles.selectedStyle}
-          sliderLength={(327 / 375) * width_screen}
-          values={valuesDistance}
-          onValuesChange={onValuesDistanceChange}
+         <Text style={styles.textOptionHeader}>Event Location {eventLocation}</Text>
+          <TextInput
+         style={styles.textInput}
+          placeholder="Event Location"
+          value={eventLocation}
+          onChangeText={setEventLocation}
         />
-
-        <View style={styles.distanceHeader}>
-          <Text style={styles.textOptionHeader}>Price</Text>
-          <Text style={styles.textDistance}>
-            ${valuesPriceDistance[0]} - ${valuesPriceDistance[1]}
-          </Text>
-        </View>
-        <MultiSlider
-          min={0}
-          max={1000}
-          containerStyle={styles.slider}
-          trackStyle={styles.trackStyle}
-          selectedStyle={styles.selectedStyle}
-          sliderLength={(327 / 375) * width_screen}
-          values={valuesPriceDistance}
-          onValuesChange={onValuesPriceChange}
-        /> */}
-        {/* <View style={styles.checkFree}>
-          <CheckBox
-            onPress={onPressCheck}
-            isCheck={isFree}
-            borderColor={"#7F8FA6"}
-            checkedColor={"#ED3269"}
-          />
-          <Text style={styles.textChecker}>Only free events</Text>
-        </View> */}
-      </ScrollView>
+      </ScrollView> 
       <View style={styles.buttonView}>
         <ButtonLinear
           title={"Show Filtered Events"}
@@ -174,6 +106,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flex: 1,
   },
+  textInput: {
+    height: height_screen * 0.07,
+    width: width_screen * 0.9,
+    borderWidth: 0.8,
+    borderColor: "#F05F3E",
+    borderRadius: 10,
+    marginTop: height_screen * 0.03,
+    paddingLeft: height_screen * 0.02,
+  },
   scroll: {
     paddingHorizontal: 16,
     paddingTop: 24,
@@ -191,7 +132,7 @@ const styles = StyleSheet.create({
   hashTagView: {
     flexDirection: "row",
     marginTop: 24,
-    marginBottom: 40,
+    marginBottom: 20,
   },
   star: {
     marginRight: 16,

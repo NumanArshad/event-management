@@ -7,6 +7,7 @@ interface Props {
   title: string;
   onPress?: () => void;
   style?: ViewStyle;
+  isDisabled?: Boolean
 }
 
 const ButtonLinear = memo((props: Props) => {
@@ -14,7 +15,8 @@ const ButtonLinear = memo((props: Props) => {
     <TouchableOpacity
       style={[props.style, {overflow: 'hidden'}]}
       onPress={props.onPress}
-      activeOpacity={0.75}>
+      activeOpacity={0.75}
+      disabled={props.isDisabled}>
       <LinearGradient
         start={{x: 0, y: 1}}
         end={{x: 1, y: 1}}

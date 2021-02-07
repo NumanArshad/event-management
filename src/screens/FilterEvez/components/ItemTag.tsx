@@ -4,31 +4,21 @@ import FONTS from "ultis/fonts";
 interface ItemTag {
   active: boolean;
   tagName: string;
-  // onPress: Function;
+  onPress?: () => void;
 }
 const ItemTag = memo((props: ItemTag) => {
-  const [isActive, setActive] = useState(props.active);
   let stylesTag;
   let colorText;
-  if (isActive) {
+  if (props.active) {
     stylesTag = [styles.tagItemContainer, styles.colorActive];
     colorText = "#FFFFFF";
   } else {
     stylesTag = [styles.tagItemContainer, styles.colorInactive];
     colorText = "#7F8FA6";
   }
-  const onChoice = useCallback(() => {
-    setActive(!isActive);
-    // props.onPress(props.tagName);
-  }, [isActive]);
-
-  const onChoice2 = () => {
-    setActive(!isActive);
-    // props.onPress(props.tagName);
-  };
 
   return (
-    <TouchableOpacity style={stylesTag} onPress={onChoice2}>
+    <TouchableOpacity style={stylesTag} onPress={props?.onPress}>
       <Text style={[styles.textTagName, { color: colorText }]}>
         {props.tagName}
       </Text>
