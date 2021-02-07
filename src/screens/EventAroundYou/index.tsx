@@ -18,7 +18,6 @@ import { getAllReservedEvents, getAllAttendedEvents, getAllTrendingEvents, getAl
 import keyExtractor from "ultis/keyExtractor";
 import isEmpty from "ultis/isEmpty";
 import { formatDateTime } from "ultis/functions";
-//import moment from "moment";
 
 const EventAroundYou = memo(() => {
   const navigation = useNavigation();

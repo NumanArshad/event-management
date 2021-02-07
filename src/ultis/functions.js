@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { duration } from "moment";
 
 export let [currentLat, currentLong] = [null, null];
 

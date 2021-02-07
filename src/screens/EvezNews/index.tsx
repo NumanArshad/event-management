@@ -17,8 +17,6 @@ import SvgSearch from "svgs/EvezNews/SvgSearch";
 import { adsBannerId } from "data/ads";
 import { AdMobBanner } from "expo-ads-admob";
 import CalendarPicker from "react-native-calendar-picker";
-import headerRight from "components/header/headerRight";
-//import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { height_screen } from "ultis/dimensions";
@@ -26,8 +24,7 @@ import FONTS from "ultis/fonts";
 import PinLocation from "svgs/PinLocation";
 import { ScrollView } from "react-native-gesture-handler";
 import { getAllReservedEvents } from "redux/events/events.actions";
-import moment from "moment";
-
+import dayjs from "dayjs";
 
 const data = [
   {
@@ -136,7 +133,7 @@ const EvezNews = memo(() => {
   );
 
   const getDateConsole = (date) => {
-    const d = moment(date).format("MM/DD/YYYY"); //02/14/2021
+    const d = dayjs(date).format("MM/DD/YYYY"); //02/14/2021
     console.log("DATE ", d);
     setdateChange(d);
     const result = all_reserved_events?.filter(
