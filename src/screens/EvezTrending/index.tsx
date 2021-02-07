@@ -15,7 +15,8 @@ import {
   getFilteredEvents,
 } from "redux/events/events.actions";
 import isEmpty from "ultis/isEmpty";
-import { getDistanceByLatLong } from "ultis/functions";
+import { formatDateTime, getEventTimeDown, isEventInProgress } from "ultis/functions";
+import dayjs from "dayjs";
 
 const data = [
   {
@@ -63,11 +64,9 @@ const EvezTrending = memo(() => {
   const { params } = useRoute();
 
   const dispatch = useDispatch();
-  const { all_trending_events, all_saved_events } = useSelector<any, any>(
+  const { all_trending_events } = useSelector<any, any>(
     (state) => state.events
   );
-
-console.log("all is",all_saved_events)
 
   const { all_errors } = useSelector<any, any>((state) => state.errors);
   const { loading } = useSelector<any, any>((state) => state.loading);
@@ -90,6 +89,7 @@ console.log("all is",all_saved_events)
       );
     }, [dispatch, navigation, params])
   );
+  
 
   const renderItem = useCallback(({ item }) => {
     const {
@@ -108,24 +108,21 @@ console.log("all is",all_saved_events)
       event_date,
       lat_long,
       rating,
+      duration,
       type_name,
     } = item;
+
     return (
       <EventItem
         thumbnail={require("@assets/Trending/trending_3.png")}
         tag={type_name}
-        // reviewTimes={20}
         id={event_id}
         eventName={event_name}
         location={address}
         distance={lat_long}
-        timeCountDown="7 Days 06 Hours 27 Mins 44 secs"
-        //  currentAttending={currentAttending}
-        //  eventTime={`SUN, MAR. 25  -  4:30 PM EST`}
-        eventTime={`${event_date}  -  ${start_time}`}
+        eventDateTime={formatDateTime(event_date, start_time)}
         rate={rating}
-        //  //maxAttending={//maxAttending}
-       // save={false}
+        duration={duration}
       />
     );
   }, []);

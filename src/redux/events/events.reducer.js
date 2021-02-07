@@ -29,7 +29,7 @@ export default function (state = initialState, action) {
         all_attended_events: action.payload,
       };
       case GET_ALL_SAVED_EVENTS:
-        console.log("nice is", action.payload)
+        
         return {
           ...state,
           all_saved_events: action.payload,

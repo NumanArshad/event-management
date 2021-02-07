@@ -19,6 +19,9 @@ import { useNavigation } from "@react-navigation/native";
 import SvgSaved from "svgs/IconSaved";
 import { saveEvent, unSaveEvent } from "redux/events/events.actions";
 import { useDispatch, useSelector } from "react-redux";
+import EventTimeCountDown from "components/EventTimeCountDown";
+import { compareDateTime, isEventInProgress } from "ultis/functions";
+import dayjs from "dayjs";
 
 interface EventItemProps {
   thumbnail: any;
@@ -27,15 +30,13 @@ interface EventItemProps {
   reviewTimes?: number;
   eventName: string;
   location: string;
-  timeCountDown?: string; //time left for event in days hour minute second
   distance: string;
   currentAttending?: number;
-  save?: boolean;
   rate?: number;
   marginLeft?: number;
   onPress?: () => void;
-  eventTime?: string;
-  price?: number;
+  eventDateTime?: string;
+  duration?: string;
   colorAttending?: string;
   isSmallItem?: boolean;
 }
@@ -45,14 +46,14 @@ const EventItem = memo((props: EventItemProps) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const {all_saved_events} = useSelector(state => state.events)
+  const { all_saved_events } = useSelector((state) => state.events);
 
-useEffect(() => {
-  const isEventSaved = all_saved_events?.find(
-    ({ event_id }: { event_id: number }) => event_id === props.id
-  );
-  setSave(!!isEventSaved);
-}, [all_saved_events, props]);
+  useEffect(() => {
+    const isEventSaved = all_saved_events?.find(
+      ({ event_id }: { event_id: number }) => event_id === props.id
+    );
+    setSave(!!isEventSaved);
+  }, [all_saved_events, props]);
 
   const onPressSave = useCallback(() => {
     setSave(!isSave);
@@ -63,14 +64,9 @@ useEffect(() => {
     }
   }, [isSave]);
 
-
   const thumbnailDimension = {
     width: props.isSmallItem ? "100%" : (327 / 375) * widthScreen,
     height: props.isSmallItem ? 220 * (375 / 327) * 0.7 : 220 * (375 / 327),
-  };
-  const countDownDimension = {
-    width: props.isSmallItem ? "100%" : (327 / 375) * widthScreen,
-    height: props.isSmallItem ? 34 * (375 / 327) * 0.7 : 34 * (375 / 327),
   };
 
   const data = {
@@ -80,13 +76,9 @@ useEffect(() => {
     reviewTimes: props.reviewTimes || "",
     eventName: props.eventName,
     location: props.location,
-    timeCountDown: props.timeCountDown || "",
     distance: props.distance,
     currentAttending: props.currentAttending || 0,
-    //maxAttending: props.maxAttending  || '',
     rate: props.rate || 0,
-    price: props.price || 0,
-    save: props.save,
   };
 
   const onDetail = useCallback(() => {
@@ -115,13 +107,18 @@ useEffect(() => {
         <TouchableOpacity style={styles.iconUnSave} onPress={onPressSave}>
           {isSave ? <SvgSaved /> : <IconUnSave />}
         </TouchableOpacity>
-        {props.timeCountDown ? (
-          <View style={[styles.labelCountDown, countDownDimension]}>
-            <HourGlass />
-            <Text style={styles.textCountDown}>{props.timeCountDown}</Text>
-          </View>
-        ) : null}
+
+        {(compareDateTime(props.eventDateTime)?.isAfter 
+        ) && (
+          <EventTimeCountDown
+            eventDateTime={props.eventDateTime}
+            id={props.id}
+          />
+        )}
       </View>
+      
+    
+      
       <EventName
         tag={props.tag}
         eventName={props.eventName}
@@ -133,7 +130,8 @@ useEffect(() => {
         currentAttending={props.currentAttending}
         location={props.location}
         distance={props.distance}
-        eventTime={props.eventTime}
+        eventDateTime={props.eventDateTime}
+        eventId={props.id}
         isSmallItem={props.isSmallItem}
       />
     </TouchableOpacity>

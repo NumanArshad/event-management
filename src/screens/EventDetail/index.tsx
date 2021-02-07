@@ -44,23 +44,35 @@ import {
 } from "redux/events/events.actions";
 import { clearEventAllReviews } from "redux/reviews/reviews.actions";
 import isEmpty from "ultis/isEmpty";
+import {
+  compareDateTime,
+  formatDateTime,
+  isEventInProgress,
+} from "ultis/functions";
+import EventTimeCountDown from "components/EventTimeCountDown";
+import dayjs from "dayjs";
+import { markAttendance } from "redux/attendEvent/attendEvent.actions";
+import {currentLat, currentLong} from "ultis/functions"
 
 const EventDetail = memo(() => {
   const route = useRoute();
   const navigation = useNavigation();
 
+  console.log("lat is", currentLong)
+
+  
   // @ts-ignore
   const data = route.params?.data;
 
   const dispatch = useDispatch();
   const [isSaved, setSaved] = useState(data.save);
 
-  const { 
-    single_event, 
-    all_reserved_events, 
-    all_saved_events } = useSelector<any, any>((state) => state.events);
+  const { single_event, all_reserved_events, all_saved_events } = useSelector<
+    any,
+    any
+  >((state) => state.events);
 
-  const {loading} = useSelector<any, any>(state => state.loading);
+  const { loading } = useSelector<any, any>((state) => state.loading);
 
   useEffect(() => {
     dispatch(getSingleEventDetail(data?.id));
@@ -77,19 +89,29 @@ const EventDetail = memo(() => {
     };
   }, [dispatch]);
 
-
   const isEventReservedByUser = () => {
     return all_reserved_events?.find(
       ({ event_id }: { event_id: number }) => event_id === data?.id
     );
   };
 
+  const handleReserveAttendEvent = () => {
+    const formData = new FormData();
+    formData.append("event_id", data?.id);
+    formData.append("lat", currentLat);
+    formData.append("long", currentLong);
+    is_event_in_progress
+      ? dispatch(markAttendance(formData))
+      : handleReserveEvent();
+  };
+
   const handleReserveEvent = () => {
-    dispatch(isEventReservedByUser() ?
-      unReserveEvent(data?.id) :
-      reserveEvent(data?.id)
-    )
-  }
+    dispatch(
+      isEventReservedByUser()
+        ? unReserveEvent(data?.id)
+        : reserveEvent(data?.id)
+    );
+  };
 
   const onBack = useCallback(() => {
     navigation.goBack();
@@ -99,7 +121,6 @@ const EventDetail = memo(() => {
     setSaved(!!isSaved);
     dispatch(isSaved ? unSaveEvent(data?.id) : saveEvent(data?.id));
   };
-
 
   const onDirection = useCallback(() => {
     navigation.navigate(ROUTES.EventDetailMap);
@@ -118,6 +139,27 @@ const EventDetail = memo(() => {
     outputRange: [0, 1],
     extrapolate: "clamp",
   });
+
+  const { isAfter } = compareDateTime(
+    single_event &&
+      formatDateTime(single_event?.event_date, single_event?.start_time)
+  ) || {};
+
+  const is_event_in_progress = single_event && isEventInProgress(
+     formatDateTime(single_event?.event_date, single_event?.start_time),
+      single_event?.duration
+    )
+
+  const reserveAttendanceText =
+      loading || isEmpty(single_event)
+      ? `...loading`
+      : isAfter
+      ? isEventReservedByUser()
+        ? `Unreserve`
+        : `Reserve`
+      : is_event_in_progress
+      ? `Attend Event`
+      : null;
 
   return (
     <View style={styles.container}>
@@ -149,28 +191,41 @@ const EventDetail = memo(() => {
         </Swiper>
 
         {/* 7 Days 06 Hours 27 Mins 44 secs */}
-        {data?.timeCountDown !== "" ? (
+        {/* {data?.timeCountDown !== "" ? (
           <View style={styles.countDownView}>
             <HourGlass />
             <Text style={styles.textCountDown}>{data.timeCountDown}</Text>
           </View>
-        ) : null}
+        ) : null} */}
+
         {isEmpty(single_event) ? (
           <Text>...loading</Text>
         ) : (
-          <View style={styles.infoView}>
-            <EventName
-              eventName={single_event?.event_name}
-              //rate={single_event?.rating}
-              tag={single_event?.type_name}
-            />
-            <EventBasicInfo
-              eventId={data?.id}
-              currentAttending={single_event?.participants}
-              distance={single_event?.lat_long}
-              eventTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
-            />
-          </View>
+          <>
+            {isAfter && (
+              <EventTimeCountDown
+                id={data?.id}
+                eventDateTime={formatDateTime(
+                  single_event?.event_date,
+                  single_event?.start_time
+                )}
+                isDetail={styles.countDownView}
+              />
+            )}
+
+            <View style={styles.infoView}>
+              <EventName
+                eventName={single_event?.event_name}
+                tag={single_event?.type_name}
+              />
+              <EventBasicInfo
+                eventId={data?.id}
+                currentAttending={single_event?.participants}
+                distance={single_event?.lat_long}
+                eventDateTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
+              />
+            </View>
+          </>
         )}
         <RateDetail
           eventId={data?.id}
@@ -279,28 +334,18 @@ const EventDetail = memo(() => {
           </ScrollView>
         </View> */}
 
-        <View style={styles.buttonView}>
-
-        <ButtonLinear
-              title={` ${loading
-                ? `...loading` : 
-                isEventReservedByUser() ? 'Unreserve' : `Reserve`}`}
+        {(isEmpty(single_event) ||
+          loading || isAfter ||
+          is_event_in_progress) && (
+          <View style={styles.buttonView}>
+            <ButtonLinear
+              title={reserveAttendanceText}
               style={styles.bottomButton}
               isDisabled={loading}
-              onPress={handleReserveEvent}
+              onPress={handleReserveAttendEvent}
             />
-          {/* {isAvailable ? (
-            <ButtonLinear
-              title={textBuyButton}
-              style={styles.bottomButton}
-              onPress={onBuy}
-            />
-          ) : (
-            <View style={styles.buttonSoldOut}>
-              <Text style={styles.textSoldOut}>{textBuyButton}</Text>
-            </View>
-          )} */}
-        </View>
+          </View>
+        )}
       </ScrollView>
       <View style={styles.buttonTopView}>
         <TouchableOpacity onPress={onBack} style={styles.btnBack}>
@@ -310,7 +355,10 @@ const EventDetail = memo(() => {
           <TouchableOpacity>
             <IconShare />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonSave} onPress={handleSavedEvent}>
+          <TouchableOpacity
+            style={styles.buttonSave}
+            onPress={handleSavedEvent}
+          >
             {isSaved ? <SvgSaved /> : <IconUnSave />}
           </TouchableOpacity>
         </View>

@@ -18,8 +18,6 @@ const DonatePoint = () => {
   const dispatch = useDispatch();
   const [companiesList, setcompaniesList] = useState([]);
   const [organizationID, setorganizationID] = useState("");
-  const { getState } = store;
-  // const { companies } = getState()?.donate;
   const { companies } = useSelector((state) => state.donate);
   const [modalVisible, setModalVisible] = useState(false);
   const [credits, setcredits] = useState("");

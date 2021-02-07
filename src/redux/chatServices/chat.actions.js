@@ -10,8 +10,6 @@ export const isConversationInitiated = (conversionDocId, initialMsg) => {
     .get()
     .then((res) => {
       if (!res.docs.length) {
-        ////console.log("not exist");
-        ///Intital chat message/////
         sendMessage(conversionDocId, initialMsg);
       }
     });

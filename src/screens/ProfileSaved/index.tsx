@@ -57,7 +57,7 @@ const ProfileSaved = memo(() => {
         location={address}
         distance={lat_long}
         timeCountDown="15 Days 06 Hours 27 Mins 44 secs"
-        eventTime={`${event_date}  -  ${start_time}`}
+        eventDateTime={`${event_date}  -  ${start_time}`}
         rate={rating}
         save
       />

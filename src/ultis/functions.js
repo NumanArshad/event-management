@@ -1,4 +1,7 @@
-let [currentLat, currentLong] = [null, null];
+import dayjs from "dayjs";
+import { duration } from "moment";
+
+export let [currentLat, currentLong] = [null, null];
 
 export const getUserPosition = () => {
   navigator.geolocation.getCurrentPosition(
@@ -19,7 +22,61 @@ export const getUserPosition = () => {
   );
 };
 
+export const getEventTimeDown = (dateTime) => {
+  const eventDateTime = dayjs(dateTime);
 
+  const current = dayjs().format("MM/DD/YYYY HH:mm");
+  const mins = eventDateTime.diff(current, "minutes", true);
+  const totalHours = parseInt(mins / 60);
+  const totalMins = dayjs().minute(mins).$m;
+  const days = parseInt(totalHours / 24);
+  const remaingHours = totalHours % 24;
+
+  return {
+    days: days === -0 ? 0 : days,
+    hours: remaingHours,
+    minutes: remaingHours < 0 ? 60 - totalMins : totalMins,
+    overAllMinutes: mins
+  };
+};
+
+export const compareDateTime = (dateTime) => {
+  const eventDateTime = dayjs(dateTime);
+
+  const current = dayjs().format("MM/DD/YYYY HH:mm");
+  return {
+    isAfter: eventDateTime.isAfter(current),
+    isSame: eventDateTime.isSame(current),
+    isBefore: eventDateTime.isBefore(current),
+  };
+};
+
+export const isEventInProgress = (eventDateTime, duration) => {
+  const [strHours, strMins] = duration?.split(":");
+  const [durationHours, durationMins] = [+strHours, +strMins];
+
+  const { isSame, isBefore, isAfter } = compareDateTime(eventDateTime);
+
+  const { overAllMinutes } = getEventTimeDown(eventDateTime);
+
+  const diffMinutes =  overAllMinutes * -1;
+  const durationMinutes = (durationHours * 60) + durationMins;
+
+  console.log("det is", diffMinutes, durationMinutes,isBefore, isAfter, getEventTimeDown(eventDateTime))
+
+  const progressFlag = isBefore ?
+
+      diffMinutes <= durationMinutes :
+      isSame
+
+  return progressFlag
+  
+};
+
+export const formatDateTime = (eventDate, eventTime) => {
+  const [time, ...rest] = eventTime?.split(" ");
+  return `${eventDate} ${time}`;
+};
 
 export const splitLatLongStr = (latLong) => {
   const [strLat, strLong] = latLong?.split(",");

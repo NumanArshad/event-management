@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllReservedEvents, getAllAttendedEvents, getAllTrendingEvents, getAllSavedEvents } from "redux/events/events.actions";
 import keyExtractor from "ultis/keyExtractor";
 import isEmpty from "ultis/isEmpty";
+import { formatDateTime } from "ultis/functions";
+//import moment from "moment";
 
 const EventAroundYou = memo(() => {
   const navigation = useNavigation();
@@ -27,7 +29,7 @@ const EventAroundYou = memo(() => {
       dispatch(getAllSavedEvents())
   },[dispatch])
 
-  const { all_attended_events, all_saved_events } = useSelector<any, any>(
+  const { all_attended_events } = useSelector<any, any>(
     (state) => state.events
   );
   const { all_errors } = useSelector<any, any>((state) => state.errors);
@@ -37,8 +39,6 @@ const EventAroundYou = memo(() => {
       dispatch(getAllAttendedEvents());
     }, [dispatch])
   );
-
-console.log("save is", all_saved_events)
 
   const onPressAllEventAroundYou = useCallback(() => {
     navigation.navigate(ROUTES.AllEventAroundYou);
@@ -54,36 +54,37 @@ console.log("save is", all_saved_events)
       lat_long,
       rating,
       type_name,
+      duration
     } = item;
-
     return (
       <EventItem
-        thumbnail={require("@assets/Trending/trending_3.png")}
+      thumbnail={require("@assets/Trending/trending_3.png")}
         tag={type_name}
         id={event_id}
         eventName={event_name}
         location={address}
         distance={lat_long}
-        timeCountDown="7 Days 06 Hours 27 Mins 44 secs"
-        eventTime={`${event_date}  -  ${start_time}`}
+        eventDateTime={formatDateTime(event_date, start_time)}
+        duration={duration}
         rate={rating}
-       // save
       />
-    );
+      );
   }, []);
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.headerForU}
           onPress={onPressAllEventAroundYou}
         >
+
           <IconAroundU />
           <Text style={styles.textHeaderForU}>
             See All Event Around You - 10km
+          
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {
          !isEmpty(all_attended_events) ?
          <FlatList

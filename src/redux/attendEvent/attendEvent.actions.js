@@ -2,6 +2,7 @@ import {
   GET_ALL_EVENT_ATTENDEES,
 CLEAR_ALL_EVENT_ATTENDEES} from "../actionTypes";
 import axios from "ultis/services/httpServices";
+import { alertMessage } from "ultis/alertToastMessages";
 
 export const getEventAttendees = eventId => (dispatch) => {
   axios.get(`attendance/event-attendees?event_id=${eventId}`).then((res) => {
@@ -14,16 +15,14 @@ export const getEventAttendees = eventId => (dispatch) => {
   });
 };
 
-// export const getAllAttendedEvents = () => (dispatch) => {
-//   axios.get("event/saved-events").then((res) => {
-//     if (res?.data?.status_code === 200) {
-//       dispatch({
-//         type: GET_ALL_ATTENDED_EVENTS,
-//         payload: res?.data?.data,
-//       });
-//     }
-//   });
-// };
+export const markAttendance = data => (dispatch) => {
+  axios.post("attendance/mark-attendance", data).then((res) => {
+    if (res?.data?.status_code === 200) {
+      alertMessage(res?.data?.message);
+      dispatch(getEventAttendees())
+    }
+  });
+};
 
 // /////////////Attend event and attendees/////
 

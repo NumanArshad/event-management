@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import isEmpty from "ultis/isEmpty";
 import { getDistanceByLatLong, splitLatLongStr } from "ultis/functions";
+import dayjs, { Dayjs } from "dayjs";
 
 interface EventBasicInfoProps {
   eventId?: number;
@@ -18,7 +19,7 @@ interface EventBasicInfoProps {
   distance?: string;
   currentAttending?: number;
   //maxAttending?: number;
-  eventTime?: string;
+  eventDateTime?:  string;
   colorAttending?: string;
   isSmallItem?: boolean;
 }
@@ -34,8 +35,6 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
       eventId: props.eventId
     });
   };
-
-  console.log("id is", props.eventId)
 
   const {latitude, longitude} =  splitLatLongStr(props?.distance) || {}
 
@@ -54,12 +53,12 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
           </Text>
         </View>
       ) : null}
-      {props.eventTime ? (
+      {props.eventDateTime ? (
         <View style={styles.location}>
           <View style={styles.flexRow}>
             <SvgEventTime />
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
-              {props.eventTime}
+            {props.eventDateTime}
             </Text>
           </View>
         </View>
