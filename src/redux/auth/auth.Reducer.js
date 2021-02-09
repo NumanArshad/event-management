@@ -1,4 +1,8 @@
-import { IS_AUTHENTICATED, NOT_AUTHORIZED, USER_PROFILE } from "../actionTypes";
+import {
+  IS_AUTHENTICATED,
+  NOT_AUTHORIZED,
+  UPDATE_AUTH_USER,
+} from "../actionTypes";
 
 const defaultSession = {
   auth_token: null,
@@ -37,6 +41,14 @@ export default function (state = initialState, action) {
       return {
         is_authenticated: false,
         login_Session: defaultSession,
+      };
+    case UPDATE_AUTH_USER:
+      return {
+        ...state,
+        login_Session: {
+          ...state.login_Session,
+          ...action.payload,
+        },
       };
     default:
       return state;

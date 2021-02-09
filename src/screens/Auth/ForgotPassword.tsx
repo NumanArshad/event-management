@@ -13,11 +13,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
 import Color from "../../ultis/color/index";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  forgotPassword,
-  login,
-  SetItem_AsynsStorage,
-} from "redux/auth/auth.actions";
+import { forgotPassword } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
@@ -43,10 +39,10 @@ const ForgotPassword = memo((navigation) => {
       setpreLoader(true);
       const formData = new FormData();
       formData.append("email", email);
-      console.log("FORMDATA:", formData);
+      ////console.log("FORMDATA:", formData);
       forgotPassword(formData)
         .then((res) => {
-          console.log("Response ", res.data);
+          ////console.log("Response ", res.data);
           if (res.data.status_code === 200) {
             navigate(ROUTES.Login);
             setpreLoader(false);
@@ -54,7 +50,7 @@ const ForgotPassword = memo((navigation) => {
           setpreLoader(false);
         })
         .catch((err) => {
-          console.log("ERror :", err.response.data.errors);
+          ////console.log("ERror :", err.response.data.errors);
           Alert.alert("", JSON.stringify(err.response.data.errors));
           setpreLoader(false);
         });

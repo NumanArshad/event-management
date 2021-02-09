@@ -1,28 +1,25 @@
-import React, {memo, useCallback, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import FONTS from 'ultis/fonts';
+import React, { memo, useCallback, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import FONTS from "ultis/fonts";
 interface ItemTag {
   active: boolean;
   tagName: string;
+  onPress?: () => void;
 }
 const ItemTag = memo((props: ItemTag) => {
-  const [isActive, setActive] = useState(props.active);
   let stylesTag;
   let colorText;
-  if (isActive) {
+  if (props.active) {
     stylesTag = [styles.tagItemContainer, styles.colorActive];
-    colorText = '#FFFFFF';
+    colorText = "#FFFFFF";
   } else {
     stylesTag = [styles.tagItemContainer, styles.colorInactive];
-    colorText = '#7F8FA6';
+    colorText = "#7F8FA6";
   }
-  const onChoice = useCallback(() => {
-    setActive(!isActive);
-  }, [isActive]);
 
   return (
-    <TouchableOpacity style={stylesTag} onPress={onChoice}>
-      <Text style={[styles.textTagName, {color: colorText}]}>
+    <TouchableOpacity style={stylesTag} onPress={props?.onPress}>
+      <Text style={[styles.textTagName, { color: colorText }]}>
         {props.tagName}
       </Text>
     </TouchableOpacity>
@@ -40,10 +37,10 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   colorActive: {
-    backgroundColor: '#ED3269',
+    backgroundColor: "#ED3269",
   },
   colorInactive: {
-    backgroundColor: '#F7F8FA',
+    backgroundColor: "#F7F8FA",
   },
   textTagName: {
     fontFamily: FONTS.Regular,

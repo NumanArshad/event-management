@@ -11,20 +11,14 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
-import Color from "../../ultis/color/index";
-import { LinearGradient } from "expo-linear-gradient";
-import {
-  forgotPassword,
-  login,
-  SetItem_AsynsStorage,
-} from "redux/auth/auth.actions";
+import { forgotPassword } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
+import SubmitButton from "components/buttons/submitButton";
 
 const ChangePassword = memo((navigation) => {
   const { navigate } = useNavigation();
-  const [preLoader, setpreLoader] = useState(false);
   const [currentPassword, setcurrentPassword] = useState("");
   const [newPassword, setnewPassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
@@ -37,35 +31,30 @@ const ChangePassword = memo((navigation) => {
     return false;
   };
   const handleForgotPassword = () => {
-    if (
-      validatePassword() &&
-      currentPassword != "" &&
-      newPassword != "" &&
-      confirmPassword != ""
-    ) {
-      setpreLoader(true);
-      const formData = new FormData();
-      formData.append("current_password", currentPassword);
-      formData.append("password", newPassword);
+    if (currentPassword != "" && newPassword != "" && confirmPassword != "") {
+      if (validatePassword()) {
+        const formData = new FormData();
+        formData.append("current_password", currentPassword);
+        formData.append("password", newPassword);
 
-      formData.append("password_confirmation", confirmPassword);
+        formData.append("password_confirmation", confirmPassword);
 
-      //   console.log("FORMDATA:", formData);
-      forgotPassword(formData)
-        .then((res) => {
-          console.log("Response ", res.data);
-          if (res.data.status_code === 200) {
-            Alert.alert("", res.data.message);
-            navigate(ROUTES.Login);
-            setpreLoader(false);
-          }
-          setpreLoader(false);
-        })
-        .catch((err) => {
-          console.log("ERror :", err.response.data.errors);
-          Alert.alert("", JSON.stringify(err.response.data.errors));
-          setpreLoader(false);
-        });
+        //   ////console.log("FORMDATA:", formData);
+        forgotPassword(formData)
+          .then((res) => {
+            ////console.log("Response ", res.data);
+            if (res.data.status_code === 200) {
+              Alert.alert("", res.data.message);
+              navigate(ROUTES.Login);
+            }
+          })
+          .catch((err) => {
+            ////console.log("ERror :", err.response.data.errors);
+            Alert.alert("", JSON.stringify(err.response.data.errors));
+          });
+      }
+    } else {
+      Alert.alert("", "Kindly Fill All The Inputs.");
     }
   };
   return (
@@ -106,33 +95,7 @@ const ChangePassword = memo((navigation) => {
           </TouchableOpacity>
         </Text>
       </View>
-      <TouchableOpacity onPress={handleForgotPassword}>
-        <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 1 }}
-          style={{ borderRadius: 10, marginTop: height_screen * 0.03 }}
-        >
-          <Text style={styles.loginBtn}>Submit</Text>
-          <View
-            style={{
-              position: "absolute",
-              left: height_screen * 0.09,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <ActivityIndicator
-              color="#fff"
-              animating={preLoader}
-              size="small"
-            />
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
+      <SubmitButton text="Submit" onPress={handleForgotPassword} />
     </View>
   );
 });
@@ -155,16 +118,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: height_screen * 0.01,
     paddingLeft: height_screen * 0.02,
-  },
-  loginBtn: {
-    height: height_screen * 0.055,
-    width: width_screen * 0.3,
-    backgroundColor: "transparent",
-    borderRadius: 10,
-    marginTop: height_screen * 0.01,
-    textAlign: "center",
-    paddingTop: height_screen * 0.012,
-    color: "#fff",
   },
   viewForgotPass: {
     flexDirection: "row",

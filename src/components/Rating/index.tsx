@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native";
 
 interface RatingProps {
   rate?: number;
+  onPress: (index: number) => void;
 }
 
 const Rating = memo((props: RatingProps) => {

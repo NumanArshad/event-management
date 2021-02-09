@@ -37,62 +37,98 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   clearSingleEvent,
   getSingleEventDetail,
+  reserveEvent,
+  saveEvent,
+  unReserveEvent,
+  unSaveEvent,
 } from "redux/events/events.actions";
-import {clearEventAllReviews} from "redux/reviews/reviews.actions";
-
+import { clearEventAllReviews } from "redux/reviews/reviews.actions";
+import isEmpty from "ultis/isEmpty";
+import {
+  compareDateTime,
+  formatDateTime,
+  isEventInProgress,
+} from "ultis/functions";
+import EventTimeCountDown from "components/EventTimeCountDown";
+import dayjs from "dayjs";
+import { markAttendance } from "redux/attendEvent/attendEvent.actions";
+import {currentLat, currentLong} from "ultis/functions"
 
 const EventDetail = memo(() => {
   const route = useRoute();
   const navigation = useNavigation();
 
+  console.log("lat is", currentLong)
+
+  
   // @ts-ignore
   const data = route.params?.data;
 
   const dispatch = useDispatch();
+  const [isSaved, setSaved] = useState(data.save);
 
-  const { single_event } = useSelector<any, any>((state) => state.events);
-  
+  const { single_event, all_reserved_events, all_saved_events } = useSelector<
+    any,
+    any
+  >((state) => state.events);
+
   const { loading } = useSelector<any, any>((state) => state.loading);
 
   useEffect(() => {
     dispatch(getSingleEventDetail(data?.id));
-    
+    const isEventSaved = all_saved_events?.find(
+      ({ event_id }: { event_id: number }) => event_id === data?.id
+    );
+    setSaved(!!isEventSaved);
+  }, [dispatch, all_saved_events, data]);
+
+  useEffect(() => {
     return () => {
       dispatch(clearSingleEvent());
       dispatch(clearEventAllReviews());
     };
   }, [dispatch]);
 
-  const [isSaved, setSaved] = useState(data.save);
-  let textBuyButton = "";
-  let isAvailable;
-  // if (data.currentAttending < data.maxAttending) {
-  isAvailable = true;
-  if (data.price && data.price > 0) {
-    textBuyButton = `FROM $${data.price} - GET IT`;
-  } else {
-    textBuyButton = "JOIN IT FREE";
-  }
-  //}
-  // else {
-  //   textBuyButton = "The list is full. Please select other time";
-  //   isAvailable = false;
-  // }
-  const onSaved = useCallback(() => {
-    setSaved(!isSaved);
-  }, [isSaved]);
+  const isEventReservedByUser = () => {
+    return all_reserved_events?.find(
+      ({ event_id }: { event_id: number }) => event_id === data?.id
+    );
+  };
+
+  const handleReserveAttendEvent = () => {
+    const formData = new FormData();
+    formData.append("event_id", data?.id);
+    formData.append("lat", currentLat);
+    formData.append("long", currentLong);
+    is_event_in_progress
+      ? dispatch(markAttendance(formData))
+      : handleReserveEvent();
+  };
+
+  const handleReserveEvent = () => {
+    dispatch(
+      isEventReservedByUser()
+        ? unReserveEvent(data?.id)
+        : reserveEvent(data?.id)
+    );
+  };
+
   const onBack = useCallback(() => {
     navigation.goBack();
   }, []);
-  const onBuy = useCallback(() => {
-    navigation.navigate(ROUTES.TicketDetail);
-  }, []);
+
+  const handleSavedEvent = () => {
+    setSaved(!!isSaved);
+    dispatch(isSaved ? unSaveEvent(data?.id) : saveEvent(data?.id));
+  };
+
   const onDirection = useCallback(() => {
     navigation.navigate(ROUTES.EventDetailMap);
   }, []);
+
   const onReview = useCallback(() => {
-    navigation.navigate(ROUTES.EventDetailRateComment,{
-      eventId: data?.id
+    navigation.navigate(ROUTES.EventDetailRateComment, {
+      eventId: data?.id,
     });
   }, [navigation]);
 
@@ -103,6 +139,27 @@ const EventDetail = memo(() => {
     outputRange: [0, 1],
     extrapolate: "clamp",
   });
+
+  const { isAfter } = compareDateTime(
+    single_event &&
+      formatDateTime(single_event?.event_date, single_event?.start_time)
+  ) || {};
+
+  const is_event_in_progress = single_event && isEventInProgress(
+     formatDateTime(single_event?.event_date, single_event?.start_time),
+      single_event?.duration
+    )
+
+  const reserveAttendanceText =
+      loading || isEmpty(single_event)
+      ? `...loading`
+      : isAfter
+      ? isEventReservedByUser()
+        ? `Unreserve`
+        : `Reserve`
+      : is_event_in_progress
+      ? `Attend Event`
+      : null;
 
   return (
     <View style={styles.container}>
@@ -120,48 +177,63 @@ const EventDetail = memo(() => {
           activeDotColor={"#fff"}
         >
           <View>
-            <Image source={data.thumbnail} style={styles.thumbnail} />
+            <Image source={data?.thumbnail} style={styles.thumbnail} />
           </View>
           <View>
-            <Image source={data.thumbnail} style={styles.thumbnail} />
+            <Image source={data?.thumbnail} style={styles.thumbnail} />
           </View>
           <View>
-            <Image source={data.thumbnail} style={styles.thumbnail} />
+            <Image source={data?.thumbnail} style={styles.thumbnail} />
           </View>
           <View>
-            <Image source={data.thumbnail} style={styles.thumbnail} />
+            <Image source={data?.thumbnail} style={styles.thumbnail} />
           </View>
         </Swiper>
 
         {/* 7 Days 06 Hours 27 Mins 44 secs */}
-        {data.timeCountDown !== "" ? (
+        {/* {data?.timeCountDown !== "" ? (
           <View style={styles.countDownView}>
             <HourGlass />
             <Text style={styles.textCountDown}>{data.timeCountDown}</Text>
           </View>
-        ) : null}
-        {single_event && (
-          <View style={styles.infoView}>
-            <EventName 
-            eventName={single_event.event_name}
-            //rate={single_event?.rating}
-            tag={single_event?.type_name} 
-            />
-            <EventBasicInfo
-              currentAttending={single_event?.participants}
-              eventTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
-            />
-          </View>
+        ) : null} */}
+
+        {isEmpty(single_event) ? (
+          <Text>...loading</Text>
+        ) : (
+          <>
+            {isAfter && (
+              <EventTimeCountDown
+                id={data?.id}
+                eventDateTime={formatDateTime(
+                  single_event?.event_date,
+                  single_event?.start_time
+                )}
+                isDetail={styles.countDownView}
+              />
+            )}
+
+            <View style={styles.infoView}>
+              <EventName
+                eventName={single_event?.event_name}
+                tag={single_event?.type_name}
+              />
+              <EventBasicInfo
+                eventId={data?.id}
+                currentAttending={single_event?.participants}
+                distance={single_event?.lat_long}
+                eventDateTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
+              />
+            </View>
+          </>
         )}
         <RateDetail
           eventId={data?.id}
           onPress={onReview}
-          rate={single_event?.rate}
-          reviewTimes={12}
+          rate={single_event?.rating}
           marginTop={32}
-          numberReviews={214}
         />
-        <View style={styles.contentView}>
+        {/* <View style={styles.contentView}>
           <Text style={styles.textTitle}>ABOUT</Text>
           <Text style={styles.aboutContent}>
             Why this party is for you {"\n"}
@@ -174,7 +246,7 @@ const EventDetail = memo(() => {
               <SvgArrowRight />
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
 
         {single_event && (
           <>
@@ -184,8 +256,7 @@ const EventDetail = memo(() => {
               </Text>
               <UserItem
                 image={require("@assets/Followers/img.jpg")}
-                name={single_event?.type_name}
-                numberFollower={"535"}
+                user_name={single_event?.sub_type_name}
               />
             </View>
 
@@ -212,7 +283,8 @@ const EventDetail = memo(() => {
             </View>
           </>
         )}
-        <View style={styles.contentView}>
+        
+        {/* <View style={styles.contentView}>
           <Text style={styles.textTitle}>CONTACT</Text>
           <Text style={styles.aboutContent}>
             Send us an email at{" "}
@@ -261,21 +333,20 @@ const EventDetail = memo(() => {
               isSmallItem={true}
             />
           </ScrollView>
-        </View>
+        </View> */}
 
-        <View style={styles.buttonView}>
-          {isAvailable ? (
+        {(isEmpty(single_event) ||
+          loading || isAfter ||
+          is_event_in_progress) && (
+          <View style={styles.buttonView}>
             <ButtonLinear
-              title={textBuyButton}
+              title={reserveAttendanceText}
               style={styles.bottomButton}
-              onPress={onBuy}
+              isDisabled={loading}
+              onPress={handleReserveAttendEvent}
             />
-          ) : (
-            <View style={styles.buttonSoldOut}>
-              <Text style={styles.textSoldOut}>{textBuyButton}</Text>
-            </View>
-          )}
-        </View>
+          </View>
+        )}
       </ScrollView>
       <View style={styles.buttonTopView}>
         <TouchableOpacity onPress={onBack} style={styles.btnBack}>
@@ -285,7 +356,10 @@ const EventDetail = memo(() => {
           <TouchableOpacity>
             <IconShare />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonSave} onPress={onSaved}>
+          <TouchableOpacity
+            style={styles.buttonSave}
+            onPress={handleSavedEvent}
+          >
             {isSaved ? <SvgSaved /> : <IconUnSave />}
           </TouchableOpacity>
         </View>
@@ -384,6 +458,7 @@ const styles = StyleSheet.create({
 
   buttonView: {
     width: "100%",
+    marginTop: 15,
     paddingHorizontal: "6.4%",
   },
   bottomButton: {

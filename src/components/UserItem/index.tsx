@@ -17,13 +17,13 @@ import ROUTES from "ultis/routes";
 import { sendFriendRequest } from "redux/users/users.actions";
 import { useDispatch } from "react-redux";
 
-// interface Props {
-//   user_id: any;
-//   user_name: string;
-//   numberFollower: string;
-//   id: string;
-//   actionButton?: string;
-// }
+interface Props {
+  // user_id: any;
+  user_name: string;
+  user_type?: string;
+  // id: string;
+  actionButton?: string;
+}
 
 const UserItem = memo((props: any) => {
   const [follow, setFollow] = useState(false);
@@ -43,7 +43,7 @@ const UserItem = memo((props: any) => {
     });
   }, [navigation]);
 
-  const { user_name, followers, image, id, friendRequests } = userInfo;
+  const { user_name, followers, image, id, friendRequests, user_type } = userInfo;
 
   const friendRequestStatus = () => {
     const { status } =
@@ -78,9 +78,7 @@ const UserItem = memo((props: any) => {
       <Image style={styles.image} source={image} />
       <View style={styles.txtField}>
         <Text style={styles.txtName}>{user_name}</Text>
-        <Text style={styles.txtNumberFollower}>
-          {followers?.length} followers
-        </Text>
+        {user_type && <Text style={styles.txtNumberFollower}>{user_type}</Text>}
       </View>
       {actionButton === "addFriend" && !friendRequestStatus()?.isRejected ? (
         <TouchableOpacity

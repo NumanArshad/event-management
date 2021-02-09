@@ -14,18 +14,13 @@ import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
 import Color from "../../ultis/color/index";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  updateProfile,
-  SetItem_AsynsStorage,
-  getProfile,
-} from "redux/auth/auth.actions";
+import { getProfile, updateProfile } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
 import { useDispatch, useSelector } from "react-redux";
-import store from "../../redux/store";
+
 const Profile = memo(() => {
-  const { getState } = store;
   const {
     login_Session: {
       user_name,
@@ -33,24 +28,22 @@ const Profile = memo(() => {
       first_name,
       last_name,
       contact,
-      stripe_account_id,
+      stripe_account,
     },
-  } = getState()?.auth;
+  } = useSelector(state => state?.auth);
 
   const [email, setemail] = useState(userEmail);
   const [password, setpassword] = useState("");
   const [name, setname] = useState(user_name);
   const [firstName, setfirstName] = useState(first_name);
   const [lastName, setlastName] = useState(last_name);
-  const [stripAccount, setstripAccount] = useState(stripe_account_id);
+  const [stripAccount, setstripAccount] = useState(stripe_account);
   const [phone, setphone] = useState(contact);
 
   const { navigate } = useNavigation();
   const [preLoader, setpreLoader] = useState(false);
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getProfile());
-  // }, []);
+  
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;
@@ -63,23 +56,37 @@ const Profile = memo(() => {
     Alert.alert("", email);
   };
   const handleProfile = () => {
-    if (ValidateEmail() && email != "" && name != "") {
-      setpreLoader(true);
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("name", name);
-      console.log("FORMDATA:", formData);
-      updateProfile(formData)
-        .then((res) => {
-          console.log("Response ", res.data);
-          Alert.alert("", "Your Profile has been Updated Successfully!");
-          setpreLoader(false);
-        })
-        .catch((err) => {
-          console.log("ERror :", err.response.data.errors);
-          Alert.alert("", JSON.stringify(err.response.data.errors));
-          setpreLoader(false);
-        });
+    if (
+      email != "" &&
+      name != "" &&
+      firstName != "" &&
+      lastName != "" &&
+      stripAccount != "" &&
+      phone != ""
+    ) {
+      if (ValidateEmail()) {
+        setpreLoader(true);
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("name", name);
+        formData.append("first_name", firstName);
+        formData.append("last_name", lastName);
+        formData.append("stripe_account", stripAccount);
+        formData.append("contact", phone);
+
+        const jsonData = {
+          email,
+          first_name: firstName,
+          last_name: lastName,
+          stripe_account: stripAccount,
+          contact: phone,
+        };
+        // formData.append("image", email);
+        ////console.log("FORMDATA:", formData);
+        dispatch(updateProfile(formData, jsonData));
+      }
+    } else {
+      Alert.alert("", "Kindly Fill All The Inputs.");
     }
   };
   return (
@@ -103,26 +110,26 @@ const Profile = memo(() => {
           style={styles.textInput}
           placeholder="First Name..."
           onChangeText={(data) => setfirstName(data)}
-          value={name}
+          value={firstName}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Last Name..."
           onChangeText={(data) => setlastName(data)}
-          value={name}
+          value={lastName}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Strip Account Number..."
           onChangeText={(data) => setstripAccount(data)}
-          value={name}
+          value={stripAccount}
           secureTextEntry={true}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Phone Number..."
           onChangeText={(data) => setphone(data)}
-          value={name}
+          value={contact}
           keyboardType="number-pad"
         />
         <TextInput

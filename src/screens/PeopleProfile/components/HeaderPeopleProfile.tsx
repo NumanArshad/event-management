@@ -21,7 +21,7 @@ interface Props {
 
 const HeaderPeopleProfile = memo((props: Props) => {
 
-  console.log("user id", props?.user_id)
+  //console.log("user id", props?.user_id)
   const navigation = useNavigation();
   const onChat = useCallback(() => {
     navigation.navigate(ROUTES.Chat, {
@@ -56,11 +56,11 @@ const HeaderPeopleProfile = memo((props: Props) => {
           <TouchableOpacity onPress={onChat} style={styles.inbox}>
             <Text style={styles.txtInbox}>MESSAGE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.follow}>
+          {/* <TouchableOpacity style={styles.follow}>
             <Text style={styles.txtFollow}>FOLLOW</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
-        <View style={styles.followStyle}>
+        {/* <View style={styles.followStyle}>
           <TouchableOpacity onPress={onFollower}>
             <Text style={styles.followers}>
               {props.followers}
@@ -73,7 +73,7 @@ const HeaderPeopleProfile = memo((props: Props) => {
               <Text style={styles.txtFollower}> following</Text>
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         {/* <Text style={styles.interested}>Interested in:</Text>
         <View style={styles.tagStyle}>
           {props.interested.map((item) => (

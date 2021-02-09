@@ -10,8 +10,6 @@ export const isConversationInitiated = (conversionDocId, initialMsg) => {
     .get()
     .then((res) => {
       if (!res.docs.length) {
-        console.log("not exist");
-        ///Intital chat message/////
         sendMessage(conversionDocId, initialMsg);
       }
     });
@@ -29,7 +27,7 @@ export const getConversation = (conversionDocId, myMessages, callBack) => {
   chatMessagesRef(conversionDocId).orderBy("createdAt").onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((changes) => {
       if (changes.type === "added") {
-        console.log("chnage data is", changes.doc.data());
+        ////console.log("chnage data is", changes.doc.data());
         myMessages.unshift({
           ...changes.doc.data(),
           id: changes.doc.id,
@@ -44,11 +42,11 @@ export const getConversation = (conversionDocId, myMessages, callBack) => {
 //     transformAsync
 //   )
 // }
-// export const getAllSavedEvents = () => (dispatch) => {
+// export const getAllAttendedEvents = () => (dispatch) => {
 //   axios.get("event/saved-events").then((res) => {
 //     if (res?.data?.status_code === 200) {
 //       dispatch({
-//         type: GET_ALL_SAVED_EVENTS,
+//         type: GET_ALL_ATTENDED_EVENTS,
 //         payload: res?.data?.data,
 //       });
 //     }

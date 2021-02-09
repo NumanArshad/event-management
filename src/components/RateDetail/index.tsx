@@ -10,8 +10,6 @@ interface RateDetailProps {
   eventId: number;
   marginTop?: number;
   rate: number;
-  reviewTimes: number;
-  numberReviews: number;
   onPress: () => void;
 }
 
@@ -21,8 +19,6 @@ const RateDetail = (props: RateDetailProps) => {
   const dispatch = useDispatch();
 
   const { all_reviews } = useSelector<any, any>((state) => state.reviews);
-
-  //console.log("eevnt id", props.eventId,all_reviews)
 
   useEffect(() => {
     dispatch(getEventAllReviews(props.eventId));
@@ -39,9 +35,9 @@ const RateDetail = (props: RateDetailProps) => {
         <View style={styles.reviewView}>
           <View style={styles.flexRow}>
             <InactiveRate rate={props.rate} />
-            <Text style={[styles.textReviewTimes, { marginLeft: 8 }]}>
+            {/* <Text style={[styles.textReviewTimes, { marginLeft: 8 }]}>
               {props.reviewTimes}K
-            </Text>
+            </Text> */}
           </View>
           <Text style={styles.textReviewTimes}>
             {all_reviews?.length || 0} review{all_reviews?.length > 1 && `s`}

@@ -18,8 +18,6 @@ const DonatePoint = () => {
   const dispatch = useDispatch();
   const [companiesList, setcompaniesList] = useState([]);
   const [organizationID, setorganizationID] = useState("");
-  const { getState } = store;
-  // const { companies } = getState()?.donate;
   const { companies } = useSelector((state) => state.donate);
   const [modalVisible, setModalVisible] = useState(false);
   const [credits, setcredits] = useState("");
@@ -29,7 +27,7 @@ const DonatePoint = () => {
       // makeRow();
     } else {
       dispatch(getCompanies());
-      console.log("Run", companies);
+      //console.log("Run", companies);
     }
   }, [dispatch, companies]);
 
@@ -38,7 +36,7 @@ const DonatePoint = () => {
       organization_id: organizationID,
       credits: credits,
     };
-    console.log("Send Donation", data);
+    //console.log("Send Donation", data);
     setModalVisible(false);
     setcredits("");
     dispatch(sendDonation(data, Alert));

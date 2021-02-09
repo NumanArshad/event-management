@@ -15,13 +15,17 @@ import ButtonLinear from "components/buttons/ButtonLinear";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { requestPayout } from "redux/users/users.actions";
 import ROUTES from "ultis/routes";
+import store from "../../redux/store";
 
 const Rewards = memo(() => {
   const [value, onChangeText] = React.useState("");
   const navigate = useNavigation();
   const route = useRoute();
   const [preLoader, setpreLoader] = useState(false);
-
+  const { getState } = store;
+  const {
+    login_Session: { user_name, earn_credits, followers, following, email },
+  } = getState()?.auth;
   const handlePayoutRequest = () => {
     if (value != "") {
       setpreLoader(true);
@@ -29,10 +33,10 @@ const Rewards = memo(() => {
       formData.append("credits", value);
       formData.append("account_number", "12321-98790");
 
-      console.log("FORMDATA:", formData);
+      //console.log("FORMDATA:", formData);
       requestPayout(formData)
         .then((res) => {
-          console.log("Response ", res.data);
+          //console.log("Response ", res.data);
           if (res.data.status_code === 200) {
             setpreLoader(false);
             Alert.alert("", res.data.message);
@@ -40,16 +44,18 @@ const Rewards = memo(() => {
           setpreLoader(false);
         })
         .catch((err) => {
-          console.log("ERror :", err.response.data.message);
-          // Alert.alert("",res.data.message)
-          Alert.alert("", err.response.data.message);
+          //console.log("ERror :", err.response);
+          // // Alert.alert("",res.data.message)
+          // Alert.alert("", err.response);
           setpreLoader(false);
         });
+    } else {
+      Alert.alert("", "Write some Credits!Thank You.Don't leave it Empty.");
     }
   };
   return (
     <View style={styles.container}>
-      <HeaderReward amount={route.params.rewards} />
+      <HeaderReward amount={earn_credits} />
       <View style={styles.inputShape}>
         <TextInput
           onChangeText={(text) => onChangeText(text)}
@@ -76,15 +82,15 @@ const Rewards = memo(() => {
       <View
         style={{
           position: "absolute",
-          left: height_screen * 0.2,
+          left: width_screen * 0.035,
           right: 0,
-          top: height_screen * 0.12,
+          top: height_screen * 0.25,
           bottom: 0,
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <ActivityIndicator color="#fff" animating={preLoader} size="small" />
+        <ActivityIndicator color="#ED3269" animating={preLoader} size="small" />
       </View>
     </View>
   );

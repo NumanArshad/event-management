@@ -1,12 +1,22 @@
 import React, { memo, useCallback } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import ROUTES from "ultis/routes";
 import ButtonFilter from "components/buttons/ButtonFilter";
 import EventItem from "components/EventItem";
 import keyExtractor from "ultis/keyExtractor";
-import { getAllTrendingEvents } from "redux/events/events.actions";
+import {
+  getAllTrendingEvents,
+  getFilteredEvents,
+} from "redux/events/events.actions";
+import isEmpty from "ultis/isEmpty";
+import { formatDateTime, getEventTimeDown, isEventInProgress } from "ultis/functions";
+import dayjs from "dayjs";
 
 const data = [
   {
@@ -51,21 +61,35 @@ const data = [
 const EvezTrending = memo(() => {
   const navigation = useNavigation();
 
+  const { params } = useRoute();
+
   const dispatch = useDispatch();
   const { all_trending_events } = useSelector<any, any>(
     (state) => state.events
   );
 
-  const { login_Session } = useSelector<any, any>((state) => state.auth);
-
+  const { all_errors } = useSelector<any, any>((state) => state.errors);
+  const { loading } = useSelector<any, any>((state) => state.loading);
+  //const { login_Session } = useSelector<any, any>((state) => state.auth);
 
   const onPressFilter = useCallback(() => {
-    navigation.navigate(ROUTES.FilterEvez);
-  }, [navigation]);
+    navigation.navigate(ROUTES.FilterEvez, {
+      activeFilter: params,
+    });
+  }, [navigation, params]);
 
   useFocusEffect(
-    useCallback(() => dispatch(getAllTrendingEvents()), [dispatch])
+    useCallback(() => {
+      //@ts-ignore
+      const { eventLocation, eventType } = params || {};
+      dispatch(
+        (eventLocation || eventType)
+          ? getFilteredEvents(eventLocation, eventType)
+          : getAllTrendingEvents()
+      );
+    }, [dispatch, navigation, params])
   );
+  
 
   const renderItem = useCallback(({ item }) => {
     const {
@@ -84,38 +108,41 @@ const EvezTrending = memo(() => {
       event_date,
       lat_long,
       rating,
+      duration,
       type_name,
     } = item;
+
     return (
       <EventItem
         thumbnail={require("@assets/Trending/trending_3.png")}
         tag={type_name}
-        // reviewTimes={20}
         id={event_id}
         eventName={event_name}
         location={address}
         distance={lat_long}
-        timeCountDown="7 Days 06 Hours 27 Mins 44 secs"
-        //  currentAttending={currentAttending}
-        //  eventTime={`SUN, MAR. 25  -  4:30 PM EST`}
-        eventTime={`${event_date}  -  ${start_time}`}
+        eventDateTime={formatDateTime(event_date, start_time)}
         rate={rating}
-        //  //maxAttending={//maxAttending}
-        save={false}
+        duration={duration}
       />
     );
   }, []);
 
   return (
     <View style={styles.container}>
-      <FlatList
-        style={styles.scroll}
-        data={all_trending_events}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.contentContainerStyle}
-      />
+      {!isEmpty(all_trending_events) ? (
+        <FlatList
+          style={styles.scroll}
+          data={all_trending_events}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.contentContainerStyle}
+        />
+      ) : !isEmpty(all_errors) ? (
+        <Text>{all_errors?.message}</Text>
+      ) : (
+        <Text>...Loading</Text>
+      )}
       <ButtonFilter onPress={onPressFilter} />
     </View>
   );

@@ -28,7 +28,7 @@ const StackProfile = memo(() => {
         name={ROUTES.TabProfile}
         component={TabProfile}
         options={{
-          title: 'Hieu Le',
+          title: 'Profile',
           headerRight: () => (
             <View style={styles.headeRight}>
               <View style={styles.btnNotification}>

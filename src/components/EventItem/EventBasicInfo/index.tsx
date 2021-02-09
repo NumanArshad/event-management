@@ -10,13 +10,16 @@ import { formatK } from "help/formatNumber/formatK";
 import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import isEmpty from "ultis/isEmpty";
+import { getDistanceByLatLong, splitLatLongStr } from "ultis/functions";
+import dayjs, { Dayjs } from "dayjs";
 
 interface EventBasicInfoProps {
+  eventId?: number;
   location?: string;
-  distance?: number;
+  distance?: string;
   currentAttending?: number;
   //maxAttending?: number;
-  eventTime?: string;
+  eventDateTime?:  string;
   colorAttending?: string;
   isSmallItem?: boolean;
 }
@@ -28,8 +31,12 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
   const textInfo = [styles.textLocation, { color: color }];
   const navigation = useNavigation();
   const onAttending = () => {
-    navigation.navigate(ROUTES.ListAttending);
+    navigation.navigate(ROUTES.ListAttending,{
+      eventId: props.eventId
+    });
   };
+
+  const {latitude, longitude} =  splitLatLongStr(props?.distance) || {}
 
   return (
     <View style={styles.container}>
@@ -42,23 +49,24 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
             </Text>
           </View>
           <Text style={[styles.textTag, { color: colorTextLocation }]}>
-            {props.distance}km
+            {getDistanceByLatLong(latitude, longitude)} km
           </Text>
         </View>
       ) : null}
-      {props.eventTime ? (
+      {props.eventDateTime ? (
         <View style={styles.location}>
           <View style={styles.flexRow}>
             <SvgEventTime />
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
-              {props.eventTime}
+            {props.eventDateTime}
             </Text>
           </View>
         </View>
       ) : null}
 
       {props.currentAttending && (
-        <View style={styles.location}>
+        <View style={styles.location}
+        onTouchStart={onAttending}>
           <View style={styles.flexRow}>
             <TicketIcon />
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
