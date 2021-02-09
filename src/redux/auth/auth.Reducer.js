@@ -13,6 +13,7 @@ const defaultSession = {
   followers: [],
   following: [],
   friends: [],
+  friendRequests: [],
   groups: [],
   user_doc_id: null,
   user_id: null,

@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserPosition } from "ultis/functions";
 
 const Main = memo(() => {
-  const [isAuthenticated, setAutenticated] = useState(false);
 
   const dispatch = useDispatch();
   const { is_authenticated } = useSelector<any, any>((state) => state.auth);

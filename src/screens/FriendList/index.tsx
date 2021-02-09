@@ -5,6 +5,7 @@ import { getAllUsers, getUsersbyDocRefList } from "redux/users/users.actions";
 import { useSelector } from "react-redux";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
+import isEmpty from "ultis/isEmpty";
 
 const Friendlist = memo(() => {
   const [users, setUsers] = useState([]);
@@ -16,7 +17,7 @@ const Friendlist = memo(() => {
 
   useFocusEffect(
     useCallback(() => {
-     getUsersbyDocRefList(friends, (res) => setUsers(res));
+    getUsersbyDocRefList(friends, (res) => setUsers(res));
     }, [])
   );
 

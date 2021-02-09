@@ -63,6 +63,7 @@ export const getProfile = (auth_token) => (dispatch) => {
           followers: [],
           following: [],
           friends: [],
+          friendRequests: [],
           groups: [],
           deviceToken: "token",
         };
@@ -116,6 +117,7 @@ export const getUserSessions = () => async (dispatch) => {
 
     token &&
       getSingleUser(parseInt(userId), (userInfo) => {
+        console.log("profile is ",userInfo )
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
       });
   } catch (error) {

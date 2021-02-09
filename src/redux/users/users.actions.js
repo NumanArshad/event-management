@@ -11,6 +11,7 @@ import {
   updateAuthUser,
 } from "redux/auth/auth.actions";
 import FriendList from "screens/FriendList";
+import isEmpty from "ultis/isEmpty";
 
 const userCollectionRef = firebase.firestore().collection("users");
 
@@ -96,24 +97,33 @@ export const getSingleUser = (user_id, isAuthCallBack) => {
     .then((res) => {
       let userInfo = {};
       res.forEach((payload) => {
+        
         userInfo = { ...payload.data(), user_doc_id: payload.id };
       });
       isAuthCallBack && isAuthCallBack(userInfo);
     });
 };
 
-export const addFriend = (payload) => {
-  let followers = [];
-  followers.push(payload);
+
+///update user and auth login session///
+export const sendFriendRequest = (
+  requestReceipentDocId,
+  friendRequests,
+  loginUserId
+) => {
+  console.log("param is ", requestReceipentDocId, friendRequests, loginUserId);
   userCollectionRef
-    .doc("lCGhe5QtiDUZ7NyGxP8v")
+    .doc(requestReceipentDocId)
     .update({
-      followers,
+      friendRequests,
     })
     .then((res) => {
-      //console.log("Response ", res);
+      console.log("very good");
     });
 };
+
+///approve/reject friend request
+export const UpdateFriendRequestStatus = (payload) => {};
 
 export const requestPayout = (data) => {
   return axios.post("payout/send-request", data);
