@@ -14,14 +14,15 @@ const FriendRequest = memo(() => {
   const pendingRequests = friendRequests
     //@ts-ignore
     ?.filter(({ status }) => status === "pending")
-    ?.map(({ user_doc_id }: { user_doc_id: string }) => {
-      user_doc_id;
-    });
+    ?.map(({ user_doc_id }: { user_doc_id: string }) => 
+      user_doc_id);
 
+
+    console.log("nice is", pendingRequests, users)
   useFocusEffect(
     useCallback(() => {
-      getUsersbyDocRefList(pendingRequests, (res) => setUsers(res));
-    }, [])
+      getUsersbyDocRefList(pendingRequests, setUsers);
+    }, [pendingRequests])
   );
 
   return (

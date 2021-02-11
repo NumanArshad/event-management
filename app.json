@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "githubUrl":"https://github.com/NumanArshad/event-management",
+    "githubUrl": "https://github.com/NumanArshad/event-management",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.numanarshad.dev.EventManagement"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,11 +27,11 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.numanarshad.dev.EventManagement",
-        "config": {
-          "googleMaps": {
-            "apiKey": "AIzaSyDRRjGW2_dEii2gnaLAqxhSgDitVlcJmIQ"
-          }
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDRRjGW2_dEii2gnaLAqxhSgDitVlcJmIQ"
         }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -28,7 +28,7 @@ const Profile = memo(() => {
       first_name,
       last_name,
       contact,
-      stripe_account,
+      stripe_account_id: stripe_account,
     },
   } = useSelector(state => state?.auth);
 
@@ -78,7 +78,8 @@ const Profile = memo(() => {
           email,
           first_name: firstName,
           last_name: lastName,
-          stripe_account: stripAccount,
+          user_name: name,
+          stripe_account_id: stripAccount,
           contact: phone,
         };
         // formData.append("image", email);

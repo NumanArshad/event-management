@@ -14,8 +14,8 @@ interface Props {
   user_id: number,
   user_doc_id: string;
   address: string;
-  followers: string;
-  following: number;
+//  followers: string;
+//  following: number;
   interested: string[];
 }
 
@@ -33,12 +33,12 @@ const HeaderPeopleProfile = memo((props: Props) => {
       },
     });
   }, [navigation]);
-  const onFollower = useCallback(() => {
-    navigation.navigate(ROUTES.TabFollowers);
-  }, [navigation]);
-  const onFollowing = useCallback(() => {
-    navigation.navigate(ROUTES.TabFollowers);
-  }, [navigation]);
+  // const onFollower = useCallback(() => {
+  //   navigation.navigate(ROUTES.TabFollowers);
+  // }, [navigation]);
+  // const onFollowing = useCallback(() => {
+  //   navigation.navigate(ROUTES.TabFollowers);
+  // }, [navigation]);
   return (
     <View style={styles.headerProfile}>
       <Image style={styles.coverImage} source={props.coverImage} />

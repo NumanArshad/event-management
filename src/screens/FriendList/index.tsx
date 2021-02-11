@@ -15,9 +15,11 @@ const Friendlist = memo(() => {
   } = useSelector<any, any>((state) => state?.auth);
 
 
+  console.log("friend are", friends,isEmpty(friends))
+
   useFocusEffect(
     useCallback(() => {
-    getUsersbyDocRefList(friends, (res) => setUsers(res));
+    getUsersbyDocRefList(friends,setUsers);
     }, [])
   );
 

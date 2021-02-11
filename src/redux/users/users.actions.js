@@ -18,11 +18,10 @@ const userCollectionRef = firebase.firestore().collection("users");
 export const getAllUsers = (callBack) => {
   userCollectionRef.onSnapshot(
     (
-      res ////console.log("res is ", res)
+      res 
     ) => {
       let usersList = [];
       res.forEach((element) => {
-        // //console.log("singleis ", element?.data())
         usersList.push({
           id: element?.id,
           ...element?.data(),
@@ -33,30 +32,27 @@ export const getAllUsers = (callBack) => {
   );
 };
 
-export const getUsersbyDocRefList = (fiendsListIds, callBack) => {
+export const getUsersbyDocRefList = (
+  userDocListIds,
+  callBack,
+  selectionBehaviour = "in"
+) => {
   //console.log("frine id are", fiendsListIds);
-
-  firebase
-    .firestore()
-    .runTransaction((transaction) => {
-      let lst = [];
-      fiendsListIds.forEach((docId) => {
-        const docRef = userCollectionRef.doc(docId);
-        transaction.get(docRef).then((friendPayload) => {
-          if (friendPayload?.exists) {
-            lst.push({
-              id: friendPayload?.id,
-              ...friendPayload?.data(),
+  (selectionBehaviour === "in" && !userDocListIds?.lengt)
+    ? callBack([])
+    : userCollectionRef
+        .where("__name__", selectionBehaviour, userDocListIds)
+        .onSnapshot((snapshot) => {
+          let usersList = [];
+          snapshot.forEach((res) => {
+            usersList.push({
+              id: res?.id,
+              ...res?.data(),
             });
-          }
+          });
+          console.log("userdoc is", userDocListIds, selectionBehaviour);
+          callBack(usersList);
         });
-      });
-      return Promise.resolve(lst);
-    })
-    .then((trResponse) => {
-      callBack && callBack(trResponse);
-    })
-    .catch((err) => Promise.reject(err.message));
 };
 
 ////New user signup store user in firestore collection///
@@ -78,15 +74,19 @@ export const addUser = (payload, auth_token) => (dispatch) => {
 };
 
 ////Update auth user on profile update/////
-export const updateUser = (payload) => (dispatch, getState) => {
+export const updateUser = (payload, updateStatus) => (dispatch, getState) => {
   const {
     login_Session: { user_doc_id },
   } = getState()?.auth;
 
+  console.log("collection is", user_doc_id, payload, updateStatus)
+
   userCollectionRef
     .doc(user_doc_id)
     .update(payload)
-    .then((res) => dispatch(updateAuthUser(payload)));
+    .then((res) => {
+      updateStatus === 'profileUpdated' && dispatch(updateAuthUser(payload));
+    });
 };
 
 export const getSingleUser = (user_id, isAuthCallBack) => {
@@ -100,18 +100,18 @@ export const getSingleUser = (user_id, isAuthCallBack) => {
         
         userInfo = { ...payload.data(), user_doc_id: payload.id };
       });
+      console.log("my info us", userInfo)
       isAuthCallBack && isAuthCallBack(userInfo);
     });
 };
 
 
 ///update user and auth login session///
-export const sendFriendRequest = (
+export const updateFriendRequest = (
   requestReceipentDocId,
-  friendRequests,
-  loginUserId
+  friendRequests
 ) => {
-  console.log("param is ", requestReceipentDocId, friendRequests, loginUserId);
+  console.log("param is ", requestReceipentDocId, friendRequests);
   userCollectionRef
     .doc(requestReceipentDocId)
     .update({
@@ -119,6 +119,17 @@ export const sendFriendRequest = (
     })
     .then((res) => {
       console.log("very good");
+    });
+};
+
+export const addAuthAsFriend = (userDocId, friends) => {
+  userCollectionRef
+    .doc(userDocId)
+    .update({
+      friends,
+    })
+    .then((res) => {
+      console.log("very good added ");
     });
 };
 
