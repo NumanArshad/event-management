@@ -7,7 +7,7 @@ interface Props {
   avatar: any;
   userName: any;
   message: any;
-  time: string;
+  time: any;
   un_Read: boolean;
 }
 
@@ -19,7 +19,8 @@ const NotificationMessage = memo((props: Props) => {
       <Image source={props.avatar} />
       <View style={styles.content}>
         <Text style={styles.txtUserName}>
-          {props.userName} <Text style={styles.txtSend}> send you message</Text>{' '}
+          {props.userName} 
+          {/* <Text style={styles.txtSend}> send you message</Text> */}
         </Text>
         <Text style={styles.txtMessage}>{props.message}</Text>
         <Text style={styles.txtTime}>{props.time}</Text>

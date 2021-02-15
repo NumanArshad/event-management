@@ -8,8 +8,8 @@ import { useSelector } from "react-redux";
 const FriendRequest = memo(() => {
   const [users, setUsers] = useState([]);
   const {
-    login_Session: { friendRequests },
-  } = useSelector((state) => state?.auth);
+    login_Session: { friendRequests, friends },
+  } = useSelector<any, any>((state) => state?.auth);
 
   const pendingRequests = friendRequests
     //@ts-ignore
@@ -18,12 +18,13 @@ const FriendRequest = memo(() => {
       user_doc_id);
 
 
-    console.log("nice is", pendingRequests, users)
+   console.log("nice is", pendingRequests,friendRequests, users)
   useFocusEffect(
     useCallback(() => {
-      getUsersbyDocRefList(pendingRequests, setUsers);
-    }, [pendingRequests])
+      getUsersbyDocRefList(pendingRequests,  setUsers);
+    }, [friendRequests, friends])
   );
+//console.log("data is", users)
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>

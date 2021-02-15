@@ -6,6 +6,7 @@ import {
 import axios from "ultis/services/httpServices";
 import firebase from "ultis/services/FirebaseConfig";
 import {
+  getProfile,
   isAuthenticated,
   setUserSessions,
   updateAuthUser,
@@ -38,7 +39,7 @@ export const getUsersbyDocRefList = (
   selectionBehaviour = "in"
 ) => {
   //console.log("frine id are", fiendsListIds);
-  (selectionBehaviour === "in" && !userDocListIds?.lengt)
+  (selectionBehaviour === "in" && !userDocListIds?.length)
     ? callBack([])
     : userCollectionRef
         .where("__name__", selectionBehaviour, userDocListIds)
@@ -89,21 +90,26 @@ export const updateUser = (payload, updateStatus) => (dispatch, getState) => {
     });
 };
 
-export const getSingleUser = (user_id, isAuthCallBack) => {
+export const getSingleUser = (user_id , isAuthCallBack) => {
+
+
   userCollectionRef
     .where("user_id", "==", user_id)
     .limit(1)
     .get()
     .then((res) => {
       let userInfo = {};
+
+   //   console.log("my user is ", res.docs)
       res.forEach((payload) => {
         
         userInfo = { ...payload.data(), user_doc_id: payload.id };
       });
       console.log("my info us", userInfo)
-      isAuthCallBack && isAuthCallBack(userInfo);
+      isAuthCallBack && isAuthCallBack(userInfo, res.docs?.length );
     });
 };
+
 
 
 ///update user and auth login session///
@@ -126,7 +132,7 @@ export const addAuthAsFriend = (userDocId, friends) => {
   userCollectionRef
     .doc(userDocId)
     .update({
-      friends,
+      friends
     })
     .then((res) => {
       console.log("very good added ");

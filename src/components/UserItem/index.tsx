@@ -17,6 +17,7 @@ import ROUTES from "ultis/routes";
 import { updateFriendRequest, addAuthAsFriend, updateUser } from "redux/users/users.actions";
 import { useDispatch, useSelector } from "react-redux";
 import FriendRequest from "screens/FriendRequest";
+import { sendNotification, deleteNotification } from "redux/notifications/notifications.actions";
 
 interface Props {
   // user_id: any;
@@ -58,7 +59,7 @@ const UserItem = memo((props: any) => {
   } = useSelector<any, any>((state) => state?.auth);
 
   const friendRequestStatus = () => {
-    const { status } =
+    const { status = "rejected" } =
       friendRequests?.find(
         //@ts-ignore
         ({ user_doc_id }) => user_doc_id === login_user_doc
@@ -79,6 +80,12 @@ const UserItem = memo((props: any) => {
         ];
     //@ts-ignore
     updateFriendRequest(id, updatedFriendRequests);
+    friendRequestStatus()?.isRejected ? sendNotification({
+      receipentDocId: id, 
+      sendDocId: login_user_doc,
+      type: "friendRequest",
+      createdAt: new Date()
+    }) : deleteNotification(login_user_doc, id, 'friendRequest')
   }, [userInfo, friendRequests, friendRequestStatus]);
 
   const handleAcceptRejectRequest = (requestStatus: string) => {

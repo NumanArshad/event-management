@@ -40,3 +40,9 @@ export const CLEAR_ERRORS = "CLEAR_ERRORS";
 
 //////////////GET_ALL_Earnings/////
 export const GET_ALL_EARNINGS = "GET_ALL_EARNINGS";
+
+////Notifications//////
+export const GET_ALL_NOTIFICATIONS = "GET_ALL_NOTIFICATIONS";
+
+////Groups///
+export const GET_ALL_GROUPS = "GET_ALL_GROUPS";
