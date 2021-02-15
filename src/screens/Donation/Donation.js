@@ -14,6 +14,10 @@ const Donation = memo(() => {
   const moveToDonate = useCallback(() => {
     navigation.navigate(ROUTES.DonatePoint);
   }, []);
+
+  const moveToTransaction = useCallback(() => {
+    navigation.navigate(ROUTES.TransactionHistory);
+  }, []);
   const onRewards = useCallback(() => {
     navigation.navigate(ROUTES.Rewards);
   }, [navigation]);
@@ -40,7 +44,7 @@ const Donation = memo(() => {
           <Text style={styles.loginBtn}>Donate Point</Text>
         </LinearGradient>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={moveToTransaction}>
         <LinearGradient
           colors={["#ED3269", "#F05F3E"]}
           start={{ x: 0, y: 1 }}

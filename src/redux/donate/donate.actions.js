@@ -21,6 +21,10 @@ export const getCompanies = () => (dispatch) => {
   });
 };
 
+export const getAllTransactions = () => {
+  return axios.get("earning/history");
+};
+
 export const sendDonation = (data, Alert) => (dispatch) => {
   ////console.log("sendDonation", data, Alert);
   axios

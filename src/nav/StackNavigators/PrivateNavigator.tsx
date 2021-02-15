@@ -35,6 +35,7 @@ import headerRight from "components/header/headerRight";
 import Profile from "screens/Auth/Profile";
 import DonatePoint from "screens/Donation/component/DonatePoint";
 import ChangePassword from "screens/Auth/ChangePassword";
+import Transaction from "screens/Donation/component/Transaction";
 
 const privateNavStack = createStackNavigator();
 
@@ -194,6 +195,12 @@ const PrivateNavigator = () => (
     <privateNavStack.Screen
       name={ROUTES.DonatePoint}
       component={DonatePoint}
+      options={{ headerBackTitleVisible: false }}
+    />
+
+    <privateNavStack.Screen
+      name={ROUTES.TransactionHistory}
+      component={Transaction}
       options={{ headerBackTitleVisible: false }}
     />
 
