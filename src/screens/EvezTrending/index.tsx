@@ -17,6 +17,7 @@ import {
 import isEmpty from "ultis/isEmpty";
 import { formatDateTime, getEventTimeDown, isEventInProgress } from "ultis/functions";
 import dayjs from "dayjs";
+import MyNotification from "screens/Notifications";
 
 const data = [
   {
@@ -129,6 +130,7 @@ const EvezTrending = memo(() => {
 
   return (
     <View style={styles.container}>
+      {/* <MyNotification /> */}
       {!isEmpty(all_trending_events) ? (
         <FlatList
           style={styles.scroll}

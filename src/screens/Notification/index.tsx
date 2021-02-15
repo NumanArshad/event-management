@@ -1,8 +1,15 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
 import NotificationMessage from 'screens/Notification/components/NotificationMessage';
 import NotificationEvent from 'screens/Notification/components/NotificationEvent';
 import keyExtractor from 'ultis/keyExtractor';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuthNotifications } from 'redux/notifications/notifications.actions';
+import { getUsersbyDocRefList } from 'redux/users/users.actions';
+import dayjs from 'dayjs';
+import { Text } from 'react-native-svg';
+var relativeTime = require('dayjs/plugin/relativeTime')
+dayjs.extend(relativeTime)
 
 export enum TYPE_NOTIFICATION {
   MESSAGE,
@@ -50,7 +57,7 @@ const data = [
     imageEvent: require('assets/Notification/WWE.png'),
     event: 'Win 2 tickets to WWE @\n' + ' MSG',
     time: 'SUN, MAR. 25  -  4:30 PM EST',
-    un_Read: false,
+    un_Read: true,
   },
   {
     typeNotification: TYPE_NOTIFICATION.EVENT,
@@ -72,9 +79,58 @@ const data = [
 ];
 
 const Notification = memo(() => {
-  const renderItem = useCallback(({item}) => {
+
+  const { all_notifications } = useSelector<any, any>(
+    (state) => state?.notifications
+  );
+
+  const [notificationUsers, setNotificationUsers] = useState([])
+
+  useEffect(() => {
+    const docIdList = all_notifications?.map(
+      ({ sendDocId }: { sendDocId: any }) => sendDocId
+    );
+
+    getUsersbyDocRefList(docIdList, setNotificationUsers);
+  }, [all_notifications]);
+
+  //console.log("my notification are",all_notifications, notificationUsers )
+  
+  // const renderItem = useCallback(({item}) => {
+  //   const {
+  //     typeNotification,
+  //     avatar,
+  //     userName,
+  //     message,
+  //     time,
+  //     un_Read,
+  //     title,
+  //     imageEvent,
+  //     event,
+  //   } = item;
+  //   return typeNotification === 0 ? (
+  //     <NotificationMessage
+  //       avatar={avatar}
+  //       userName={userName}
+  //       message={message}
+  //       time={time}
+  //       un_Read={un_Read}
+  //     />
+  //   ) : (
+  //     <NotificationEvent
+  //       avatar={avatar}
+  //       title={title}
+  //       imageEvent={imageEvent}
+  //       event={event}
+  //       time={time}
+  //       un_Read={un_Read}
+  //     />
+  //   );
+  // }, []);
+
+  const renderItem = useCallback(({item, index}) => {
     const {
-      typeNotification,
+      type,
       avatar,
       userName,
       message,
@@ -84,13 +140,13 @@ const Notification = memo(() => {
       imageEvent,
       event,
     } = item;
-    return typeNotification === 0 ? (
+    return type === "friendRequest" ? (
       <NotificationMessage
-        avatar={avatar}
-        userName={userName}
-        message={message}
-        time={time}
-        un_Read={un_Read}
+        avatar={data[index]?.avatar}
+        userName={notificationUsers[index]?.first_name}
+        message={"send to friend request"}
+        time={dayjs.unix(all_notifications[index]?.createdAt?.seconds).format("DD/MM/YYYY")}
+        un_Read={false}
       />
     ) : (
       <NotificationEvent
@@ -103,14 +159,22 @@ const Notification = memo(() => {
       />
     );
   }, []);
+
+  //console.log(!all_notifications)
   return (
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      style={styles.container}
-      data={data}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-    />
+    <>
+      {!all_notifications?.length ? (
+        <Text>... No Notification Found</Text>
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          style={styles.container}
+          data={all_notifications}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+        />
+      )}
+    </>
   );
 });
 

@@ -65,6 +65,8 @@ const ROUTES = {
   Payout: "Payout",
   EventList: "Events",
   DonatePoint: "DonatePoint",
+  TransactionHistory: "TransactionHistory",
+  CreateGroup: "CreateGroup",
 };
 
 export default ROUTES;

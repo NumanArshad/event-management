@@ -14,14 +14,22 @@ import {
   stopLoading,
 } from "redux/loading/loading.actions";
 import { alertMessage } from "ultis/alertToastMessages";
+import { registerForAsyncPushToken } from "redux/notifications/notifications.actions";
+import isEmpty from "ultis/isEmpty";
 
 export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
+    console.log("response auth is ", res)
     if (res.data.status_code === 200) {
       const { user, token } = res.data.data;
       setUserSessions({ user: user?.id, token });
-      getSingleUser(user?.id, (userInfo) =>
-        dispatch(isAuthenticated({ ...userInfo, auth_token: token }))
+      getSingleUser(user?.id, (userInfo, docLength) => {
+
+        console.log("doc length is", docLength)
+        docLength ?
+          dispatch(isAuthenticated({ ...userInfo, auth_token: token })) :
+          dispatch(getProfile(token));
+      }
       );
     }
   });
@@ -46,7 +54,7 @@ export const changePassword = (data) => {
 export const updateProfile = (data, jsonData) => (dispatch) => {
   axios.post("auth/update-profile", data).then((res) => {
     alertMessage("Your Profile has been Updated Successfully!");
-    dispatch(updateUser(jsonData));
+    dispatch(updateUser(jsonData, 'profileUpdated'));
   });
 };
 
@@ -58,15 +66,26 @@ export const getProfile = (auth_token) => (dispatch) => {
     })
     .then((res) => {
       if (res.data.status_code === 200) {
-        const userPayload = {
-          ...res.data.data.user,
-          followers: [],
-          following: [],
-          friends: [],
-          groups: [],
-          deviceToken: "token",
-        };
-        dispatch(addUser(userPayload, auth_token));
+        //console.log("profile response is ", res.data)
+        (async () => {
+          try {
+            const token = await registerForAsyncPushToken();
+            const {id: user_id, ...rest} =res.data.data.user;
+            const userPayload = {
+              ...rest,
+              user_id,
+              isOnline: true,
+              friends: [],
+              friendRequests: [],
+              groups: [],
+              deviceToken: [token],
+            };
+
+            dispatch(addUser(userPayload, auth_token));
+          } catch (error) {
+            alertMessage("firebase profile creation error"+error);
+          }
+        })();
       }
     });
 };
@@ -116,6 +135,7 @@ export const getUserSessions = () => async (dispatch) => {
 
     token &&
       getSingleUser(parseInt(userId), (userInfo) => {
+        console.log("profile is ",userInfo )
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
       });
   } catch (error) {
@@ -125,6 +145,7 @@ export const getUserSessions = () => async (dispatch) => {
 };
 
 export const updateAuthUser = (payload) => (dispatch) => {
+  console.log("profile updates is", payload)
   dispatch({
     type: UPDATE_AUTH_USER,
     payload,
@@ -132,15 +153,30 @@ export const updateAuthUser = (payload) => (dispatch) => {
 };
 
 export const isAuthenticated = (payload) => (dispatch) => {
-  dispatch({
-    type: IS_AUTHENTICATED,
-    payload,
-  });
-  dispatch(stopAuthLoading());
+
+  (async () => {
+    try {
+      const token = await registerForAsyncPushToken();
+      const updatedTokenList = payload?.deviceToken?.includes(token) ?
+        payload?.deviceToken : [...payload?.deviceToken, token];
+
+       dispatch({
+        type: IS_AUTHENTICATED,
+        payload,
+      });
+      dispatch(updateUser({ isOnline: true, deviceToken: updatedTokenList }))
+    }
+    catch (error) {
+      console.log("fetch token error is " + error);
+    }
+    dispatch(stopAuthLoading());
+
+  })()
 };
 
-export const unAuthorized = () => (dispatch) => {
-  dispatch({
+export const unAuthorized = () => async(dispatch) => {
+ await dispatch(updateUser({isOnline: false}))
+ await dispatch({
     type: NOT_AUTHORIZED,
   });
   dispatch(stopAuthLoading());

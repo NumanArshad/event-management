@@ -32,19 +32,20 @@ const MainBottomTab = () => {
         }}
       />
       <Tab.Screen
-        name={ROUTES.TabSearchEvents}
-        component={StackSearchEvents}
-        options={{
-          tabBarIcon: ({ color }) => <SvgTabSearchInactive color={color} />,
-        }}
-      />
-      <Tab.Screen
         name={ROUTES.EvezNews}
         component={StackCalender}
         options={{
           tabBarIcon: ({ color }) => <SvgTabEvezInactive color={color} />,
         }}
       />
+      <Tab.Screen
+        name={ROUTES.TabSearchEvents}
+        component={StackSearchEvents}
+        options={{
+          tabBarIcon: ({ color }) => <SvgTabSearchInactive color={color} />,
+        }}
+      />
+
       <Tab.Screen
         name={ROUTES.TabPeople}
         component={StackPeople}

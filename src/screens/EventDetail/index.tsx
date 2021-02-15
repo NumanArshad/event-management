@@ -283,6 +283,7 @@ const EventDetail = memo(() => {
             </View>
           </>
         )}
+        
         {/* <View style={styles.contentView}>
           <Text style={styles.textTitle}>CONTACT</Text>
           <Text style={styles.aboutContent}>

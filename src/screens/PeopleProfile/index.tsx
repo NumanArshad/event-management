@@ -66,8 +66,8 @@ const PeopleProfile = memo(() => {
           user_doc_id={user_doc_id}
           user_id={user_id}
           address={item.address}
-          followers={followers}
-          following={following}
+         // followers={followers}
+         // following={following}
           interested={item.interested}
         />
         {/* {data.map((item, index) => {
