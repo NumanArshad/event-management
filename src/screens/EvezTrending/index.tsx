@@ -130,7 +130,7 @@ const EvezTrending = memo(() => {
 
   return (
     <View style={styles.container}>
-      <MyNotification />
+      {/* <MyNotification /> */}
       {!isEmpty(all_trending_events) ? (
         <FlatList
           style={styles.scroll}

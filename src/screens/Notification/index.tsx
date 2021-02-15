@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAuthNotifications } from 'redux/notifications/notifications.actions';
 import { getUsersbyDocRefList } from 'redux/users/users.actions';
 import dayjs from 'dayjs';
+import { Text } from 'react-native-svg';
 var relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
 
@@ -77,8 +78,6 @@ const data = [
   },
 ];
 
-
-
 const Notification = memo(() => {
 
   const { all_notifications } = useSelector<any, any>(
@@ -95,7 +94,7 @@ const Notification = memo(() => {
     getUsersbyDocRefList(docIdList, setNotificationUsers);
   }, [all_notifications]);
 
-  console.log("my notification are",all_notifications, notificationUsers )
+  //console.log("my notification are",all_notifications, notificationUsers )
   
   // const renderItem = useCallback(({item}) => {
   //   const {
@@ -161,14 +160,21 @@ const Notification = memo(() => {
     );
   }, []);
 
+  //console.log(!all_notifications)
   return (
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      style={styles.container}
-      data={all_notifications}
-      keyExtractor={keyExtractor}
-      renderItem={renderItem}
-    />
+    <>
+      {!all_notifications?.length ? (
+        <Text>... No Notification Found</Text>
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          style={styles.container}
+          data={all_notifications}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+        />
+      )}
+    </>
   );
 });
 
