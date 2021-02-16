@@ -30,7 +30,7 @@ const Profile = memo(() => {
       contact,
       stripe_account_id: stripe_account,
     },
-  } = useSelector(state => state?.auth);
+  } = useSelector((state) => state?.auth);
 
   const [email, setemail] = useState(userEmail);
   const [password, setpassword] = useState("");
@@ -43,7 +43,7 @@ const Profile = memo(() => {
   const { navigate } = useNavigation();
   const [preLoader, setpreLoader] = useState(false);
   const dispatch = useDispatch();
-  
+
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;
