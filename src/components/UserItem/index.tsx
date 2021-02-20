@@ -23,10 +23,8 @@ import {
 } from "redux/users/users.actions";
 import { useDispatch, useSelector } from "react-redux";
 import FriendRequest from "screens/FriendRequest";
-import {
-  sendNotification,
-  deleteNotification,
-} from "redux/notifications/notifications.actions";
+import { sendNotification, deleteNotification } from "redux/notifications/notifications.actions";
+import { noFoundImg } from "ultis/constants";
 
 interface Props {
   // user_id: any;
@@ -36,7 +34,7 @@ interface Props {
   actionButton?: string;
 }
 
-const UserItem = memo((props: any) => {
+const UserItem = (props: any) => {
   // const [follow, setFollow] = useState(false);
   // const onPress = useCallback(() => {
   //   setFollow(!follow);
@@ -127,12 +125,14 @@ const UserItem = memo((props: any) => {
         )
       );
     }
+
+    deleteNotification(id, login_user_doc, 'friendRequest')
   };
 
   // conpsole.log("people is", userInfo);
   return (
     <TouchableOpacity onPress={onPeopleProfile} style={styles.card}>
-      <Image style={styles.image} source={image} />
+      <Image style={styles.image} source={{uri: (!image || image?.includes("default")) ? noFoundImg : image}} />
       <View style={styles.txtField}>
         <Text style={styles.txtName}>{user_name}</Text>
         {user_type && <Text style={styles.txtNumberFollower}>{user_type}</Text>}
@@ -178,7 +178,7 @@ const UserItem = memo((props: any) => {
       ) : null}
     </TouchableOpacity>
   );
-});
+};
 
 export default UserItem;
 
@@ -192,6 +192,9 @@ const styles = StyleSheet.create({
   },
   image: {
     marginHorizontal: 0.04 * width_screen,
+    width: width_screen * 0.15,
+    height: height_screen * 0.07,
+    borderRadius: 100
   },
   txtName: {
     fontFamily: FONTS.Medium,

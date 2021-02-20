@@ -255,7 +255,7 @@ const EventDetail = memo(() => {
                 ENDORSE
               </Text>
               <UserItem
-                image={require("@assets/Followers/img.jpg")}
+                image={single_event?.image}
                 user_name={single_event?.sub_type_name}
               />
             </View>

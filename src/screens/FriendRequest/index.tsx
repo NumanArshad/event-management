@@ -32,7 +32,7 @@ const FriendRequest = memo(() => {
         <UserItem
           key={key}
           {...user}
-          image={require("assets/Followers/img.jpg")}
+         // image={require("assets/Followers/img.jpg")}
           actionButton="friendRequest"
         />
       ))}

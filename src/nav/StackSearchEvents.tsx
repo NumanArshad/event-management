@@ -4,19 +4,21 @@ import ROUTES from "ultis/routes";
 import TabSearchEvents from "screens/TabSearchEvents";
 import headerBackground from "components/header/headerbackground";
 import CreateGroup from "screens/Group/CreateGroup";
+import NotificationRightHeader from "components/NotificationRightHeader";
 const Stack = createStackNavigator();
 const StackSearchEvents = memo(() => (
   <Stack.Navigator
     screenOptions={{
       headerBackground: headerBackground,
       headerTintColor: "#FFF",
+      headerRight: () => <NotificationRightHeader />,
     }}
   >
     <Stack.Screen
       name={ROUTES.StackSearchEvents}
       component={TabSearchEvents}
       options={{
-        title: "",
+        title: "Groups",
       }}
     />
     <Stack.Screen

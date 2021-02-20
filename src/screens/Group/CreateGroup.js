@@ -25,11 +25,63 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import Color from "ultis/color";
 import SubmitButton from "components/buttons/submitButton";
+import { getUsersbyDocRefList } from "redux/users/users.actions";
+import useImagePicker from "components/ImgPicker";
+import { noFoundImg } from "ultis/constants";
+import { createGroup } from "redux/groups/groups.actions";
+import { buldSendNotification, sendNotification } from "redux/notifications/notifications.actions";
+import { useNavigation } from "@react-navigation/native";
+import { alertMessage } from "ultis/alertToastMessages";
 
 const CreateGroup = () => {
   const dispatch = useDispatch();
   const scrollX = useRef(new Animated.Value(0)).current;
-  const [email, setemail] = useState("");
+
+  const {image, pickImage, uploadImage} = useImagePicker();
+  
+  const {login_Session:{user_doc_id, friends}} = useSelector(state => state?.auth)
+
+  const [formData, setFormData] =  useState({
+    name:'',
+    members: []
+  })
+
+  const {name, members} = formData;
+
+  useEffect(()=>{
+     getUsersbyDocRefList(friends, members => setFormData(prevState => ({
+       ...prevState,
+       members
+     })))
+  },[])
+
+  const { goBack } = useNavigation()
+
+  const handleSubmit = async() => {
+   const downloadUrl = await uploadImage();
+    alertMessage(downloadUrl)
+    if(downloadUrl){
+      console.log("downloaded is ", downloadUrl)
+      const selectedFriends = members.map(({ id }) => id);
+      const payload = {
+        name,
+        image: downloadUrl,
+        members: [...selectedFriends,user_doc_id],
+        createdBy: user_doc_id,
+        createdDate: new Date()
+      }
+      createGroup(payload);
+      const mapBulkNotifications = members.map(({ id: receipentDocId }) => (
+        sendNotification({
+          receipentDocId,
+          senderDocId: user_doc_id,
+          createdAt: new Date(),
+          type: 'groupInvite'
+        })))
+  
+      buldSendNotification(mapBulkNotifications, goBack);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -41,20 +93,20 @@ const CreateGroup = () => {
         <Image
           style={styles.img}
           source={{
-            uri:
-              "https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png",
+            uri: image
           }}
         />
         <Ionicons
           name="create-outline"
           size={18}
           color="black"
+          onPress={pickImage}
           style={styles.iconEdit}
         />
         <TextInput
           style={styles.textInput}
           placeholder="Enter name..."
-          onChangeText={(data) => setemail(data)}
+          onChangeText={name => setFormData({...formData, name})}
         />
 
         <Text
@@ -73,56 +125,22 @@ const CreateGroup = () => {
             marginVertical: height_screen * 0.02,
           }}
         >
-          <TouchableOpacity style={styles.selectpeople}>
-            <Image
-              style={styles.img2}
-              source={{
-                uri:
-                  "https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png",
-              }}
-            />
-            <Text style={styles.userName}>User Name</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.selectpeople}>
-            <Image
-              style={styles.img2}
-              source={{
-                uri:
-                  "https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png",
-              }}
-            />
-            <Text style={styles.userName}>User Name</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.selectpeople}>
-            <Image
-              style={styles.img2}
-              source={{
-                uri:
-                  "https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png",
-              }}
-            />
-            <Text style={styles.userName}>User Name</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.selectpeople}>
-            <Image
-              style={styles.img2}
-              source={{
-                uri:
-                  "https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png",
-              }}
-            />
-            <Text style={styles.userName}>User Name</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.selectpeople}>
-            <Image
-              style={styles.img2}
-              source={{
-                uri:
-                  "https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png",
-              }}
-            />
-            <Text style={styles.userName}>User Name</Text>
-          </TouchableOpacity>
+          {members?.map(({user_name, image, id }) => (
+            <TouchableOpacity 
+            style={styles.selectpeople}
+            key={id}
+            >
+              <Image
+                style={styles.img2}
+                source={{
+                  uri:
+                    (!image || image.includes('default')) ?
+                      noFoundImg : image
+                }}
+              />
+              <Text style={styles.userName}>{user_name}</Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
         <View
           style={{
@@ -130,7 +148,9 @@ const CreateGroup = () => {
             alignSelf: "center",
           }}
         >
-          <SubmitButton text="Create" onPress={() => console.log("Create")} />
+          <SubmitButton text="Create" onPress={handleSubmit} 
+          isDisabled={!friends?.length}
+          />
         </View>
       </ScrollView>
     </View>

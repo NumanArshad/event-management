@@ -1,5 +1,5 @@
 import React, {memo, useCallback, useEffect, useState} from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, StyleSheet, Text} from 'react-native';
 import NotificationMessage from 'screens/Notification/components/NotificationMessage';
 import NotificationEvent from 'screens/Notification/components/NotificationEvent';
 import keyExtractor from 'ultis/keyExtractor';
@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAuthNotifications } from 'redux/notifications/notifications.actions';
 import { getUsersbyDocRefList } from 'redux/users/users.actions';
 import dayjs from 'dayjs';
-import { Text } from 'react-native-svg';
 var relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
 
@@ -88,7 +87,7 @@ const Notification = memo(() => {
 
   useEffect(() => {
     const docIdList = all_notifications?.map(
-      ({ sendDocId }: { sendDocId: any }) => sendDocId
+      ({ senderDocId }: { senderDocId: any }) => senderDocId
     );
 
     getUsersbyDocRefList(docIdList, setNotificationUsers);

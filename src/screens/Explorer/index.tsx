@@ -6,6 +6,7 @@ import SvgBack from 'svgs/People/SvgBack';
 import TopHostItem from 'screens/Explorer/components/TopItem';
 import keyExtractor from 'ultis/keyExtractor';
 import UserItem from 'components/UserItem';
+import { noFoundImg } from 'ultis/constants';
 
 interface Props {
   onPress: () => null;
@@ -60,7 +61,7 @@ const Explorer = memo((props: Props) => {
   const renderUserItem = useCallback(({item}) => {
     return (
       <UserItem
-        image={require('assets/Followers/img.jpg')}
+        image={noFoundImg}
         name={item.name}
         numberFollower={item.numberFollower}
       />

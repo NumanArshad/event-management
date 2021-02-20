@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ROUTES from "ultis/routes";
 import EvezForUTab from "nav/EvezForUTab";
 import headerBackground from "components/header/headerbackground";
+import NotificationRightHeader from "components/NotificationRightHeader";
 const Stack = createStackNavigator();
 const EvezForUStack = memo(() => {
   return (
@@ -10,6 +11,7 @@ const EvezForUStack = memo(() => {
       screenOptions={{
         headerBackground: headerBackground,
         headerTintColor: "#FFF",
+        headerRight: () => <NotificationRightHeader />,
       }}
     >
       <Stack.Screen

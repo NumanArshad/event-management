@@ -50,17 +50,28 @@ export const sendPushNotification = payload => {
 }
 
 
-export const sendNotification = payload => dispatch => {
+export const sendNotification = payload  => {
 
-  notificationCollectionRef.add(payload).then(res => 
-    console.log("notfication save succesfully!"))
-    
+  notificationCollectionRef.add(payload)
+  .then(res => 
+    console.log("notfication save succesfully!")) 
     .catch(err => console.log("error is ", err))
 }
 
-export const deleteNotification = (sendDocId, receipentDocId) => {
-  notificationCollectionRef.where("sendDocId", "==", sendDocId)
-    .where("recepeintDocId", "==", receipentDocId).where('type', '==', 'friendRequest')
+export const buldSendNotification = (data, callBack) => {
+  Promise.all(data).then(
+    res => {
+      alertMessage("bulk send successfully!");
+      callBack()
+    }
+  )
+    .catch(error => alertMessage(`error in bulk notification is ${error}`))
+
+}
+
+export const deleteNotification = (senderDocId, receipentDocId, type = 'friendRequest') => {
+  notificationCollectionRef.where("senderDocId", "==", senderDocId)
+    .where("recepeintDocId", "==", receipentDocId).where('type', '==', type)
     .limit(1)
     .get().then(res => {
       let docId = res[0]?.id

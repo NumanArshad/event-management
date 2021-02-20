@@ -6,6 +6,7 @@ import TabPeople from "nav/TabPeople";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import SvgHeaderSearch from "svgs/SvgHeaderSearch";
 import { useNavigation } from "@react-navigation/native";
+import NotificationRightHeader from "components/NotificationRightHeader";
 
 const Stack = createStackNavigator();
 const StackPeople = memo(() => {
@@ -26,9 +27,11 @@ const StackPeople = memo(() => {
         options={{
           title: "People",
           headerRight: () => (
-            <TouchableOpacity style={styles.search} onPress={onSearchPeople}>
-              <SvgHeaderSearch />
-            </TouchableOpacity>
+            <NotificationRightHeader>
+              <TouchableOpacity style={styles.search} onPress={onSearchPeople}>
+                <SvgHeaderSearch />
+              </TouchableOpacity>
+            </NotificationRightHeader>
           ),
         }}
       />

@@ -39,7 +39,7 @@ const MayBeYouKnow = memo(() => {
           //@ts-ignore
           //  loginUser={{ user_doc_id, user_id }}
           {...user}
-          image={require("assets/Followers/img.jpg")}
+        //  image={require("assets/Followers/img.jpg")}
           actionButton="addFriend"
         />
       ))}

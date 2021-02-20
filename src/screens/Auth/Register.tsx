@@ -22,10 +22,12 @@ import { useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import SubmitButton from "components/buttons/submitButton";
+import useImagePicker from "components/ImgPicker";
 
 const Register = memo((navigation) => {
   const dispatch = useDispatch();
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
+  const {image, pickImage} = useImagePicker();
 
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
@@ -77,36 +79,37 @@ const Register = memo((navigation) => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== "web") {
-        const {
-          status,
-        } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== "granted") {
-          Alert.alert(
-            "",
-            "Sorry, we need camera roll permissions to make this work!"
-          );
-        }
-      }
-    })();
-  }, []);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  // useEffect(() => {
+  //   (async () => {
+  //     if (Platform.OS !== "web") {
+  //       const {
+  //         status,
+  //       } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //       if (status !== "granted") {
+  //         Alert.alert(
+  //           "",
+  //           "Sorry, we need camera roll permissions to make this work!"
+  //         );
+  //       }
+  //     }
+  //   })();
+  // }, []);
 
-    ////console.log(result);
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
+  //   ////console.log(result);
+
+  //   if (!result.cancelled) {
+  //     setImage(result.uri);
+  //   }
+  // };
 
   const img =
     "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=6&m=1223671392&s=612x612&w=0&h=NGxdexflb9EyQchqjQP0m6wYucJBYLfu46KCLNMHZYM=";
