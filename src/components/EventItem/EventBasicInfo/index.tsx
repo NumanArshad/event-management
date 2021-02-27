@@ -29,12 +29,12 @@ interface EventBasicInfoProps {
 const EventBasicInfo = memo((props: EventBasicInfoProps) => {
   let color;
  
-  const colorTextLocation = props.colorAttending || "#7F8FA6";
+  const colorTextLocation = props?.colorAttending || "#7F8FA6";
   const textInfo = [styles.textLocation, { color: color }];
   const navigation = useNavigation();
   const onAttending = () => {
     navigation.navigate(ROUTES.ListAttending,{
-      eventId: props.eventId
+      eventId: props?.eventId
     });
   };
 
@@ -44,16 +44,16 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
     <View style={styles.container}>
       <View style={styles.location}>
         <View style={styles.flexRow}>
-          {props.location ? <Location /> : null}
+          {props?.location ? <Location /> : null}
           <CustomSkeleton style={[styles.textLocation, { width: width_screen * 0.55, height: 15 }]}
-          loadFlag={props.loadFlag}>
+          loadFlag={props?.loadFlag}>
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
-              {props.location}
+              {props?.location}
             </Text>
           </CustomSkeleton>
         </View>
         <CustomSkeleton style={[styles.textTag, {  width: width_screen * 0.20, height: 10 }]}
-        loadFlag={props.loadFlag}>
+        loadFlag={props?.loadFlag}>
         <Text style={[styles.textTag, { color: colorTextLocation }]}>
           {getDistanceByLatLong(latitude, longitude)} km
         </Text>
@@ -63,11 +63,11 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
 
       <View style={styles.location}>
         <View style={styles.flexRow}>
-          {props.eventDateTime ? <SvgEventTime /> : null}
+          {props?.eventDateTime ? <SvgEventTime /> : null}
           <CustomSkeleton style={[styles.textLocation, { width: width_screen * 0.45, height: 10 }]}
-          loadFlag={props.loadFlag}>
+          loadFlag={props?.loadFlag}>
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
-              {props.eventDateTime}
+              {props?.eventDateTime}
             </Text>
           </CustomSkeleton>
         </View>
@@ -75,10 +75,10 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
 
         <View style={styles.location} onTouchStart={onAttending}>
           <View style={styles.flexRow}>
-            {props.currentAttending ? <TicketIcon /> : null}
-            <CustomSkeleton loadFlag={props.loadFlag}>
+            {props?.currentAttending ? <TicketIcon /> : null}
+            <CustomSkeleton loadFlag={props?.loadFlag}>
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
-              {props.currentAttending} {props.currentAttending && `Attendees`}
+              {props?.currentAttending} {props?.currentAttending && `Attendees`}
             </Text>
             </CustomSkeleton>
           

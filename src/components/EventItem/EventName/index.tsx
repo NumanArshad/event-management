@@ -25,24 +25,24 @@ const EventName = memo((props: EventNameProps) => {
         <CustomSkeleton style={[styles.textTag,{width: width_screen * 0.30, height: 15}]}
         loadFlag={props.loadFlag}>
           <Text style={[styles.textTag, { fontSize: fontSizeTag }]}>
-            # {props.tag}
+            # {props?.tag}
           </Text>
         </CustomSkeleton>
 
 
         {props?.rate ? (
           <View style={styles.rateView}>
-            <InactiveRate rate={props.rate || 0} />
+            <InactiveRate rate={props?.rate || 0} />
 
             <Text style={[styles.textReviewTimes, { fontSize: fontSizeTag }]}>
-              {props.reviewTimes}K
+              {props?.reviewTimes}K
             </Text>
           </View>
         ) : null}
       </View>
       <CustomSkeleton style={[styles.textEventName,{width: width_screen * 0.5, height: 20}]}>
         <Text style={[styles.textEventName, { fontSize: fontSizeName }]}>
-          {props.eventName}
+          {props?.eventName}
         </Text>
       </CustomSkeleton>
     </View>

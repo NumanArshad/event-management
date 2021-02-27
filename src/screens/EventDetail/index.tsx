@@ -50,6 +50,7 @@ import {
 import EventTimeCountDown from "components/EventTimeCountDown";
 import { markAttendance } from "redux/attendEvent/attendEvent.actions";
 import {currentLat, currentLong} from "ultis/functions"
+import CustomSkeleton from "components/SkeletonPlaceholder";
 
 const EventDetail = memo(() => {
   const route = useRoute();
@@ -117,8 +118,10 @@ const EventDetail = memo(() => {
   };
 
   const onDirection = useCallback(() => {
-    navigation.navigate(ROUTES.EventDetailMap);
-  }, []);
+    navigation.navigate(ROUTES.EventDetailMap,{
+      eventLocation: single_event?.lat_long
+    });
+  }, [single_event]);
 
   const onReview = useCallback(() => {
     navigation.navigate(ROUTES.EventDetailRateComment, {
@@ -202,46 +205,51 @@ const EventDetail = memo(() => {
           <Text>...loading</Text>
         ) : (
           <> */}
-            { (isEmpty(single_event) || isAfter) && (
+            { (!isEmpty(single_event) || isAfter) && (
               <EventTimeCountDown
                 id={data?.id}
                 eventDateTime={formatDateTime(
                   single_event?.event_date,
                   single_event?.start_time
-                )}
+                ) }
                 isDetail={styles.countDownView}
-                loadFlag={isEmpty(single_event)}
+              //  loadFlag={isEmpty(single_event)}
               />
             )}
 
-            {/* <View style={styles.infoView}>
+            <View style={styles.infoView}>
               <EventName
                 eventName={single_event?.event_name}
                 tag={single_event?.type_name}
+                loadFlag={isEmpty(single_event)}
               />
               <EventBasicInfo
                 eventId={data?.id}
-                currentAttending={single_event?.participants}
-                distance={single_event?.lat_long}
-                eventDateTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
+                currentAttending={single_event?.participants || 0}
+                distance={single_event?.lat_long || ''}
+                eventDateTime={!isEmpty(single_event) && `${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
+                loadFlag={isEmpty(single_event)}
               />
-            </View> */}
+            </View>
           
-        
-        {/* <RateDetail
+       {single_event && 
+         <RateDetail
           eventId={data?.id}
           onPress={onReview}
           rate={single_event?.rating}
           marginTop={32}
-        /> */}
+        />} 
      
 
         {single_event && (
           <>
             <View style={styles.contentViewNoPadding}>
+              <CustomSkeleton>
               <Text style={[styles.textTitle, { paddingHorizontal: 24 }]}>
                 ENDORSE
               </Text>
+              </CustomSkeleton>
+            
               <UserItem
                 image={single_event?.image}
                 user_name={single_event?.sub_type_name}
