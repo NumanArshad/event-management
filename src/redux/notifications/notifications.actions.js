@@ -8,7 +8,6 @@ import { GET_ALL_NOTIFICATIONS } from "redux/actionTypes";
 
 const notificationCollectionRef = firebase.firestore().collection("notifications");
 
-
 export  async function registerForAsyncPushToken() {
     let token;
     if (Constants.isDevice) {
@@ -26,15 +25,15 @@ export  async function registerForAsyncPushToken() {
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
   
-      console.log("token i s", token)
-      //  if (Platform.OS === 'android') {
-      // Notifications.setNotificationChannelAsync('default', {
-      //   name: 'default',
-      //   importance: Notifications.AndroidImportance.MAX,
-      //   vibrationPattern: [0, 250, 250, 250],
-      //   lightColor: 'red',
-      // });
-      // }
+   // alertMessage(`token i s, ${token}`)
+       if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: 'red',
+      });
+      }
     } else {
       alertMessage("Must use physical device for notification");
     }
@@ -42,11 +41,38 @@ export  async function registerForAsyncPushToken() {
   }
 
 
-export const sendPushNotification = payload => {
-    axios.post('https://exp.host/--/api/v2/push/send',
-    payload).then(
-        res => console.log("send response is ", res)
-    ).catch(error => console.log("error is", error))
+// export const sendPushNotification = payload => {
+//     axios.post('https://exp.host/--/api/v2/push/send',
+//     payload).then(
+//         res => console.log("send response is ", res)
+//     ).catch(error => console.log("error is", error))
+// }
+
+export const sendPushNotification = () => (dispatch, getState) => {
+  const {login_Session:{device_token}} = getState()?.auth;
+  fetch('https://fcm.googleapis.com/fcm/send', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `key=${device_token || `AAAAOUCCOgg:APA91bHj6-9xrOGKoCkKahgN_Fx4DZv_-lStCHMWZhMb2oyYaZodZn5TTX2eYZSORobCNBVCOZePEnH3SQBZf_nGWvE7v_sEnKx6JEeeffcPwnX9x9lbO_u82eNalkJ34unDCZ4aOU4i`}`,
+    },
+    body: JSON.stringify({
+      to: 'eZ2FVei0TSag2Phc_BdOiP:APA91bF6Tsml__-Lu7Xmgdk8lQqK5JoqInVSE4T5iH18uWWqWcj9At3GPA3TObyGScoX2GiHEK07SopIyCvWOTBWqJ6Jwp98y8J5v49lrvrHQy0BWDJATyYXTCbjzfvwyDNEpGvGSpOJ',
+      priority: 'normal',
+      data: {
+        experienceId: '@numanarshad.dev/evez_expo_20201116',
+        title: " You've got mail",
+        message: 'Hello world!',
+      },
+    }),
+  })
+  .then(
+    res => { 
+    alertMessage(JSON.stringify(`send response is ", ${res}`));
+  }
+  ).catch(error => {
+    alertMessage(JSON.stringify(`send error is ", ${error}`));
+  });
 }
 
 
@@ -94,10 +120,6 @@ export const getAuthNotifications = () => (dispatch, getState) => {
   const {
     login_Session: { user_doc_id },
   } = getState()?.auth;
-
-  
-
-  console.log("docv id", user_doc_id  )
 
   //alert("jwkfnej")
   notificationCollectionRef.where('receipentDocId','==',user_doc_id)

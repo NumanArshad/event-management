@@ -14,7 +14,6 @@ const Main = memo(() => {
   const { is_authenticated } = useSelector<any, any>((state) => state.auth);
 
   useEffect(() => {
-    //console.log(getUserPosition().then(res => console.log("nice is", res)))
    (async() => (is_authenticated ? await getUserPosition() : dispatch(getUserSessions())))();
     is_authenticated && dispatch(getAuthUserObserver());
   }, [dispatch, is_authenticated]);

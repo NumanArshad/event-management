@@ -19,16 +19,10 @@ import isEmpty from "ultis/isEmpty";
 
 export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
-  //  console.log("response auth is ", res)
     if (res.data.status_code === 200) {
       const { user, token } = res.data.data;
-    //  alertMessage("login success")
       setUserSessions({ user: user?.id, token });
-    //  dispatch(getProfile(token));
-
       getSingleUser(user?.id, (userInfo, docLength) => {
-
-    //    console.log("doc length is", docLength)
         docLength ?
           dispatch(isAuthenticated({ ...userInfo, auth_token: token })) :
           dispatch(getProfile(token));

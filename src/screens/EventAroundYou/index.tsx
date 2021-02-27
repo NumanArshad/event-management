@@ -55,8 +55,6 @@ const EventAroundYou = memo(() => {
     });
   }, [navigation]);
 
-console.log("hey", eventLocation)
-
   const renderItem = useCallback(({ item }) => {
     const {
       event_id,
@@ -110,7 +108,7 @@ console.log("hey", eventLocation)
            contentContainerStyle={styles.contentContainerStyle}
          /> :
         !isEmpty(all_errors) ? 
-           <Text>{all_errors?.message}</Text> :
+           <Text>{all_errors}</Text> :
              <Text>...Loading</Text>
       }
 

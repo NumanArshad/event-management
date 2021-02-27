@@ -22,9 +22,6 @@ const EventDetailMap = memo(() => {
 const {latitude, longitude} = splitLatLongStr(params?.eventLocation) || {};
 
 
-console.log("param is", latitude, longitude)
-
-
   const region = useMemo(
     () => ({
       latitude,

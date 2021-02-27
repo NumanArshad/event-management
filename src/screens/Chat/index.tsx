@@ -158,13 +158,16 @@ const Chat = () => {
 
   const renderbuffer = useCallback((props) => {
     const { currentMessage } = props;
+
+
     const message = isGroupChat
       ? getEventById(currentMessage?.text)
       : currentMessage?.text;
 
+
     return (
       <>
-        {isGroupChat ? (
+        {isGroupChat && !isEmpty(message) ? (
           <EventItem
             thumbnail={require("@assets/Trending/trending_3.png")}
             tag={message?.type_name}
@@ -179,6 +182,7 @@ const Chat = () => {
             rate={message?.rating}
             duration={message?.duration}
             isSmallItem
+            key={message?.id}
           />
         ) : (
           <Bubble

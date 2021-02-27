@@ -34,6 +34,8 @@ const TabSearchEvents = memo(() => {
     }, [dispatch])
   );
 
+
+  console.log({groupList})
   return (
     <View style={styles.container}>
       <ScrollView>

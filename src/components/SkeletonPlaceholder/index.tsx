@@ -10,10 +10,8 @@ interface skeletonPropModel  {
 }
 
 const CustomSkeleton = memo(({style ,loadFlag, children }:skeletonPropModel) => {
-    // const {loading} = useSelector<any, any>(state => state?.loading);
 
     const childStyle = style ?? React.Children.only(children).props.style;
-    // console.log("nice",childStyle);
 
     return (
         <>

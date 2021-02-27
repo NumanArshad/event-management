@@ -14,6 +14,7 @@ import {
 import FriendList from "screens/FriendList";
 import isEmpty from "ultis/isEmpty";
 import { alertMessage } from "ultis/alertToastMessages";
+import { stopLoading } from "redux/loading/loading.actions";
 
 const userCollectionRef = firebase.firestore().collection("users");
 
@@ -120,7 +121,10 @@ export const updateUser = (payload, updateStatus) => (dispatch, getState) => {
     .doc(user_doc_id)
     .update(payload)
     .then((res) => {
-      updateStatus === 'profileUpdated' && dispatch(updateAuthUser(payload));
+      updateStatus === 'profileUpdated' ? 
+      dispatch(updateAuthUser(payload)) :
+      dispatch(stopLoading());
+
     });
 };
 

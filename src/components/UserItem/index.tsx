@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FriendRequest from "screens/FriendRequest";
 import { sendNotification, deleteNotification } from "redux/notifications/notifications.actions";
 import { noFoundImg } from "ultis/constants";
+import { getImage } from "ultis/functions";
 
 interface Props {
   // user_id: any;
@@ -70,7 +71,6 @@ const UserItem = (props: any) => {
 
     const filterAuthUser = props.members.filter((docId:string) => docId!==login_user_doc);
 
-   // console.log("filterauth useid", filterAuthUser, id)
     navigation.navigate(
       ROUTES.Chat, {
         group:{
@@ -152,7 +152,7 @@ const UserItem = (props: any) => {
   // conpsole.log("people is", userInfo);
   return (
     <TouchableOpacity onPress={handleItemPress} style={styles.card}>
-      <Image style={styles.image} source={{uri: (!image || image?.includes("default")) ? noFoundImg : image}} />
+      <Image style={styles.image} source={{uri: getImage(image)}} />
       <View style={styles.txtField}>
         <Text style={styles.txtName}>{user_name}</Text>
         {user_type && <Text style={styles.txtNumberFollower}>{user_type}</Text>}

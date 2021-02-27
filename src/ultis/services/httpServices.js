@@ -1,10 +1,11 @@
 import axios from "axios";
 import { clearErrors, errorActions } from "redux/error/error.actions";
 import { alertMessage, toastMessages } from "ultis/alertToastMessages";
+import { baseApiUrl } from "ultis/constants";
 import { startLoading, stopLoading } from "../../redux/loading/loading.actions";
 import store from "../../redux/store";
 
-axios.defaults.baseURL = "http://iuvo.arcocia.tech/api/";
+axios.defaults.baseURL = baseApiUrl;
 
 const { dispatch, getState } = store;
 
@@ -39,11 +40,18 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   (response) => {
-    dispatch(stopLoading());
+    const isAuthUrl = [
+      "login",
+      "register",
+    ].includes(response?.config);
+
+    !isAuthUrl && dispatch(stopLoading());
+    dispatch(clearErrors());
     return response;
   },
   (error) => {
     console.log("in error is", error)
+    alertMessage(`error is ${error}`)
     dispatch(stopLoading());
     const { status, data } = error?.response;
     //console.log("error response is ", error?.response.status);

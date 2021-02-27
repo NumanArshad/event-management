@@ -201,55 +201,57 @@ const EventDetail = memo(() => {
           </View>
         ) : null} */}
 
-        {/* {isEmpty(single_event) ? (
+        {isEmpty(single_event) ? (
           <Text>...loading</Text>
         ) : (
-          <> */}
-            { (!isEmpty(single_event) || isAfter) && (
-              <EventTimeCountDown
-                id={data?.id}
-                eventDateTime={formatDateTime(
-                  single_event?.event_date,
-                  single_event?.start_time
-                ) }
-                isDetail={styles.countDownView}
-              //  loadFlag={isEmpty(single_event)}
-              />
-            )}
+          isAfter && (
+            <EventTimeCountDown
+              id={data?.id}
+              eventDateTime={formatDateTime(
+                single_event?.event_date,
+                single_event?.start_time
+              )}
+              isDetail={styles.countDownView}
+            />
+          )
+        )}
 
-            <View style={styles.infoView}>
-              <EventName
-                eventName={single_event?.event_name}
-                tag={single_event?.type_name}
-                loadFlag={isEmpty(single_event)}
-              />
-              <EventBasicInfo
-                eventId={data?.id}
-                currentAttending={single_event?.participants || 0}
-                distance={single_event?.lat_long || ''}
-                eventDateTime={!isEmpty(single_event) && `${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
-                loadFlag={isEmpty(single_event)}
-              />
-            </View>
-          
-       {single_event && 
-         <RateDetail
-          eventId={data?.id}
-          onPress={onReview}
-          rate={single_event?.rating}
-          marginTop={32}
-        />} 
-     
+        <View style={styles.infoView}>
+          <EventName
+            eventName={single_event?.event_name}
+            tag={single_event?.type_name}
+            loadFlag={isEmpty(single_event)}
+          />
+          <EventBasicInfo
+            eventId={data?.id}
+            currentAttending={single_event?.participants || 0}
+            distance={single_event?.lat_long || ""}
+            eventDateTime={
+              !isEmpty(single_event) &&
+              `${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`
+            }
+            loadFlag={isEmpty(single_event)}
+          />
+        </View>
+
+        {single_event && (
+          <RateDetail
+            eventId={data?.id}
+            onPress={onReview}
+            rate={single_event?.rating}
+            marginTop={32}
+          />
+        )}
 
         {single_event && (
           <>
             <View style={styles.contentViewNoPadding}>
               <CustomSkeleton>
-              <Text style={[styles.textTitle, { paddingHorizontal: 24 }]}>
-                ENDORSE
-              </Text>
+                <Text style={[styles.textTitle, { paddingHorizontal: 24 }]}>
+                  ENDORSE
+                </Text>
               </CustomSkeleton>
-            
+
               <UserItem
                 image={single_event?.image}
                 user_name={single_event?.sub_type_name}
@@ -279,7 +281,7 @@ const EventDetail = memo(() => {
             </View>
           </>
         )}
-        
+
         {/* <View style={styles.contentView}>
           <Text style={styles.textTitle}>CONTACT</Text>
           <Text style={styles.aboutContent}>
@@ -332,7 +334,8 @@ const EventDetail = memo(() => {
         </View> */}
 
         {(isEmpty(single_event) ||
-          loading || isAfter ||
+          loading ||
+          isAfter ||
           is_event_in_progress) && (
           <View style={styles.buttonView}>
             <ButtonLinear
@@ -350,7 +353,7 @@ const EventDetail = memo(() => {
         </TouchableOpacity>
         <View style={styles.flexRow}>
           <TouchableOpacity onPress={handleNavGroupShare}>
-            <IconShare/>
+            <IconShare />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonSave}

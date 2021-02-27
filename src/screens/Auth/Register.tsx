@@ -16,17 +16,14 @@ import { width_screen, height_screen } from "../../ultis/dimensions/index";
 import { register } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
-import Text_Input from "ultis/component/Text_Input";
 import Logo from "../../assets/logo.jpg";
 import { useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
 import SubmitButton from "components/buttons/submitButton";
 import useImagePicker from "components/ImgPicker";
 
 const Register = memo((navigation) => {
   const dispatch = useDispatch();
-  // const [image, setImage] = useState(null);
   const {image, pickImage} = useImagePicker();
 
   const [email, setemail] = useState("");
@@ -34,11 +31,6 @@ const Register = memo((navigation) => {
   const [name, setname] = useState("");
   const [cPassword, setcPassword] = useState("");
   const { navigate } = useNavigation();
-  const [preLoader, setpreLoader] = useState(false);
-  const [userType, setuserType] = useState("citizen");
-  const check = () => {
-    Alert.alert("", email);
-  };
 
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -65,13 +57,6 @@ const Register = memo((navigation) => {
         formData.append("user_type", "citizen");
         formData.append("name", name);
         formData.append("password_confirmation", cPassword);
-        // formData.append("image", {
-        //   uri: image,
-        //   name: name + ".jpg",
-        //   type: "image/jpg",
-        // });
-
-        ////console.log("FORMDATA:", formData);
         dispatch(register(formData));
       }
     } else {
@@ -79,48 +64,12 @@ const Register = memo((navigation) => {
     }
   };
 
-
-  // useEffect(() => {
-  //   (async () => {
-  //     if (Platform.OS !== "web") {
-  //       const {
-  //         status,
-  //       } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //       if (status !== "granted") {
-  //         Alert.alert(
-  //           "",
-  //           "Sorry, we need camera roll permissions to make this work!"
-  //         );
-  //       }
-  //     }
-  //   })();
-  // }, []);
-
-  // const pickImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   ////console.log(result);
-
-  //   if (!result.cancelled) {
-  //     setImage(result.uri);
-  //   }
-  // };
-
   const img =
     "https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=6&m=1223671392&s=612x612&w=0&h=NGxdexflb9EyQchqjQP0m6wYucJBYLfu46KCLNMHZYM=";
   return (
     <View style={styles.container}>
       <View>
         <Image
-          // source={{
-          //   uri:
-          //     "https://i.pinimg.com/originals/f6/db/9b/f6db9b785d37c154c2be26b7c32604b6.jpg",
-          // }}
           source={{ uri: image ? image : img }}
           style={styles.imageProfile}
         />

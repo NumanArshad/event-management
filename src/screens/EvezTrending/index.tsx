@@ -19,6 +19,8 @@ import { formatDateTime, getEventTimeDown, isEventInProgress } from "ultis/funct
 import dayjs from "dayjs";
 import MyNotification from "screens/Notifications";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { sendPushNotification } from "redux/notifications/notifications.actions";
 
 const data = [
   {
@@ -129,11 +131,14 @@ const EvezTrending = memo(() => {
     );
   }, []);
 
-  console.log(all_trending_events )
-
   return (
     <View style={styles.container}>
       {/* <MyNotification /> */}
+      {/* <TouchableOpacity onPress={()=>dispatch(sendPushNotification())}>
+        <Text>
+          send notufication
+        </Text>
+      </TouchableOpacity> */}
       {!isEmpty(all_trending_events) ? (
         <FlatList
           style={styles.scroll}

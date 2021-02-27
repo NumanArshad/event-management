@@ -1,6 +1,8 @@
 import React, { memo } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import HeaderProfile from "screens/About/components/HeaderProfile";
+import { noFoundImg } from "ultis/constants";
+import { getImage } from "ultis/functions";
 import store from "../../redux/store";
 
 const item2 = {
@@ -19,11 +21,12 @@ const item2 = {
 const About = memo(() => {
   const { getState } = store;
   const {
-    login_Session: { user_name, earn_credits, followers, following, email },
+    login_Session: { user_name, earn_credits, followers, following, email, image },
   } = getState()?.auth;
+
   const item = {
     coverImage: require("assets/Profile/CoverImage.png"),
-    avatar: require("assets/Profile/Avatar.png"),
+    avatar: {uri: getImage(image)},
     userName: user_name ? user_name : "Jhon Doe",
     address: email ? email : "Email",
     followers: followers?.length,

@@ -97,7 +97,7 @@ const HeaderProfile = memo((props: Props) => {
           onPress={onProfile}
         />
         <Text style={styles.userName}>
-          {props.userName}{" "}
+          {props.userName}
           {/* <Ionicons name="create-outline" size={20} color="black" /> */}
         </Text>
         <Text style={styles.address}>{props.address}</Text>
@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
   img: {
     width: 104,
     height: 104,
+    
     borderRadius: 100,
     borderColor: "rgba(255, 255, 255, 0.4)",
     marginTop: -0.06 * height_screen,

@@ -1,10 +1,9 @@
 import dayjs from "dayjs";
-import { alertMessage } from "./alertToastMessages";
+import { baseImageUrl, noFoundImg } from "./constants";
 
 export let [currentLat, currentLong] = [null, null];
 
 export const getUserPosition = () => {
-  //alertMessage("hey called")
   return new Promise((resolve, reject)=>{
     navigator.geolocation.getCurrentPosition(
       //@ts-ignore
@@ -124,3 +123,8 @@ export const getDistanceByLatLong = (
     return Math.ceil(dist);
   }
 };
+
+export const getImage = image => {
+  const imagePath = image?.includes("firebasestorage") ? `` : baseImageUrl;
+  return (!image || image.includes('default')) ? noFoundImg : `${imagePath}${image}`
+}
