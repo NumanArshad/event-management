@@ -13,7 +13,7 @@ interface mapLocationProps {
 const MapLocation = memo((props: mapLocationProps) => {
   const [showMap, setShowMap] = useState(false);
 
-  const [strLatitude, strLongitude] = props?.eventLocation.split(",");
+  const [strLatitude, strLongitude] = props?.eventLocation?.split(",");
   const [latitude, longitude] = [+strLatitude, +strLongitude];
 
   useEffect(() => {

@@ -29,9 +29,10 @@ import { getUsersbyDocRefList } from "redux/users/users.actions";
 import useImagePicker from "components/ImgPicker";
 import { noFoundImg } from "ultis/constants";
 import { createGroup } from "redux/groups/groups.actions";
-import { buldSendNotification, sendNotification } from "redux/notifications/notifications.actions";
+import { bulkFirestoreHandler, sendNotification } from "redux/notifications/notifications.actions";
 import { useNavigation } from "@react-navigation/native";
 import { alertMessage } from "ultis/alertToastMessages";
+import { startLoading, stopLoading } from "redux/loading/loading.actions";
 
 const CreateGroup = () => {
   const dispatch = useDispatch();
@@ -61,6 +62,7 @@ const CreateGroup = () => {
    const downloadUrl = await uploadImage();
     alertMessage(downloadUrl)
     if(downloadUrl){
+      dispatch(startLoading());
       console.log("downloaded is ", downloadUrl)
       const selectedFriends = members.map(({ id }) => id);
       const payload = {
@@ -71,6 +73,8 @@ const CreateGroup = () => {
         createdDate: new Date()
       }
       createGroup(payload);
+
+      ///Send Group join notification to all receipent
       const mapBulkNotifications = members.map(({ id: receipentDocId }) => (
         sendNotification({
           receipentDocId,
@@ -79,8 +83,13 @@ const CreateGroup = () => {
           type: 'groupInvite'
         })))
   
-      buldSendNotification(mapBulkNotifications, goBack);
+      bulkFirestoreHandler(mapBulkNotifications, handleGoBack);
     }
+  }
+
+  const handleGoBack = () => {
+    dispatch(stopLoading())
+    goBack();
   }
 
   return (

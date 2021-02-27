@@ -19,13 +19,16 @@ import isEmpty from "ultis/isEmpty";
 
 export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
-    console.log("response auth is ", res)
+  //  console.log("response auth is ", res)
     if (res.data.status_code === 200) {
       const { user, token } = res.data.data;
+    //  alertMessage("login success")
       setUserSessions({ user: user?.id, token });
+    //  dispatch(getProfile(token));
+
       getSingleUser(user?.id, (userInfo, docLength) => {
 
-        console.log("doc length is", docLength)
+    //    console.log("doc length is", docLength)
         docLength ?
           dispatch(isAuthenticated({ ...userInfo, auth_token: token })) :
           dispatch(getProfile(token));
@@ -135,7 +138,7 @@ export const getUserSessions = () => async (dispatch) => {
 
     token &&
       getSingleUser(parseInt(userId), (userInfo) => {
-        console.log("profile is ",userInfo )
+    //    console.log("profile is ",userInfo )
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
       });
   } catch (error) {
@@ -145,7 +148,7 @@ export const getUserSessions = () => async (dispatch) => {
 };
 
 export const updateAuthUser = (payload) => (dispatch) => {
-  console.log("profile updates is", payload)
+ // console.log("profile updates is", payload)
   dispatch({
     type: UPDATE_AUTH_USER,
     payload,

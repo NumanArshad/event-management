@@ -58,7 +58,7 @@ export const sendNotification = payload  => {
     .catch(err => console.log("error is ", err))
 }
 
-export const buldSendNotification = (data, callBack) => {
+export const bulkFirestoreHandler = (data, callBack) => {
   Promise.all(data).then(
     res => {
       alertMessage("bulk send successfully!");
@@ -70,14 +70,23 @@ export const buldSendNotification = (data, callBack) => {
 }
 
 export const deleteNotification = (senderDocId, receipentDocId, type = 'friendRequest') => {
+  console.log("operate params are",{senderDocId, receipentDocId, type})
   notificationCollectionRef.where("senderDocId", "==", senderDocId)
-    .where("recepeintDocId", "==", receipentDocId).where('type', '==', type)
+    .where("receipentDocId", "==", receipentDocId).where('type', '==', type)
     .limit(1)
     .get().then(res => {
-      let docId = res[0]?.id
-      notificationCollectionRef.doc(docId).delete().then(
-        res => console.log("doc remove successfully!")
-      ).catch(err => console.log("delete error is ", err))
+      let docId = null;
+      res.forEach(payload => {
+        docId = payload.id;
+        console.log("doc id for del not is", payload)
+
+      })
+
+      if (docId) {
+        notificationCollectionRef.doc(docId).delete().then(
+          res => console.log("doc remove successfully!")
+        ).catch(err => console.log("delete error is ", err))
+      }
     })
 }
 
@@ -86,6 +95,7 @@ export const getAuthNotifications = () => (dispatch, getState) => {
     login_Session: { user_doc_id },
   } = getState()?.auth;
 
+  
 
   console.log("docv id", user_doc_id  )
 
@@ -100,7 +110,7 @@ export const getAuthNotifications = () => (dispatch, getState) => {
         id: res.id
       })
     })
-    console.log({notifArray})
+   console.log({notifArray})
     dispatch({
       type: GET_ALL_NOTIFICATIONS,
       payload: notifArray

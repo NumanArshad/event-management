@@ -35,12 +35,7 @@ interface Props {
 }
 
 const UserItem = (props: any) => {
-  // const [follow, setFollow] = useState(false);
-  // const onPress = useCallback(() => {
-  //   setFollow(!follow);
-  //   console.log("ID CLICKED", props.id);
-  //   // addFriend(props.id);
-  // }, [follow]);
+
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
@@ -64,6 +59,31 @@ const UserItem = (props: any) => {
       user_doc_id: login_user_doc,
     },
   } = useSelector<any, any>((state) => state?.auth);
+
+  const handleItemPress = () => {
+    props.isGroupItem ?
+    handleGroupNavigation() :
+    onPeopleProfile();
+  }
+
+  const handleGroupNavigation = () => {
+
+    const filterAuthUser = props.members.filter((docId:string) => docId!==login_user_doc);
+
+   // console.log("filterauth useid", filterAuthUser, id)
+    navigation.navigate(
+      ROUTES.Chat, {
+        group:{
+          name: user_name,
+          image,
+          members: filterAuthUser
+        },
+        chatType: "groupChat",
+        conversationId: id,
+        eventShareStatus: props.eventShareStatus
+      }
+    )
+  }
 
   const friendRequestStatus = () => {
     const { status = "rejected" } =
@@ -89,7 +109,7 @@ const UserItem = (props: any) => {
     friendRequestStatus()?.isRejected
       ? sendNotification({
           receipentDocId: id,
-          sendDocId: login_user_doc,
+          senderDocId: login_user_doc,
           type: "friendRequest",
           createdAt: new Date(),
         })
@@ -131,7 +151,7 @@ const UserItem = (props: any) => {
 
   // conpsole.log("people is", userInfo);
   return (
-    <TouchableOpacity onPress={onPeopleProfile} style={styles.card}>
+    <TouchableOpacity onPress={handleItemPress} style={styles.card}>
       <Image style={styles.image} source={{uri: (!image || image?.includes("default")) ? noFoundImg : image}} />
       <View style={styles.txtField}>
         <Text style={styles.txtName}>{user_name}</Text>

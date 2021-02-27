@@ -4,7 +4,9 @@ import { alertMessage } from "ultis/alertToastMessages";
 
 export const errorActions = (errorResponse) => (dispatch) => {
   const { status, data } = errorResponse;
-  if (status === 401) {
+
+  //console.log(Object.va(data?.message))
+  if (status === 401 && !data?.message) {
     dispatch(logout());
   } else if (status === 422) {
     if (data?.errors) {
@@ -20,7 +22,7 @@ export const errorActions = (errorResponse) => (dispatch) => {
     //alertMessage(data?.message);
     dispatch({
       type: GET_ALL_ERRORS,
-      payload: data,
+      payload: data?.message,
     });
   }
 };

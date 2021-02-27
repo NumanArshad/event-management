@@ -18,6 +18,7 @@ import isEmpty from "ultis/isEmpty";
 import { formatDateTime, getEventTimeDown, isEventInProgress } from "ultis/functions";
 import dayjs from "dayjs";
 import MyNotification from "screens/Notifications";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 
 const data = [
   {
@@ -128,6 +129,8 @@ const EvezTrending = memo(() => {
     );
   }, []);
 
+  console.log(all_trending_events )
+
   return (
     <View style={styles.container}>
       {/* <MyNotification /> */}
@@ -143,7 +146,20 @@ const EvezTrending = memo(() => {
       ) : !isEmpty(all_errors) ? (
         <Text>{all_errors?.message}</Text>
       ) : (
-        <Text>...Loading</Text>
+        [...Array(2)].map(() => (
+          <EventItem
+            thumbnail={require("@assets/Trending/trending_3.png")}
+            tag={""}
+            id={0}
+            eventName={""}
+            location={""}
+            distance={""}
+            eventDateTime={""}
+            rate={0}
+            duration={""}
+            loadFlag={isEmpty(all_trending_events)}
+          />
+        ))
       )}
       <ButtonFilter onPress={onPressFilter} />
     </View>

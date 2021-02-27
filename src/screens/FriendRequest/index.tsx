@@ -18,7 +18,7 @@ const FriendRequest = memo(() => {
       user_doc_id);
 
 
-   console.log("nice is", pendingRequests,friendRequests, users)
+   //console.log("nice is", pendingRequests,friendRequests, users)
   useFocusEffect(
     useCallback(() => {
       getUsersbyDocRefList(pendingRequests,  setUsers);

@@ -66,7 +66,7 @@ const HeaderProfile = memo((props: Props) => {
       // makeRow();
     } else {
       dispatch(getMyEarning());
-      console.log("Run", my_earnings);
+   //   console.log("Run", my_earnings);
     }
   }, [dispatch, my_earnings]);
 

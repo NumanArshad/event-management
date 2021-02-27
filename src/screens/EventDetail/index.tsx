@@ -21,9 +21,7 @@ import {
   getBottomSpace,
   getStatusBarHeight,
 } from "react-native-iphone-x-helper";
-import EventItem from "components/EventItem";
 import ButtonLinear from "components/buttons/ButtonLinear";
-import HourGlass from "svgs/HourGlass";
 import SvgArrowBack from "svgs/EventDetail/SvgArrowBack";
 import IconShare from "svgs/IconShare";
 import IconUnSave from "svgs/IconUnSave";
@@ -50,16 +48,12 @@ import {
   isEventInProgress,
 } from "ultis/functions";
 import EventTimeCountDown from "components/EventTimeCountDown";
-import dayjs from "dayjs";
 import { markAttendance } from "redux/attendEvent/attendEvent.actions";
 import {currentLat, currentLong} from "ultis/functions"
 
 const EventDetail = memo(() => {
   const route = useRoute();
   const navigation = useNavigation();
-
-  console.log("lat is", currentLong)
-
   
   // @ts-ignore
   const data = route.params?.data;
@@ -149,6 +143,12 @@ const EventDetail = memo(() => {
      formatDateTime(single_event?.event_date, single_event?.start_time),
       single_event?.duration
     )
+  
+  const handleNavGroupShare = () => {
+    navigation.navigate(ROUTES.TabSearchEvents, {
+      eventShare: true,
+    });
+  };
 
   const reserveAttendanceText =
       loading || isEmpty(single_event)
@@ -198,11 +198,11 @@ const EventDetail = memo(() => {
           </View>
         ) : null} */}
 
-        {isEmpty(single_event) ? (
+        {/* {isEmpty(single_event) ? (
           <Text>...loading</Text>
         ) : (
-          <>
-            {isAfter && (
+          <> */}
+            { (isEmpty(single_event) || isAfter) && (
               <EventTimeCountDown
                 id={data?.id}
                 eventDateTime={formatDateTime(
@@ -210,10 +210,11 @@ const EventDetail = memo(() => {
                   single_event?.start_time
                 )}
                 isDetail={styles.countDownView}
+                loadFlag={isEmpty(single_event)}
               />
             )}
 
-            <View style={styles.infoView}>
+            {/* <View style={styles.infoView}>
               <EventName
                 eventName={single_event?.event_name}
                 tag={single_event?.type_name}
@@ -224,29 +225,16 @@ const EventDetail = memo(() => {
                 distance={single_event?.lat_long}
                 eventDateTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
               />
-            </View>
-          </>
-        )}
-        <RateDetail
+            </View> */}
+          
+        
+        {/* <RateDetail
           eventId={data?.id}
           onPress={onReview}
           rate={single_event?.rating}
           marginTop={32}
-        />
-        {/* <View style={styles.contentView}>
-          <Text style={styles.textTitle}>ABOUT</Text>
-          <Text style={styles.aboutContent}>
-            Why this party is for you {"\n"}
-            Let’s play the silent game, but this time you have to dance under
-            the stars with hundreds…
-          </Text>
-          <View style={styles.flexEnd}>
-            <TouchableOpacity style={styles.detailAboutBtn}>
-              <Text style={styles.textBtn}>Detail</Text>
-              <SvgArrowRight />
-            </TouchableOpacity>
-          </View>
-        </View> */}
+        /> */}
+     
 
         {single_event && (
           <>
@@ -279,7 +267,7 @@ const EventDetail = memo(() => {
                   distance={single_event?.lat_long}
                 />
               </View>
-              <MapLocation eventLocation={single_event?.lat_long} />
+              {/* <MapLocation eventLocation={single_event?.lat_long} /> */}
             </View>
           </>
         )}
@@ -353,8 +341,8 @@ const EventDetail = memo(() => {
           <SvgArrowBack />
         </TouchableOpacity>
         <View style={styles.flexRow}>
-          <TouchableOpacity>
-            <IconShare />
+          <TouchableOpacity onPress={handleNavGroupShare}>
+            <IconShare/>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonSave}

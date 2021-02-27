@@ -93,6 +93,8 @@ const Notification = memo(() => {
     getUsersbyDocRefList(docIdList, setNotificationUsers);
   }, [all_notifications]);
 
+  //console.log("notifoicayion users are",all_notifications, notificationUsers )
+
   //console.log("my notification are",all_notifications, notificationUsers )
   
   // const renderItem = useCallback(({item}) => {
@@ -139,17 +141,17 @@ const Notification = memo(() => {
       imageEvent,
       event,
     } = item;
-    return type === "friendRequest" ? (
+    return ["friendRequest", "groupInvite"].includes(type) ? (
       <NotificationMessage
         avatar={data[index]?.avatar}
         userName={notificationUsers[index]?.first_name}
-        message={"send to friend request"}
+        message={type}
         time={dayjs.unix(all_notifications[index]?.createdAt?.seconds).format("DD/MM/YYYY")}
         un_Read={false}
       />
     ) : (
       <NotificationEvent
-        avatar={avatar}
+        avatar={data[index]?.avatar}
         title={title}
         imageEvent={imageEvent}
         event={event}

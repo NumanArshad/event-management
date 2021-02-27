@@ -9,35 +9,35 @@ import UserItem from "components/UserItem";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { height_screen, width_screen } from "ultis/dimensions";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import { getAuthGroupsObserver } from "redux/groups/groups.actions";
-import { alertMessage } from "ultis/alertToastMessages";
-import { useDispatch, useSelector } from "react-redux";
-import isEmpty from "ultis/isEmpty";
+import { useDispatch } from "react-redux";
 
 const TabSearchEvents = memo(() => {
-  const [value, setValue] = useState("");
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  const {
+    params,
+  } = useRoute();
+
   const toCreateGroup = () => {
     navigation.navigate(ROUTES.CreateGroup);
   };
-  const [groupList, setGroupList] = useState([]);
+  const [groupList, setGroupList] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
-     // alertMessage("hey back");
       dispatch(getAuthGroupsObserver(setGroupList));
     }, [dispatch])
   );
 
-  console.log("auth user group are", groupList);
   return (
     <View style={styles.container}>
       <ScrollView>
-        {isEmpty(groupList) ? (
+        {!groupList ? (
           <Text>...loading</Text>
         ) : !groupList?.length ? (
           <Text>No group found</Text>
@@ -46,16 +46,22 @@ const TabSearchEvents = memo(() => {
             ({
               image,
               name,
+              members,
               id,
             }: {
               image: string;
               name: string;
+              members: string[]
               id: string;
             }) => 
             <UserItem
              image={image} 
              user_name={name} 
              key={id} 
+             id={id}
+             members={members}
+             isGroupItem
+            eventShareStatus={params?.eventShare}
              />
           )
         )}

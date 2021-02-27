@@ -1,32 +1,34 @@
 import React, {memo, useCallback, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {InteractionManager, ScrollView, StyleSheet, View} from 'react-native';
 import MapView, {Circle, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import UserLocation from 'svgs/UserLocation';
 import EventItem from 'components/EventItem';
 import {eventLocation} from 'data/eventLocation';
 import PinLocation from 'svgs/PinLocation';
 import ButtonFilter from 'components/buttons/ButtonFilter';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import MapButton from 'components/buttons/MapButton';
 import ROUTES from 'ultis/routes';
+import {currentLat as latitude, currentLong as longitude, getUserPosition} from "ultis/functions"
 
+console.log(latitude, longitude)
 export const userLocation = {
-  latitude: 37.78825,
-  longitude: -122.4324,
+  latitude,
+  longitude,
 };
 export const initialLatitudeDelta = 0.01202;
 export const initialLongitudeDelta = 0.00081;
-export const initialRadius = 1000;
+export const initialRadius = 6000;
 
 const AllEventAroundYou = memo(() => {
   const navigation = useNavigation();
-  const initialRegion = {
-    ...userLocation,
-    latitudeDelta: initialLatitudeDelta,
-    longitudeDelta: initialLongitudeDelta,
-  };
+  // const initialRegion = {
+  //   ...userLocation,
+  //   latitudeDelta: initialLatitudeDelta,
+  //   longitudeDelta: initialLongitudeDelta,
+  // };
   const [color, setColor] = useState('#000');
-  const [region, setRegion] = useState(initialRegion);
+  const [region, setRegion] = useState(null);
 
   const onPressBack = useCallback(() => {
     navigation.goBack();
@@ -36,37 +38,61 @@ const AllEventAroundYou = memo(() => {
   }, [navigation]);
   const onPressDirection = useCallback(() => {}, []);
 
+  const {params} = useRoute();
+
+  console.log("locaion is", params?.eventLocation)
+ const [showMap, setShowMap] = useState(false)
+
+  useEffect(() => {
+  //  InteractionManager.runAfterInteractions(() => setShowMap(true));
+  InteractionManager.runAfterInteractions(()=>setShowMap(true))
+  }, [latitude, longitude]);
+
   useEffect(() => {
     setColor('rgba(255, 0, 0, 0.2)');
-  }, []);
+   !region && getUserPosition()?.then(res => {
+      setRegion({
+        latitude: res?.latitude,
+        longitude: res?.longitude,
+        latitudeDelta: initialLatitudeDelta,
+        longitudeDelta: initialLongitudeDelta
+      })
+    })
+  }, [region]);
+
+if(!showMap && !region ){
+  return null
+}
 
   return (
     <View style={styles.mapView}>
       <View style={styles.mapContainer}>
-        <MapView
+        {region &&
+         <MapView
           initialRegion={region}
           provider={PROVIDER_GOOGLE}
+          
           style={styles.mapStyle}>
-          <Marker coordinate={userLocation} tracksViewChanges={false}>
+          <Marker coordinate={{latitude: region?.latitude, longitude: region?.longitude}} tracksViewChanges={false}>
             <UserLocation />
           </Marker>
           <Circle
-            center={userLocation}
+            center={{latitude: region?.latitude, longitude: region?.longitude}}
             radius={initialRadius}
             strokeColor={color}
             fillColor={color}
             zIndex={2}
             strokeWidth={1}
           />
-          {eventLocation.map(item => (
+          {params?.eventLocation.map(({latitude, longitude}, index) => (
             <Marker
-              coordinate={item.coordinate}
-              key={item.id}
-              tracksViewChanges={false}>
+              coordinate={{latitude, longitude}}
+              key={index}
+              tracksViewChanges={true}>
               <PinLocation />
             </Marker>
           ))}
-        </MapView>
+        </MapView>}
         <ButtonFilter onPress={onFillter} style={styles.filterButton} />
         <MapButton
           onBack={onPressBack}
@@ -74,7 +100,7 @@ const AllEventAroundYou = memo(() => {
           style={styles.mapBtnStyle}
         />
       </View>
-      <View style={styles.eventView}>
+      {/* <View style={styles.eventView}>
         <ScrollView
           showsHorizontalScrollIndicator={false}
           horizontal={true}
@@ -152,7 +178,7 @@ const AllEventAroundYou = memo(() => {
             isSmallItem={true}
           />
         </ScrollView>
-      </View>
+      </View> */}
     </View>
   );
 });

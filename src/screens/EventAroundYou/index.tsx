@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import {
   FlatList,
   ScrollView,
@@ -17,16 +17,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllReservedEvents, getAllAttendedEvents, getAllTrendingEvents, getAllSavedEvents } from "redux/events/events.actions";
 import keyExtractor from "ultis/keyExtractor";
 import isEmpty from "ultis/isEmpty";
-import { formatDateTime } from "ultis/functions";
+import { formatDateTime, splitLatLongStr } from "ultis/functions";
 
 const EventAroundYou = memo(() => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-      dispatch(getAllReservedEvents())
-      dispatch(getAllSavedEvents())
-  },[dispatch])
+  const [eventLocation, setEventLocation] = useState([])
+
+  useEffect(() => {
+ 
+    dispatch(getAllReservedEvents());
+    dispatch(getAllSavedEvents());
+  }, [dispatch]);
 
   const { all_attended_events } = useSelector<any, any>(
     (state) => state.events
@@ -35,13 +38,24 @@ const EventAroundYou = memo(() => {
 
   useFocusEffect(
     useCallback(() => {
+      if (all_attended_events?.length) {
+        const eventLocationList = all_attended_events?.map(
+          ({ lat_long }: { lat_long: string }) => splitLatLongStr(lat_long)
+        );
+        setEventLocation(eventLocationList);
+        return;
+      }
       dispatch(getAllAttendedEvents());
-    }, [dispatch])
+    }, [dispatch, all_attended_events])
   );
 
   const onPressAllEventAroundYou = useCallback(() => {
-    navigation.navigate(ROUTES.AllEventAroundYou);
+    navigation.navigate(ROUTES.AllEventAroundYou,{
+      eventLocation
+    });
   }, [navigation]);
+
+console.log("hey", eventLocation)
 
   const renderItem = useCallback(({ item }) => {
     const {
@@ -73,17 +87,18 @@ const EventAroundYou = memo(() => {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-        {/* <TouchableOpacity
+         <TouchableOpacity
           style={styles.headerForU}
           onPress={onPressAllEventAroundYou}
         >
 
           <IconAroundU />
           <Text style={styles.textHeaderForU}>
-            See All Event Around You - 10km
+            See All Event Around You 
           
           </Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
+        
         {
          !isEmpty(all_attended_events) ?
          <FlatList

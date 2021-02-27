@@ -29,7 +29,9 @@ const Login = memo(() => {
 
   const dispatch = useDispatch();
   const { authloading } = useSelector<any, any>((state) => state.loading);
+  const {all_errors} = useSelector<any, any>((state) => state.errors);
 
+  console.log({all_errors})
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;
@@ -37,6 +39,8 @@ const Login = memo(() => {
     Alert.alert("", "You have entered an invalid email address!");
     return false;
   };
+
+
 
   const check = () => {
     Alert.alert("", email);
@@ -74,6 +78,7 @@ const Login = memo(() => {
           placeholder="Email..."
           onChangeText={(data) => setemail(data)}
         />
+        {all_errors?.email && <Text>{all_errors?.email}</Text>}
         <TextInput
           style={styles.textInput}
           secureTextEntry={true}
@@ -81,6 +86,8 @@ const Login = memo(() => {
           textContentType="password"
           onChangeText={(data) => setpassword(data)}
         />
+        {all_errors && typeof(all_errors)==="string" ? <Text>{all_errors}</Text> : null}
+
         {/* <Text_Input
         secureText={false}
         placeholder="Pakistan..."
