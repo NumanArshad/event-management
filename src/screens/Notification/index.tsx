@@ -1,5 +1,5 @@
 import React, {memo, useCallback, useEffect, useState} from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, StyleSheet, Text} from 'react-native';
 import NotificationMessage from 'screens/Notification/components/NotificationMessage';
 import NotificationEvent from 'screens/Notification/components/NotificationEvent';
 import keyExtractor from 'ultis/keyExtractor';
@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAuthNotifications } from 'redux/notifications/notifications.actions';
 import { getUsersbyDocRefList } from 'redux/users/users.actions';
 import dayjs from 'dayjs';
-import { Text } from 'react-native-svg';
 var relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
 
@@ -88,11 +87,13 @@ const Notification = memo(() => {
 
   useEffect(() => {
     const docIdList = all_notifications?.map(
-      ({ sendDocId }: { sendDocId: any }) => sendDocId
+      ({ senderDocId }: { senderDocId: any }) => senderDocId
     );
 
     getUsersbyDocRefList(docIdList, setNotificationUsers);
   }, [all_notifications]);
+
+  //console.log("notifoicayion users are",all_notifications, notificationUsers )
 
   //console.log("my notification are",all_notifications, notificationUsers )
   
@@ -140,17 +141,17 @@ const Notification = memo(() => {
       imageEvent,
       event,
     } = item;
-    return type === "friendRequest" ? (
+    return ["friendRequest", "groupInvite"].includes(type) ? (
       <NotificationMessage
         avatar={data[index]?.avatar}
         userName={notificationUsers[index]?.first_name}
-        message={"send to friend request"}
+        message={type}
         time={dayjs.unix(all_notifications[index]?.createdAt?.seconds).format("DD/MM/YYYY")}
         un_Read={false}
       />
     ) : (
       <NotificationEvent
-        avatar={avatar}
+        avatar={data[index]?.avatar}
         title={title}
         imageEvent={imageEvent}
         event={event}

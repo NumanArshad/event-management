@@ -23,10 +23,9 @@ import {
 } from "redux/users/users.actions";
 import { useDispatch, useSelector } from "react-redux";
 import FriendRequest from "screens/FriendRequest";
-import {
-  sendNotification,
-  deleteNotification,
-} from "redux/notifications/notifications.actions";
+import { sendNotification, deleteNotification } from "redux/notifications/notifications.actions";
+import { noFoundImg } from "ultis/constants";
+import { getImage } from "ultis/functions";
 
 interface Props {
   // user_id: any;
@@ -36,13 +35,8 @@ interface Props {
   actionButton?: string;
 }
 
-const UserItem = memo((props: any) => {
-  // const [follow, setFollow] = useState(false);
-  // const onPress = useCallback(() => {
-  //   setFollow(!follow);
-  //   console.log("ID CLICKED", props.id);
-  //   // addFriend(props.id);
-  // }, [follow]);
+const UserItem = (props: any) => {
+
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
@@ -66,6 +60,30 @@ const UserItem = memo((props: any) => {
       user_doc_id: login_user_doc,
     },
   } = useSelector<any, any>((state) => state?.auth);
+
+  const handleItemPress = () => {
+    props.isGroupItem ?
+    handleGroupNavigation() :
+    onPeopleProfile();
+  }
+
+  const handleGroupNavigation = () => {
+
+    const filterAuthUser = props.members.filter((docId:string) => docId!==login_user_doc);
+
+    navigation.navigate(
+      ROUTES.Chat, {
+        group:{
+          name: user_name,
+          image,
+          members: filterAuthUser
+        },
+        chatType: "groupChat",
+        conversationId: id,
+        eventShareStatus: props.eventShareStatus
+      }
+    )
+  }
 
   const friendRequestStatus = () => {
     const { status = "rejected" } =
@@ -91,7 +109,7 @@ const UserItem = memo((props: any) => {
     friendRequestStatus()?.isRejected
       ? sendNotification({
           receipentDocId: id,
-          sendDocId: login_user_doc,
+          senderDocId: login_user_doc,
           type: "friendRequest",
           createdAt: new Date(),
         })
@@ -127,12 +145,14 @@ const UserItem = memo((props: any) => {
         )
       );
     }
+
+    deleteNotification(id, login_user_doc, 'friendRequest')
   };
 
   // conpsole.log("people is", userInfo);
   return (
-    <TouchableOpacity onPress={onPeopleProfile} style={styles.card}>
-      <Image style={styles.image} source={image} />
+    <TouchableOpacity onPress={handleItemPress} style={styles.card}>
+      <Image style={styles.image} source={{uri: getImage(image)}} />
       <View style={styles.txtField}>
         <Text style={styles.txtName}>{user_name}</Text>
         {user_type && <Text style={styles.txtNumberFollower}>{user_type}</Text>}
@@ -178,7 +198,7 @@ const UserItem = memo((props: any) => {
       ) : null}
     </TouchableOpacity>
   );
-});
+};
 
 export default UserItem;
 
@@ -192,6 +212,9 @@ const styles = StyleSheet.create({
   },
   image: {
     marginHorizontal: 0.04 * width_screen,
+    width: width_screen * 0.15,
+    height: height_screen * 0.07,
+    borderRadius: 100
   },
   txtName: {
     fontFamily: FONTS.Medium,

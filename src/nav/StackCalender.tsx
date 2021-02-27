@@ -7,6 +7,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import SvgHeaderSearch from "svgs/SvgHeaderSearch";
 import { useNavigation } from "@react-navigation/native";
 import EvezNews from "screens/EvezNews";
+import NotificationRightHeader from "components/NotificationRightHeader";
 
 const Stack = createStackNavigator();
 const StackCalender = memo(() => {
@@ -19,6 +20,8 @@ const StackCalender = memo(() => {
       screenOptions={{
         headerBackground: headerBackground,
         headerTintColor: "#FFF",
+        headerRight: () => <NotificationRightHeader />
+
       }}
     >
       <Stack.Screen
@@ -31,7 +34,7 @@ const StackCalender = memo(() => {
           //       <SvgHeaderSearch />
           //     </TouchableOpacity>
           //   ),
-          headerTitleAlign: "center",
+         // headerTitleAlign: "center",
         }}
       />
     </Stack.Navigator>

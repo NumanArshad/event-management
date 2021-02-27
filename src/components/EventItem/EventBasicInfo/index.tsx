@@ -12,6 +12,7 @@ import ROUTES from "ultis/routes";
 import isEmpty from "ultis/isEmpty";
 import { getDistanceByLatLong, splitLatLongStr } from "ultis/functions";
 import dayjs, { Dayjs } from "dayjs";
+import CustomSkeleton from "components/SkeletonPlaceholder";
 
 interface EventBasicInfoProps {
   eventId?: number;
@@ -22,17 +23,18 @@ interface EventBasicInfoProps {
   eventDateTime?:  string;
   colorAttending?: string;
   isSmallItem?: boolean;
+  loadFlag?:boolean
 }
 
 const EventBasicInfo = memo((props: EventBasicInfoProps) => {
   let color;
  
-  const colorTextLocation = props.colorAttending || "#7F8FA6";
+  const colorTextLocation = props?.colorAttending || "#7F8FA6";
   const textInfo = [styles.textLocation, { color: color }];
   const navigation = useNavigation();
   const onAttending = () => {
     navigation.navigate(ROUTES.ListAttending,{
-      eventId: props.eventId
+      eventId: props?.eventId
     });
   };
 
@@ -40,41 +42,49 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
 
   return (
     <View style={styles.container}>
-      {props.location ? (
-        <View style={styles.location}>
-          <View style={styles.flexRow}>
-            <Location />
+      <View style={styles.location}>
+        <View style={styles.flexRow}>
+          {props?.location ? <Location /> : null}
+          <CustomSkeleton style={[styles.textLocation, { width: width_screen * 0.55, height: 15 }]}
+          loadFlag={props?.loadFlag}>
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
-              {props.location}
+              {props?.location}
             </Text>
-          </View>
-          <Text style={[styles.textTag, { color: colorTextLocation }]}>
-            {getDistanceByLatLong(latitude, longitude)} km
-          </Text>
+          </CustomSkeleton>
         </View>
-      ) : null}
-      {props.eventDateTime ? (
-        <View style={styles.location}>
-          <View style={styles.flexRow}>
-            <SvgEventTime />
-            <Text style={[styles.textLocation, { color: colorTextLocation }]}>
-            {props.eventDateTime}
-            </Text>
-          </View>
-        </View>
-      ) : null}
+        <CustomSkeleton style={[styles.textTag, {  width: width_screen * 0.20, height: 10 }]}
+        loadFlag={props?.loadFlag}>
+        <Text style={[styles.textTag, { color: colorTextLocation }]}>
+          {getDistanceByLatLong(latitude, longitude)} km
+        </Text>
+        </CustomSkeleton>
+      
+      </View>
 
-      {props.currentAttending && (
-        <View style={styles.location}
-        onTouchStart={onAttending}>
-          <View style={styles.flexRow}>
-            <TicketIcon />
+      <View style={styles.location}>
+        <View style={styles.flexRow}>
+          {props?.eventDateTime ? <SvgEventTime /> : null}
+          <CustomSkeleton style={[styles.textLocation, { width: width_screen * 0.45, height: 10 }]}
+          loadFlag={props?.loadFlag}>
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
-              {props.currentAttending} Attendees
+              {props?.eventDateTime}
             </Text>
+          </CustomSkeleton>
+        </View>
+      </View>
+
+        <View style={styles.location} onTouchStart={onAttending}>
+          <View style={styles.flexRow}>
+            {props?.currentAttending ? <TicketIcon /> : null}
+            <CustomSkeleton loadFlag={props?.loadFlag}>
+            <Text style={[styles.textLocation, { color: colorTextLocation }]}>
+              {props?.currentAttending} {props?.currentAttending && `Attendees`}
+            </Text>
+            </CustomSkeleton>
+          
           </View>
         </View>
-      )}
+    
     </View>
   );
 });

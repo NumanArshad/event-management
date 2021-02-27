@@ -17,7 +17,7 @@ const MayBeYouKnow = memo(() => {
     ?.filter(({ status }: {status: string}) => status === "pending")
     ?.map(({ user_doc_id }:{user_doc_id: string}) => user_doc_id);
 
-    console.log("des is", destReqDocId)
+  //  console.log("des is", destReqDocId)
 
   useFocusEffect(
     useCallback(() => {
@@ -29,7 +29,7 @@ const MayBeYouKnow = memo(() => {
     }, [friendRequests])
   );
 
-  console.log("user are ", users, friends, friendRequests);
+//  console.log("user are ", users, friends, friendRequests);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -39,7 +39,7 @@ const MayBeYouKnow = memo(() => {
           //@ts-ignore
           //  loginUser={{ user_doc_id, user_id }}
           {...user}
-          image={require("assets/Followers/img.jpg")}
+        //  image={require("assets/Followers/img.jpg")}
           actionButton="addFriend"
         />
       ))}

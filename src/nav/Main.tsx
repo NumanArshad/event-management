@@ -6,6 +6,7 @@ import { Alert, StatusBar } from "react-native";
 import { getUserSessions } from "redux/auth/auth.actions";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserPosition } from "ultis/functions";
+import { getAuthUserObserver } from "redux/users/users.actions";
 
 const Main = memo(() => {
 
@@ -13,7 +14,8 @@ const Main = memo(() => {
   const { is_authenticated } = useSelector<any, any>((state) => state.auth);
 
   useEffect(() => {
-    is_authenticated ? getUserPosition() : dispatch(getUserSessions());
+   (async() => (is_authenticated ? await getUserPosition() : dispatch(getUserSessions())))();
+    is_authenticated && dispatch(getAuthUserObserver());
   }, [dispatch, is_authenticated]);
 
   return (

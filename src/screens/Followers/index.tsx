@@ -5,7 +5,7 @@ import UserItem from 'components/UserItem';
 const Followers = memo(() => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <UserItem
+      {/* <UserItem
         image={require('assets/Followers/img.jpg')}
         name={'Ethel Casey'}
         numberFollower={'750'}
@@ -39,7 +39,7 @@ const Followers = memo(() => {
         image={require('assets/Followers/img.jpg')}
         name={'Sara Herrera'}
         numberFollower={'593'}
-      />
+      /> */}
     </ScrollView>
   );
 });

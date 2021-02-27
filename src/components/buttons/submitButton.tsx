@@ -15,13 +15,15 @@ interface ButtonFilterProps {
   onPress: () => void;
   text: string;
   btnStyle?: ViewStyle;
+  isDisabled: Boolean
 }
 
 const SubmitButton = memo(
-  ({ onPress, text, btnStyle = styles.submitBtn }: ButtonFilterProps) => {
+  ({ onPress, text, btnStyle = styles.submitBtn, isDisabled = false }: ButtonFilterProps) => {
     const { loading } = useSelector<any, any>((state) => state.loading);
     return (
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={onPress}
+      disabled={isDisabled}>
         <LinearGradient
           colors={["#ED3269", "#F05F3E"]}
           start={{ x: 0, y: 1 }}

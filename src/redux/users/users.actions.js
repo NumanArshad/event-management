@@ -13,6 +13,8 @@ import {
 } from "redux/auth/auth.actions";
 import FriendList from "screens/FriendList";
 import isEmpty from "ultis/isEmpty";
+import { alertMessage } from "ultis/alertToastMessages";
+import { stopLoading } from "redux/loading/loading.actions";
 
 const userCollectionRef = firebase.firestore().collection("users");
 
@@ -33,12 +35,45 @@ export const getAllUsers = (callBack) => {
   );
 };
 
+////Run when other user send friend request or accept/reject
+export const getAuthUserObserver = () => (dispatch, getState) => {
+  const {login_Session: {user_doc_id}} = getState()?.auth
+
+  userCollectionRef.doc(user_doc_id).onSnapshot(snapshot => {
+    ////console.log("auth updated is here", snapshot.data())
+    dispatch(updateAuthUser(snapshot.data()));
+  })
+}
+
+///Update receipent user added in group 'groups field by transaction///
+export const receipentTransactions = (users, groupId) => {
+
+  ////console.log("recepient params is ", users, groupId);
+
+  firebase.firestore().runTransaction(transaction => {
+    users.forEach(userId => {
+      const userDocRef = userCollectionRef.doc(userId);
+      transaction.get(userDocRef).then(userInfo => {
+        let { groups } = userInfo.data();
+        //console.log("before update", groups, groupId)
+        groups = [...groups, groupId];
+        //console.log("after update", groups, groupId)
+
+        userDocRef.update({ groups });
+      })
+    })
+    return Promise.resolve();
+  })
+    .then(res => alertMessage("all transaction updated successfully!"))
+    .catch(error => alertMessage(`error in updated transaction is ${error}`))
+}
+
 export const getUsersbyDocRefList = (
   userDocListIds,
   callBack,
   selectionBehaviour = "in"
 ) => {
-  //console.log("frine id are", fiendsListIds);
+  ////console.log("frine id are", fiendsListIds);
   (selectionBehaviour === "in" && !userDocListIds?.length)
     ? callBack([])
     : userCollectionRef
@@ -51,7 +86,7 @@ export const getUsersbyDocRefList = (
               ...res?.data(),
             });
           });
-          console.log("userdoc is", userDocListIds, selectionBehaviour);
+    console.log("userdoc is", userDocListIds, selectionBehaviour, usersList);
           callBack(usersList);
         });
 };
@@ -80,13 +115,16 @@ export const updateUser = (payload, updateStatus) => (dispatch, getState) => {
     login_Session: { user_doc_id },
   } = getState()?.auth;
 
-  console.log("collection is", user_doc_id, payload, updateStatus)
+  //console.log("collection is", user_doc_id, payload, updateStatus)
 
   userCollectionRef
     .doc(user_doc_id)
     .update(payload)
     .then((res) => {
-      updateStatus === 'profileUpdated' && dispatch(updateAuthUser(payload));
+      updateStatus === 'profileUpdated' ? 
+      dispatch(updateAuthUser(payload)) :
+      dispatch(stopLoading());
+
     });
 };
 
@@ -100,12 +138,12 @@ export const getSingleUser = (user_id , isAuthCallBack) => {
     .then((res) => {
       let userInfo = {};
 
-   //   console.log("my user is ", res.docs)
+   //   //console.log("my user is ", res.docs)
       res.forEach((payload) => {
         
         userInfo = { ...payload.data(), user_doc_id: payload.id };
       });
-      console.log("my info us", userInfo)
+      //console.log("my info us", userInfo)
       isAuthCallBack && isAuthCallBack(userInfo, res.docs?.length );
     });
 };
@@ -117,14 +155,14 @@ export const updateFriendRequest = (
   requestReceipentDocId,
   friendRequests
 ) => {
-  console.log("param is ", requestReceipentDocId, friendRequests);
+  //console.log("param is ", requestReceipentDocId, friendRequests);
   userCollectionRef
     .doc(requestReceipentDocId)
     .update({
       friendRequests,
     })
     .then((res) => {
-      console.log("very good");
+      //console.log("very good");
     });
 };
 
@@ -135,7 +173,7 @@ export const addAuthAsFriend = (userDocId, friends) => {
       friends
     })
     .then((res) => {
-      console.log("very good added ");
+      //console.log("very good added ");
     });
 };
 

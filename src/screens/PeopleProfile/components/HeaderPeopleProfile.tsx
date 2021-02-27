@@ -6,6 +6,7 @@ import FONTS from "ultis/fonts";
 import SvgArrDown from "svgs/SvgArrDown";
 import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
+import { useSelector } from "react-redux";
 
 interface Props {
   coverImage: any;
@@ -21,16 +22,27 @@ interface Props {
 
 const HeaderPeopleProfile = memo((props: Props) => {
 
+  const {login_Session: {
+    user_id: authUserId,
+    user_doc_id: authDocId
+  }} = useSelector(state => state?.auth);
+
   //console.log("user id", props?.user_id)
   const navigation = useNavigation();
   const onChat = useCallback(() => {
+
+    ///compare id's to preserve same pattern for private chat////
+ const conversationId =
+    authUserId < props.user_id
+      ? `${authDocId}_${props.user_doc_id}`
+      : `${props.user_doc_id}_${authDocId}`;
+
     navigation.navigate(ROUTES.Chat, {
-      receiverUserInfo: {
-        user_name: props.userName,
-        user_id: props.user_id,
-        user_doc_id: props.user_doc_id,
+      group: {
+        name: props.userName,
         image: props.coverImage,
       },
+      conversationId 
     });
   }, [navigation]);
   // const onFollower = useCallback(() => {

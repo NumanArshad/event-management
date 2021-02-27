@@ -10,6 +10,7 @@ import SvgOnLocation from "svgs/ProfileSetting/SvgOnLocation";
 import SvgAboutUs from "svgs/ProfileSetting/SvgAboutUs";
 import SvgFeedBack from "svgs/ProfileSetting/SvgFeedBack";
 import SvgUpdate from "svgs/ProfileSetting/SvgUpdate";
+import SvgLogout from "svgs/ProfileSetting/SvgLogout";
 import Item from "screens/Settings/components/Item";
 import { width_screen } from "ultis/dimensions";
 import { useDispatch } from "react-redux";
@@ -24,23 +25,23 @@ const Settings = memo(() => {
     <View style={styles.container}>
       <Item
         svgItem={<SvgMail />}
-        title={"Change Email"}
+        title={"Privacy Policy"}
         txt={"lehieuds@gmail.com"}
         svgBack={<SvgBack />}
       />
       <Item
         svgItem={<SvgCity />}
-        title={"Change City"}
+        title={"Terms and conditions"}
         txt={"London"}
         svgBack={<SvgBack />}
       />
-      <Item
+      <Item handlePress={()=>dispatch(logout())}
         svgItem={<SvgHashTag />}
-        title={"8 hashtag"}
-        txt={"London"}
+        title={"Logout"}
+        txt={"Exit"}
         svgBack={<SvgBack />}
       />
-      <Item svgItem={<SvgCredit />} title={"Delete Payment History"} />
+      {/* <Item svgItem={<SvgCredit />} title={"Delete Payment History"} />
       <Item
         svgItem={<SvgNotification />}
         title={"Enable Notification"}
@@ -61,7 +62,7 @@ const Settings = memo(() => {
         svgBack={<SvgBack />}
       />
       <Item svgItem={<SvgUpdate />} title={"Check For Update"} />
-      <Text style={styles.txtVersion}>Evez version 2.0</Text>
+      <Text style={styles.txtVersion}>Evez version 2.0</Text> */}
     </View>
   );
 });

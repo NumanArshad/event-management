@@ -15,13 +15,14 @@ interface Props {
   txt?: string;
   svgBack?: any;
   switch?: boolean;
+  handlePress?:()=>void
 }
 
 const Item = memo((props: Props) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   return (
-    <TouchableOpacity style={styles.setting}>
+    <TouchableOpacity style={styles.setting} onPress={props.handlePress}>
       <View style={styles.svgItem}>{props.svgItem}</View>
       <View style={{ flex: 1 }}>
         <Text style={styles.txtTitle}>{props.title}</Text>

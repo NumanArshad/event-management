@@ -1,29 +1,35 @@
 import dayjs from "dayjs";
+import { baseImageUrl, noFoundImg } from "./constants";
 
 export let [currentLat, currentLong] = [null, null];
 
 export const getUserPosition = () => {
-  navigator.geolocation.getCurrentPosition(
-    //@ts-ignore
-    (position) => {
-      const location = JSON.stringify(position);
-      console.log("my location is", location);
-      const {
-        coords: { latitude, longitude },
-      } = position;
-      [currentLat, currentLong] = [latitude, longitude];
-    },
-    (error) => {
-      console.log(error.message);
-      return Promise.reject(error);
-    },
-    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-  );
+  return new Promise((resolve, reject)=>{
+    navigator.geolocation.getCurrentPosition(
+      //@ts-ignore
+      (position) => {
+        const location = JSON.stringify(position);
+        console.log("my location is", location);
+        const {
+          coords: { latitude, longitude },
+        } = position;
+        [currentLat, currentLong] = [latitude, longitude];
+       latitude && resolve({latitude, longitude})
+        // {latitude, longitude}
+      },
+      (error) => {
+        console.log("in user location",error.message);
+        return reject(error);
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+  })
+   
 };
 
 export const getEventTimeDown = (dateTime) => {
   const eventDateTime = dayjs(dateTime);
-
+  
   const current = dayjs().format("MM/DD/YYYY HH:mm");
   const mins = eventDateTime.diff(current, "minutes", true);
   const totalHours = parseInt(mins / 60);
@@ -117,3 +123,8 @@ export const getDistanceByLatLong = (
     return Math.ceil(dist);
   }
 };
+
+export const getImage = image => {
+  const imagePath = image?.includes("firebasestorage") ? `` : baseImageUrl;
+  return (!image || image.includes('default')) ? noFoundImg : `${imagePath}${image}`
+}

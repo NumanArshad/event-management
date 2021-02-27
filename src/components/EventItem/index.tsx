@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import EventTimeCountDown from "components/EventTimeCountDown";
 import { compareDateTime, isEventInProgress } from "ultis/functions";
 import dayjs from "dayjs";
+import CustomSkeleton from "components/SkeletonPlaceholder";
 
 interface EventItemProps {
   thumbnail: any;
@@ -39,6 +40,7 @@ interface EventItemProps {
   duration?: string;
   colorAttending?: string;
   isSmallItem?: boolean;
+  loadFlag?: boolean
 }
 
 const EventItem = memo((props: EventItemProps) => {
@@ -100,31 +102,36 @@ const EventItem = memo((props: EventItemProps) => {
       activeOpacity={0.8}
     >
       <View style={styles.viewThumbnail}>
-        <Image
-          source={props.thumbnail}
-          style={[styles.thumbnail, thumbnailDimension]}
-        />
-        <TouchableOpacity style={styles.iconUnSave} onPress={onPressSave}>
-          {isSave ? <SvgSaved /> : <IconUnSave />}
-        </TouchableOpacity>
-
-        {(compareDateTime(props.eventDateTime)?.isAfter 
-        ) && (
-          <EventTimeCountDown
-            eventDateTime={props.eventDateTime}
-            id={props.id}
+        <CustomSkeleton loadFlag={props.loadFlag}>
+          <Image
+            source={props.thumbnail}
+            style={[styles.thumbnail, thumbnailDimension]}
           />
+        </CustomSkeleton>
+
+        {!props.isSmallItem && (
+          <TouchableOpacity style={styles.iconUnSave} onPress={onPressSave}>
+            {isSave ? <SvgSaved /> : <IconUnSave />}
+          </TouchableOpacity>
         )}
+
+        {compareDateTime(props.eventDateTime)?.isAfter &&
+          !props.isSmallItem && (
+            <EventTimeCountDown
+              eventDateTime={props.eventDateTime}
+              id={props.id}
+              loadFlag={props.loadFlag}
+            />
+          )}
       </View>
-      
-    
-      
+
       <EventName
         tag={props.tag}
         eventName={props.eventName}
         rate={props.rate}
         reviewTimes={props.reviewTimes}
         isSmallItem={props.isSmallItem}
+        loadFlag={props.loadFlag}
       />
       <EventBasicInfo
         currentAttending={props.currentAttending}
@@ -133,6 +140,8 @@ const EventItem = memo((props: EventItemProps) => {
         eventDateTime={props.eventDateTime}
         eventId={props.id}
         isSmallItem={props.isSmallItem}
+        loadFlag={props.loadFlag}
+
       />
     </TouchableOpacity>
   );

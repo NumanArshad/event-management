@@ -29,7 +29,7 @@ const Friendlist = memo(() => {
         <UserItem
           key={key}
           {...user}
-          image={require("assets/Followers/img.jpg")}
+//          image={avatar}
         />
       ))}
     </ScrollView>
