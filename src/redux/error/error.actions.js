@@ -11,11 +11,10 @@ export const errorActions = (errorResponse) => (dispatch) => {
   } else if (status === 422) {
     if (data?.errors) {
       // obj[Object.keys(obj)[0]] return first key value
-      //Object.keys(data?.errors)[0] return first key
-      alertMessage(data?.errors[Object.keys(data?.errors)[0]]);
+     console.log(data?.errors[Object.keys(data?.errors)[0]]);
     } else {
-      alertMessage(data.message);
-      ////console.log("ERR", data);
+    //  alertMessage(data.message);
+    console.log("ERR", data);
     }
   } else {
     ////console.log("no found message is", data);

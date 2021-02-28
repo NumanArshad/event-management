@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "245895412232",
+    "project_id": "evezapp",
+    "storage_bucket": "evezapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245895412232:android:6f6c94515a315c5e9aafbd",
+        "android_client_info": {
+          "package_name": "com.numanarshad.dev.EventManagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245895412232-s7c6h9g881eoscran060cqqho01u90e8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlafFL1dsd4B9IsxLnG4fRN9T7IolOWdM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245895412232-s7c6h9g881eoscran060cqqho01u90e8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

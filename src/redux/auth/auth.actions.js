@@ -150,24 +150,26 @@ export const updateAuthUser = (payload) => (dispatch) => {
 };
 
 export const isAuthenticated = (payload) => (dispatch) => {
-  // (async () => {
+  // (async (payload) => {
   //   try {
-  //     const token = await registerForAsyncPushToken();
-  //     const updatedTokenList = payload?.deviceToken?.includes(token) ?
-  //       payload?.deviceToken : [...payload?.deviceToken, token];
-
-       dispatch({
-        type: IS_AUTHENTICATED,
-        payload,
-      });
-      dispatch(updateUser({ isOnline: true, deviceToken: updatedTokenList }))
-    // }
-    // catch (error) {
-    // console.log("fetch token error is " + error);
-    // }
+  //     toastMessages("iif called")
+  // const token = await registerForAsyncPushToken();
+  // const updatedTokenList = payload?.deviceToken?.includes(token) ?
+  //   payload?.deviceToken : [...payload?.deviceToken, token];
+  registerForAsyncPushToken().then(token => {
+  //  console.log({payload})
+    // const updatedTokenList = payload?.deviceToken?.includes(token) ?
+    //   payload?.deviceToken : [...payload?.deviceToken, token];
+    dispatch({
+      type: IS_AUTHENTICATED,
+      payload,
+    });
+    dispatch(updateUser({ isOnline: true }))
+  }).catch(error => {
+    console.log("errir in fetch token is" + error)
+  }).finally(onFinall => {
     dispatch(stopAuthLoading());
-
-  // })()
+  })
 };
 
 export const unAuthorized = () => async(dispatch) => {
