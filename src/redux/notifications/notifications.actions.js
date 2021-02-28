@@ -26,7 +26,7 @@ export  async function registerForAsyncPushToken() {
       }
       token = (await Notifications.getDevicePushTokenAsync()).data;
   
-//    alertMessage(`token i s, ${token}`)
+  //  alertMessage(`token i s, ${token}`)
        if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
@@ -50,15 +50,16 @@ export  async function registerForAsyncPushToken() {
 // }
 
 export const sendPushNotification = () => (dispatch, getState) => {
-  const {login_Session:{device_token}} = getState()?.auth;
+  const {login_Session:{deviceToken}} = getState()?.auth;
+
   fetch('https://fcm.googleapis.com/fcm/send', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `key=${device_token || `AAAAOUCCOgg:APA91bHj6-9xrOGKoCkKahgN_Fx4DZv_-lStCHMWZhMb2oyYaZodZn5TTX2eYZSORobCNBVCOZePEnH3SQBZf_nGWvE7v_sEnKx6JEeeffcPwnX9x9lbO_u82eNalkJ34unDCZ4aOU4i`}`,
+      Authorization: 'key=AAAAOUCCOgg:APA91bHj6-9xrOGKoCkKahgN_Fx4DZv_-lStCHMWZhMb2oyYaZodZn5TTX2eYZSORobCNBVCOZePEnH3SQBZf_nGWvE7v_sEnKx6JEeeffcPwnX9x9lbO_u82eNalkJ34unDCZ4aOU4i',
     },
     body: JSON.stringify({
-      to: 'eZ2FVei0TSag2Phc_BdOiP:APA91bF6Tsml__-Lu7Xmgdk8lQqK5JoqInVSE4T5iH18uWWqWcj9At3GPA3TObyGScoX2GiHEK07SopIyCvWOTBWqJ6Jwp98y8J5v49lrvrHQy0BWDJATyYXTCbjzfvwyDNEpGvGSpOJ',
+      to: deviceToken || 'eZ2FVei0TSag2Phc_BdOiP:APA91bF6Tsml__-Lu7Xmgdk8lQqK5JoqInVSE4T5iH18uWWqWcj9At3GPA3TObyGScoX2GiHEK07SopIyCvWOTBWqJ6Jwp98y8J5v49lrvrHQy0BWDJATyYXTCbjzfvwyDNEpGvGSpOJ',
       priority: 'normal',
       data: {
         experienceId: '@numanarshad.dev/evez_expo_20201116',
@@ -69,7 +70,7 @@ export const sendPushNotification = () => (dispatch, getState) => {
   })
   .then(
     res => { 
-    alertMessage(JSON.stringify(`send response is ", ${res}`));
+    console.log(JSON.stringify(`send response is ", ${res}`));
   }
   ).catch(error => {
     alertMessage(JSON.stringify(`send error is ", ${error}`));

@@ -133,8 +133,8 @@ const EvezTrending = memo(() => {
 
   return (
     <View style={styles.container}>
-      {/* <MyNotification /> */}
-      {/* <TouchableOpacity onPress={()=>dispatch(sendPushNotification())}>
+      {/* <MyNotification />
+      <TouchableOpacity onPress={()=>dispatch(sendPushNotification())}>
         <Text>
           send notufication
         </Text>
