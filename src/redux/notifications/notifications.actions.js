@@ -9,6 +9,7 @@ import { GET_ALL_NOTIFICATIONS } from "redux/actionTypes";
 const notificationCollectionRef = firebase.firestore().collection("notifications");
 
 export  async function registerForAsyncPushToken() {
+
     let token;
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(
@@ -23,9 +24,9 @@ export  async function registerForAsyncPushToken() {
         alertMessage("Notification permission denied by user");
         return;
       }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
+      token = (await Notifications.getDevicePushTokenAsync()).data;
   
-   // alertMessage(`token i s, ${token}`)
+//    alertMessage(`token i s, ${token}`)
        if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',

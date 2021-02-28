@@ -150,29 +150,22 @@ export const updateAuthUser = (payload) => (dispatch) => {
 };
 
 export const isAuthenticated = (payload) => (dispatch) => {
-  dispatch({
-    type: IS_AUTHENTICATED,
-    payload,
-  });
-  dispatch(updateUser({ isOnline: true }));
-  dispatch(stopAuthLoading());
-
   // (async () => {
   //   try {
   //     const token = await registerForAsyncPushToken();
   //     const updatedTokenList = payload?.deviceToken?.includes(token) ?
   //       payload?.deviceToken : [...payload?.deviceToken, token];
 
-  //      dispatch({
-  //       type: IS_AUTHENTICATED,
-  //       payload,
-  //     });
-  //     dispatch(updateUser({ isOnline: true, deviceToken: updatedTokenList }))
-  //   }
-  //   catch (error) {
-  //     console.log("fetch token error is " + error);
-  //   }
-  //   dispatch(stopAuthLoading());
+       dispatch({
+        type: IS_AUTHENTICATED,
+        payload,
+      });
+      dispatch(updateUser({ isOnline: true, deviceToken: updatedTokenList }))
+    // }
+    // catch (error) {
+    // console.log("fetch token error is " + error);
+    // }
+    dispatch(stopAuthLoading());
 
   // })()
 };
