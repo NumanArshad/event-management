@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import SearchBar from "components/SearchBar";
 import ListEvent from "screens/TabSearchEvents/components/ListEvent";
@@ -9,68 +9,64 @@ import UserItem from "components/UserItem";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { height_screen, width_screen } from "ultis/dimensions";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
+import { getAuthGroupsObserver } from "redux/groups/groups.actions";
+import { useDispatch } from "react-redux";
 
 const TabSearchEvents = memo(() => {
-  const [value, setValue] = useState("");
+
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  const {
+    params,
+  } = useRoute();
+
   const toCreateGroup = () => {
     navigation.navigate(ROUTES.CreateGroup);
   };
+  const [groupList, setGroupList] = useState(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getAuthGroupsObserver(setGroupList));
+    }, [dispatch])
+  );
+
+
+  console.log({groupList})
   return (
     <View style={styles.container}>
       <ScrollView>
-        <UserItem
-          image={require("assets/Followers/img.jpg")}
-          user_name="Group Name"
-          key={1}
-        />
-        <UserItem
-          image={require("assets/Followers/img.jpg")}
-          user_name="Group Name"
-          key={1}
-        />
-        <UserItem
-          image={require("assets/Followers/img.jpg")}
-          user_name="Group Name"
-          key={1}
-        />
-        <UserItem
-          image={require("assets/Followers/img.jpg")}
-          user_name="Group Name"
-          key={1}
-        />
-        <UserItem
-          image={require("assets/Followers/img.jpg")}
-          user_name="Group Name"
-          key={1}
-        />
-        <UserItem
-          image={require("assets/Followers/img.jpg")}
-          user_name="Group Name"
-          key={1}
-        />
-        <UserItem
-          image={require("assets/Followers/img.jpg")}
-          user_name="Group Name"
-          key={1}
-        />
-        <UserItem
-          image={require("assets/Followers/img.jpg")}
-          user_name="Group Name"
-          key={1}
-        />
-        <UserItem
-          image={require("assets/Followers/img.jpg")}
-          user_name="Group Name"
-          key={1}
-        />
-        <UserItem
-          image={require("assets/Followers/img.jpg")}
-          user_name="Group Name"
-          key={1}
-        />
+        {!groupList ? (
+          <Text>...loading</Text>
+        ) : !groupList?.length ? (
+          <Text>No group found</Text>
+        ) : (
+          groupList.map(
+            ({
+              image,
+              name,
+              members,
+              id,
+            }: {
+              image: string;
+              name: string;
+              members: string[]
+              id: string;
+            }) => 
+            <UserItem
+             image={image} 
+             user_name={name} 
+             key={id} 
+             id={id}
+             members={members}
+             isGroupItem
+            eventShareStatus={params?.eventShare}
+             />
+          )
+        )}
       </ScrollView>
       {/* <TouchableOpacity style={styles.iconPlus}> */}
       <Ionicons

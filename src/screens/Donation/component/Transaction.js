@@ -35,7 +35,7 @@ const Transaction = () => {
 
   useEffect(() => {
     getAllTransactions().then((res) => {
-      console.log("getAllTransactions", res.data);
+      //console.log("getAllTransactions", res.data);
       setallTransactions(res.data.data);
     });
   }, []);

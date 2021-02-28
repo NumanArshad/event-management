@@ -11,13 +11,16 @@ import FONTS from "ultis/fonts";
 import HourGlass from "svgs/HourGlass";
 import dayjs from "dayjs";
 import { getEventTimeDown } from "ultis/functions";
+import CustomSkeleton from "components/SkeletonPlaceholder";
+import { width_screen } from "ultis/dimensions";
 
 interface EventItemProps {
   id?: number;
   onPress?: () => void;
   eventDateTime?: string;
   isSmallItem?: boolean;
-  isDetail?: ViewStyle
+  isDetail?: ViewStyle;
+  loadFlag?: boolean
 }
 
 const EventTimeCountDown = memo((props: EventItemProps) => {
@@ -54,13 +57,18 @@ const EventTimeCountDown = memo((props: EventItemProps) => {
 
   const {days, hours, minutes, seconds} = timeCountData;
 
+  
+
   return (
-      <View style={props.isDetail || [styles.labelCountDown, countDownDimension]}>
+    <View style={props.isDetail || [styles.labelCountDown, countDownDimension]}>
+      <CustomSkeleton style={{width: width_screen * 0.40, height: 15}}
+      loadFlag={props.loadFlag}>
         <HourGlass />
         <Text style={styles.textCountDown}>
-          {`${days} days ${hours} hours ${minutes} minutes`}
+          {`${days ? days : ``} ${!days ? `` : days === 1 ? `day` : `days`} ${hours} hours ${minutes} minutes`}
         </Text>
-      </View>
+      </CustomSkeleton>
+    </View>
   );
 });
 

@@ -18,7 +18,7 @@ const FriendRequest = memo(() => {
       user_doc_id);
 
 
-   console.log("nice is", pendingRequests,friendRequests, users)
+   //console.log("nice is", pendingRequests,friendRequests, users)
   useFocusEffect(
     useCallback(() => {
       getUsersbyDocRefList(pendingRequests,  setUsers);
@@ -32,7 +32,7 @@ const FriendRequest = memo(() => {
         <UserItem
           key={key}
           {...user}
-          image={require("assets/Followers/img.jpg")}
+         // image={require("assets/Followers/img.jpg")}
           actionButton="friendRequest"
         />
       ))}

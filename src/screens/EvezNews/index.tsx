@@ -134,12 +134,12 @@ const EvezNews = memo(() => {
 
   const getDateConsole = (date) => {
     const d = dayjs(date).format("MM/DD/YYYY"); //02/14/2021
-    console.log("DATE ", d);
+    //console.log("DATE ", d);
     setdateChange(d);
     const result = all_reserved_events?.filter(
       (event) => event.event_date.toString() === d
     );
-    console.log("RESULT ON CLICK", result);
+  //  console.log("RESULT ON CLICK", result);
     setcheckEvent(result);
   };
 

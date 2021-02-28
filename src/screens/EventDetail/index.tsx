@@ -21,9 +21,7 @@ import {
   getBottomSpace,
   getStatusBarHeight,
 } from "react-native-iphone-x-helper";
-import EventItem from "components/EventItem";
 import ButtonLinear from "components/buttons/ButtonLinear";
-import HourGlass from "svgs/HourGlass";
 import SvgArrowBack from "svgs/EventDetail/SvgArrowBack";
 import IconShare from "svgs/IconShare";
 import IconUnSave from "svgs/IconUnSave";
@@ -50,16 +48,13 @@ import {
   isEventInProgress,
 } from "ultis/functions";
 import EventTimeCountDown from "components/EventTimeCountDown";
-import dayjs from "dayjs";
 import { markAttendance } from "redux/attendEvent/attendEvent.actions";
 import {currentLat, currentLong} from "ultis/functions"
+import CustomSkeleton from "components/SkeletonPlaceholder";
 
 const EventDetail = memo(() => {
   const route = useRoute();
   const navigation = useNavigation();
-
-  console.log("lat is", currentLong)
-
   
   // @ts-ignore
   const data = route.params?.data;
@@ -123,8 +118,10 @@ const EventDetail = memo(() => {
   };
 
   const onDirection = useCallback(() => {
-    navigation.navigate(ROUTES.EventDetailMap);
-  }, []);
+    navigation.navigate(ROUTES.EventDetailMap,{
+      eventLocation: single_event?.lat_long
+    });
+  }, [single_event]);
 
   const onReview = useCallback(() => {
     navigation.navigate(ROUTES.EventDetailRateComment, {
@@ -149,6 +146,12 @@ const EventDetail = memo(() => {
      formatDateTime(single_event?.event_date, single_event?.start_time),
       single_event?.duration
     )
+  
+  const handleNavGroupShare = () => {
+    navigation.navigate(ROUTES.TabSearchEvents, {
+      eventShare: true,
+    });
+  };
 
   const reserveAttendanceText =
       loading || isEmpty(single_event)
@@ -201,61 +204,56 @@ const EventDetail = memo(() => {
         {isEmpty(single_event) ? (
           <Text>...loading</Text>
         ) : (
-          <>
-            {isAfter && (
-              <EventTimeCountDown
-                id={data?.id}
-                eventDateTime={formatDateTime(
-                  single_event?.event_date,
-                  single_event?.start_time
-                )}
-                isDetail={styles.countDownView}
-              />
-            )}
-
-            <View style={styles.infoView}>
-              <EventName
-                eventName={single_event?.event_name}
-                tag={single_event?.type_name}
-              />
-              <EventBasicInfo
-                eventId={data?.id}
-                currentAttending={single_event?.participants}
-                distance={single_event?.lat_long}
-                eventDateTime={`${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`}
-              />
-            </View>
-          </>
+          isAfter && (
+            <EventTimeCountDown
+              id={data?.id}
+              eventDateTime={formatDateTime(
+                single_event?.event_date,
+                single_event?.start_time
+              )}
+              isDetail={styles.countDownView}
+            />
+          )
         )}
-        <RateDetail
-          eventId={data?.id}
-          onPress={onReview}
-          rate={single_event?.rating}
-          marginTop={32}
-        />
-        {/* <View style={styles.contentView}>
-          <Text style={styles.textTitle}>ABOUT</Text>
-          <Text style={styles.aboutContent}>
-            Why this party is for you {"\n"}
-            Let’s play the silent game, but this time you have to dance under
-            the stars with hundreds…
-          </Text>
-          <View style={styles.flexEnd}>
-            <TouchableOpacity style={styles.detailAboutBtn}>
-              <Text style={styles.textBtn}>Detail</Text>
-              <SvgArrowRight />
-            </TouchableOpacity>
-          </View>
-        </View> */}
+
+        <View style={styles.infoView}>
+          <EventName
+            eventName={single_event?.event_name}
+            tag={single_event?.type_name}
+            loadFlag={isEmpty(single_event)}
+          />
+          <EventBasicInfo
+            eventId={data?.id}
+            currentAttending={single_event?.participants || 0}
+            distance={single_event?.lat_long || ""}
+            eventDateTime={
+              !isEmpty(single_event) &&
+              `${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`
+            }
+            loadFlag={isEmpty(single_event)}
+          />
+        </View>
+
+        {single_event && (
+          <RateDetail
+            eventId={data?.id}
+            onPress={onReview}
+            rate={single_event?.rating}
+            marginTop={32}
+          />
+        )}
 
         {single_event && (
           <>
             <View style={styles.contentViewNoPadding}>
-              <Text style={[styles.textTitle, { paddingHorizontal: 24 }]}>
-                ENDORSE
-              </Text>
+              <CustomSkeleton>
+                <Text style={[styles.textTitle, { paddingHorizontal: 24 }]}>
+                  ENDORSE
+                </Text>
+              </CustomSkeleton>
+
               <UserItem
-                image={require("@assets/Followers/img.jpg")}
+                image={single_event?.image}
                 user_name={single_event?.sub_type_name}
               />
             </View>
@@ -279,11 +277,11 @@ const EventDetail = memo(() => {
                   distance={single_event?.lat_long}
                 />
               </View>
-              <MapLocation eventLocation={single_event?.lat_long} />
+              {/* <MapLocation eventLocation={single_event?.lat_long} /> */}
             </View>
           </>
         )}
-        
+
         {/* <View style={styles.contentView}>
           <Text style={styles.textTitle}>CONTACT</Text>
           <Text style={styles.aboutContent}>
@@ -336,7 +334,8 @@ const EventDetail = memo(() => {
         </View> */}
 
         {(isEmpty(single_event) ||
-          loading || isAfter ||
+          loading ||
+          isAfter ||
           is_event_in_progress) && (
           <View style={styles.buttonView}>
             <ButtonLinear
@@ -353,7 +352,7 @@ const EventDetail = memo(() => {
           <SvgArrowBack />
         </TouchableOpacity>
         <View style={styles.flexRow}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleNavGroupShare}>
             <IconShare />
           </TouchableOpacity>
           <TouchableOpacity
