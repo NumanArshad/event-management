@@ -36,16 +36,18 @@ const Profile = memo(() => {
     },
   } = useSelector((state) => state?.auth);
 
-  const {loading} = useSelector(state => state?.loading)
+  const { loading } = useSelector((state) => state?.loading);
 
-  console.log({  user_name,
+  console.log({
+    user_name,
     email: userEmail,
     first_name,
     last_name,
     contact,
-    image})
+    image,
+  });
 
-    console.log({image})
+  console.log({ image });
 
   const [email, setemail] = useState(userEmail);
   const [password, setpassword] = useState("");
@@ -55,7 +57,7 @@ const Profile = memo(() => {
   const [stripAccount, setstripAccount] = useState(stripe_account);
   const [phone, setphone] = useState(contact);
 
-  const {image: img, pickImage} = useImagePicker(image)
+  const { image: img, pickImage, uploadImage } = useImagePicker(image);
 
   const { navigate } = useNavigation();
   const [preLoader, setpreLoader] = useState(false);
@@ -72,7 +74,7 @@ const Profile = memo(() => {
   const check = () => {
     Alert.alert("", email);
   };
-  const handleProfile = () => {
+  const handleProfile = async () => {
     if (
       email != "" &&
       name != "" &&
@@ -82,28 +84,34 @@ const Profile = memo(() => {
       phone != ""
     ) {
       if (ValidateEmail()) {
-        setpreLoader(true);
-        const formData = new FormData();
-        formData.append("email", email);
-        formData.append("name", name);
-        formData.append("first_name", firstName);
-        formData.append("last_name", lastName);
-        formData.append("stripe_account", stripAccount);
-        formData.append("contact", phone);
-        formData.append("image", img)
+        try {
+          // setpreLoader(true);
+          if(image!==img){
+            var downloadUrl = await uploadImage();
 
-        const jsonData = {
-          email,
-          first_name: firstName,
-          last_name: lastName,
-          user_name: name,
-          stripe_account_id: stripAccount,
-          contact: phone,
-          image: img
-        };
-        // formData.append("image", email);
-        ////console.log("FORMDATA:", formData);
-        dispatch(updateProfile(formData, jsonData));
+          }
+          const formData = new FormData();
+          formData.append("email", email);
+          formData.append("name", name);
+          formData.append("first_name", firstName);
+          formData.append("last_name", lastName);
+          formData.append("stripe_account", stripAccount);
+          formData.append("contact", phone);
+          formData.append("image", downloadUrl ?? image);
+
+          const jsonData = {
+            email,
+            first_name: firstName,
+            last_name: lastName,
+            user_name: name,
+            stripe_account_id: stripAccount,
+            contact: phone,
+            image: downloadUrl ?? image,
+          };
+          dispatch(updateProfile(formData, jsonData));
+        } catch (error) {
+          console.log("error in uploading image is", error);
+        }
       }
     } else {
       Alert.alert("", "Kindly Fill All The Inputs.");
@@ -112,19 +120,16 @@ const Profile = memo(() => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.container}>
-     <View >
-        <Image
-          source={{ uri: getImage(img) }}
-          style={styles.imageProfile}
-        />
-        <Ionicons
-          name="create-outline"
-          size={18}
-          color="black"
-          style={styles.iconEdit}
-          onPress={pickImage}
-        />
-      </View>
+        <View>
+          <Image source={{ uri: getImage(img) }} style={styles.imageProfile} />
+          <Ionicons
+            name="create-outline"
+            size={18}
+            color="black"
+            style={styles.iconEdit}
+            onPress={pickImage}
+          />
+        </View>
 
         <TextInput
           style={styles.textInput}
@@ -149,7 +154,7 @@ const Profile = memo(() => {
           placeholder="Strip Account Number..."
           onChangeText={(data) => setstripAccount(data)}
           value={stripAccount}
-        //  secureTextEntry={true}
+          //  secureTextEntry={true}
         />
         <TextInput
           style={styles.textInput}
