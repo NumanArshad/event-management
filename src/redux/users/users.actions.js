@@ -115,7 +115,7 @@ export const updateUser = (payload, updateStatus) => (dispatch, getState) => {
     login_Session: { user_doc_id },
   } = getState()?.auth;
 
-  //console.log("collection is", user_doc_id, payload, updateStatus)
+  // console.log("collection is", user_doc_id, payload, updateStatus)
 
   userCollectionRef
     .doc(user_doc_id)
@@ -143,8 +143,8 @@ export const getSingleUser = (user_id , isAuthCallBack) => {
         
         userInfo = { ...payload.data(), user_doc_id: payload.id };
       });
-      //console.log("my info us", userInfo)
-      isAuthCallBack && isAuthCallBack(userInfo, res.docs?.length );
+      // console.log("my info us", userInfo)
+      isAuthCallBack?.(userInfo, res.docs?.length );
     });
 };
 

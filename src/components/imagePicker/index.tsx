@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Alert, Platform } from "react-native";
 
-const useImagePicker = () => {
-  const [image, setImage] = useState("");
+const useImagePicker = (defaultImage = "") => {
+  const [image, setImage] = useState(defaultImage);
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {

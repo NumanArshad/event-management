@@ -12,6 +12,7 @@ import StackSearchEvents from "nav/StackSearchEvents";
 import EvezNews from "screens/EvezNews";
 import StackProfile from "nav/StackProfile";
 import StackCalender from "./StackCalender";
+import Color from "ultis/color";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +21,7 @@ const MainBottomTab = () => {
     <Tab.Navigator
       tabBarOptions={{
         showLabel: false,
-        activeTintColor: "#ED3269",
+        activeTintColor: Color.GRAD_COLOR_3,
         inactiveTintColor: "#353B48",
       }}
     >

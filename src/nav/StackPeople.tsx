@@ -27,11 +27,7 @@ const StackPeople = memo(() => {
         options={{
           title: "People",
           headerRight: () => (
-            <NotificationRightHeader>
-              <TouchableOpacity style={styles.search} onPress={onSearchPeople}>
-                <SvgHeaderSearch />
-              </TouchableOpacity>
-            </NotificationRightHeader>
+            <NotificationRightHeader/>
           ),
         }}
       />

@@ -4,6 +4,8 @@ import FONTS from "ultis/fonts";
 import { width_screen } from "ultis/dimensions";
 import InactiveRate from "components/inactiveRate";
 import CustomSkeleton from "components/SkeletonPlaceholder";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import Color from "ultis/color";
 
 interface EventNameProps {
   tag?: string;
@@ -11,7 +13,7 @@ interface EventNameProps {
   rate?: number;
   reviewTimes?: number;
   isSmallItem?: boolean;
-  loadFlag?:boolean
+  loadFlag?: boolean;
 }
 
 const EventName = memo((props: EventNameProps) => {
@@ -21,14 +23,14 @@ const EventName = memo((props: EventNameProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.tagRateView}>
-    
-        <CustomSkeleton style={[styles.textTag,{width: width_screen * 0.30, height: 15}]}
-        loadFlag={props.loadFlag}>
+        <CustomSkeleton
+          style={[styles.textTag, { width: width_screen * 0.3, height: 15 }]}
+          loadFlag={props.loadFlag}
+        >
           <Text style={[styles.textTag, { fontSize: fontSizeTag }]}>
             # {props?.tag}
           </Text>
         </CustomSkeleton>
-
 
         {props?.rate ? (
           <View style={styles.rateView}>
@@ -40,7 +42,12 @@ const EventName = memo((props: EventNameProps) => {
           </View>
         ) : null}
       </View>
-      <CustomSkeleton style={[styles.textEventName,{width: width_screen * 0.5, height: 20}]}>
+      <CustomSkeleton
+        style={[
+          styles.textEventName,
+          { width: width_screen * 0.5, height: 20 },
+        ]}
+      >
         <Text style={[styles.textEventName, { fontSize: fontSizeName }]}>
           {props?.eventName}
         </Text>
@@ -81,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textReviewTimes: {
-    color: "#353B48",
+    color: Color.GRAD_COLOR_3,
     marginLeft: 8,
     fontFamily: FONTS.Regular,
   },

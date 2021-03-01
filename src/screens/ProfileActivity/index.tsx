@@ -5,6 +5,7 @@ import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { getBankInfo, updateBankInfo } from "redux/auth/auth.actions";
 import ActivityItem from "screens/ProfileActivity/components/ActivityItem";
+import Color from "ultis/color";
 import { height_screen, width_screen } from "ultis/dimensions";
 import isEmpty from "ultis/isEmpty";
 
@@ -230,13 +231,13 @@ const styles = StyleSheet.create({
     height: height_screen * 0.07,
     width: width_screen * 0.8,
     borderWidth: 0.8,
-    borderColor: "#F05F3E",
+    borderColor: Color.GRAD_COLOR_3,
     borderRadius: 10,
     marginTop: height_screen * 0.01,
     paddingLeft: height_screen * 0.02,
   },
   BankText: {
-    color: "#F05F3E",
+    color: Color.GRAD_COLOR_3,
     fontSize: 22,
     fontWeight: "bold",
     textTransform: "uppercase",

@@ -49,13 +49,14 @@ import {
 } from "ultis/functions";
 import EventTimeCountDown from "components/EventTimeCountDown";
 import { markAttendance } from "redux/attendEvent/attendEvent.actions";
-import {currentLat, currentLong} from "ultis/functions"
+import { currentLat, currentLong } from "ultis/functions";
 import CustomSkeleton from "components/SkeletonPlaceholder";
+import Color from "ultis/color";
 
 const EventDetail = memo(() => {
   const route = useRoute();
   const navigation = useNavigation();
-  
+
   // @ts-ignore
   const data = route.params?.data;
 
@@ -118,8 +119,8 @@ const EventDetail = memo(() => {
   };
 
   const onDirection = useCallback(() => {
-    navigation.navigate(ROUTES.EventDetailMap,{
-      eventLocation: single_event?.lat_long
+    navigation.navigate(ROUTES.EventDetailMap, {
+      eventLocation: single_event?.lat_long,
     });
   }, [single_event]);
 
@@ -137,16 +138,19 @@ const EventDetail = memo(() => {
     extrapolate: "clamp",
   });
 
-  const { isAfter } = compareDateTime(
-    single_event &&
-      formatDateTime(single_event?.event_date, single_event?.start_time)
-  ) || {};
+  const { isAfter } =
+    compareDateTime(
+      single_event &&
+        formatDateTime(single_event?.event_date, single_event?.start_time)
+    ) || {};
 
-  const is_event_in_progress = single_event && isEventInProgress(
-     formatDateTime(single_event?.event_date, single_event?.start_time),
+  const is_event_in_progress =
+    single_event &&
+    isEventInProgress(
+      formatDateTime(single_event?.event_date, single_event?.start_time),
       single_event?.duration
-    )
-  
+    );
+
   const handleNavGroupShare = () => {
     navigation.navigate(ROUTES.TabSearchEvents, {
       eventShare: true,
@@ -154,7 +158,7 @@ const EventDetail = memo(() => {
   };
 
   const reserveAttendanceText =
-      loading || isEmpty(single_event)
+    loading || isEmpty(single_event)
       ? `...loading`
       : isAfter
       ? isEventReservedByUser()
@@ -429,7 +433,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textBtn: {
-    color: "#ED3269",
+    color: Color.GRAD_COLOR_3,
     fontFamily: FONTS.Regular,
     fontSize: 14,
   },

@@ -13,6 +13,7 @@ import FONTS from "ultis/fonts";
 import { useSelector, useDispatch } from "react-redux";
 import { getCompanies, sendDonation } from "redux/donate/donate.actions";
 import store from "../../../redux/store";
+import Color from "ultis/color";
 
 const DonatePoint = () => {
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ const DonatePoint = () => {
                 }}
               >
                 <LinearGradient
-                  colors={["#ED3269", "#F05F3E"]}
+                  colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
                   start={{ x: 0, y: 1 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.btnStyle2}
@@ -74,7 +75,7 @@ const DonatePoint = () => {
         }}
       >
         <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
+          colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
           style={styles.modalView}
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
   },
   CompanyView: {
     flexDirection: "row",
-    borderColor: "#ED3269",
+    borderColor: Color.GRAD_COLOR_3,
     borderWidth: 0.5,
     width: width_screen * 0.95,
     height: height_screen * 0.08,
@@ -181,6 +182,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: height_screen * 0.02,
     paddingLeft: width_screen * 0.05,
+    width: width_screen * 0.56,
   },
   modalView: {
     flexDirection: "row",

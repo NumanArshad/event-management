@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import store from "redux/store";
 import { getMyEarning } from "redux/users/users.actions";
 import { ScrollView } from "react-native-gesture-handler";
-
+import COLOR from "ultis/color/index";
 interface Props {
   coverImage: any;
   avatar: any;
@@ -66,7 +66,7 @@ const HeaderProfile = memo((props: Props) => {
       // makeRow();
     } else {
       dispatch(getMyEarning());
-   //   console.log("Run", my_earnings);
+      //   console.log("Run", my_earnings);
     }
   }, [dispatch, my_earnings]);
 
@@ -121,7 +121,7 @@ const HeaderProfile = memo((props: Props) => {
           {Array.isArray(my_earnings) && my_earnings.length > 0
             ? my_earnings.map((data, id) => (
                 <LinearGradient
-                  colors={["#ED3269", "#F05F3E"]}
+                  colors={[COLOR.GRAD_COLOR_3, COLOR.GRAD_COLOR_3]}
                   start={{ x: 0, y: 1 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.mainCard}
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   img: {
     width: 104,
     height: 104,
-    
+
     borderRadius: 100,
     borderColor: "rgba(255, 255, 255, 0.4)",
     marginTop: -0.06 * height_screen,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   rewards: {
     width: 142,
     height: 40,
-    backgroundColor: "#ED3269",
+    backgroundColor: COLOR.GRAD_COLOR_3,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
     height: 16,
     width: 16,
     borderRadius: 8,
-    backgroundColor: "#ED3269",
+    backgroundColor: COLOR.GRAD_COLOR_3,
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",

@@ -1,5 +1,6 @@
-import * as React from 'react';
-import Svg, {Path} from 'react-native-svg';
+import * as React from "react";
+import Svg, { Path } from "react-native-svg";
+import Color from "ultis/color";
 // @ts-ignore
 function SvgComponent(props) {
   return (
@@ -7,7 +8,7 @@ function SvgComponent(props) {
       <Path
         clipRule="evenodd"
         d="M9 13a4 4 0 100-8 4 4 0 000 8zM1 20.96V23h16v-2.04c-.036-4.382-3.597-7.924-8-7.96-4.403.036-7.964 3.578-8 7.96z"
-        stroke="#353B48"
+        stroke={Color.GRAD_COLOR_3}
         strokeWidth={2}
         strokeLinecap="round"
       />

@@ -6,6 +6,7 @@ import InactiveRate from "components/inactiveRate";
 import SvgWriteReview from "svgs/EventDetail/SvgWriteReview";
 import { useDispatch, useSelector } from "react-redux";
 import { getEventAllReviews } from "redux/reviews/reviews.actions";
+import Color from "ultis/color";
 interface RateDetailProps {
   eventId: number;
   marginTop?: number;
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
   },
   textRate: {
     fontSize: 40,
-    color: "#ED3269",
+    color: Color.GRAD_COLOR_3,
     fontFamily: FONTS.Medium,
   },
   flexRow: {
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
 
   textReviewTimes: {
     fontSize: 14,
-    color: "#353B48",
+    color: Color.GRAD_COLOR_3,
     fontFamily: FONTS.Regular,
   },
   reviewView: {
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
   textWrite: {
     fontSize: 14,
     fontFamily: FONTS.Regular,
-    color: "#ED3269",
+    color: Color.GRAD_COLOR_3,
     marginLeft: 8,
   },
 });

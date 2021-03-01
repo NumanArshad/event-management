@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Color from "ultis/color";
 import FONTS from "ultis/fonts";
 interface ItemTag {
   active: boolean;
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   colorActive: {
-    backgroundColor: "#ED3269",
+    backgroundColor: Color.GRAD_COLOR_3,
   },
   colorInactive: {
     backgroundColor: "#F7F8FA",

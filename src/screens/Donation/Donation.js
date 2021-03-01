@@ -8,6 +8,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import FONTS from "ultis/fonts";
 import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import Color from "ultis/color";
 
 const Donation = memo(() => {
   const navigation = useNavigation();
@@ -26,7 +28,7 @@ const Donation = memo(() => {
     <View style={styles.container}>
       <TouchableOpacity onPress={onRewards}>
         <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
+          colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
           style={styles.btnStyle}
@@ -36,7 +38,7 @@ const Donation = memo(() => {
       </TouchableOpacity>
       <TouchableOpacity onPress={moveToDonate}>
         <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
+          colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
           style={styles.btnStyle}
@@ -46,7 +48,7 @@ const Donation = memo(() => {
       </TouchableOpacity>
       <TouchableOpacity onPress={moveToTransaction}>
         <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
+          colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
           style={styles.btnStyle}
