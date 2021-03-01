@@ -15,12 +15,17 @@ import {
   getFilteredEvents,
 } from "redux/events/events.actions";
 import isEmpty from "ultis/isEmpty";
-import { formatDateTime, getEventTimeDown, isEventInProgress } from "ultis/functions";
+import {
+  formatDateTime,
+  getEventTimeDown,
+  isEventInProgress,
+} from "ultis/functions";
 import dayjs from "dayjs";
 import MyNotification from "screens/Notifications";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPushNotification } from "redux/notifications/notifications.actions";
+import Color from "ultis/color";
 
 const data = [
   {
@@ -87,13 +92,12 @@ const EvezTrending = memo(() => {
       //@ts-ignore
       const { eventLocation, eventType } = params || {};
       dispatch(
-        (eventLocation || eventType)
+        eventLocation || eventType
           ? getFilteredEvents(eventLocation, eventType)
           : getAllTrendingEvents()
       );
     }, [dispatch, navigation, params])
   );
-  
 
   const renderItem = useCallback(({ item }) => {
     const {
@@ -149,7 +153,7 @@ const EvezTrending = memo(() => {
           contentContainerStyle={styles.contentContainerStyle}
         />
       ) : !isEmpty(all_errors) ? (
-        <Text>{all_errors?.message}</Text>
+        <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors?.message}</Text>
       ) : (
         [...Array(2)].map(() => (
           <EventItem

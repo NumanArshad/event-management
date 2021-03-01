@@ -108,7 +108,7 @@ const EventAroundYou = memo(() => {
             contentContainerStyle={styles.contentContainerStyle}
           />
         ) : !isEmpty(all_errors) ? (
-          <Text>{all_errors}</Text>
+          <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors}</Text>
         ) : (
           <Text>...Loading</Text>
         )}
