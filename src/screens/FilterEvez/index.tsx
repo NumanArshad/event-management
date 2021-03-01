@@ -22,15 +22,20 @@ import { adsVideoId } from "data/ads";
 import { AdMobInterstitial } from "expo-ads-admob";
 import { useDispatch } from "react-redux";
 import { clearAllEvents, getFilteredEvents } from "redux/events/events.actions";
+import Color from "ultis/color";
 
 const FilterEvez = memo(() => {
   const navigation = useNavigation();
 
   //@ts-ignore
-  const {params:{activeFilter}} = useRoute();
+  const {
+    params: { activeFilter },
+  } = useRoute();
 
   const [activeTag, setactiveTag] = useState(activeFilter?.eventType || "");
-  const [eventLocation, setEventLocation] = useState(activeFilter?.eventLocation || "");
+  const [eventLocation, setEventLocation] = useState(
+    activeFilter?.eventLocation || ""
+  );
 
   const dispatch = useDispatch();
 
@@ -47,14 +52,18 @@ const FilterEvez = memo(() => {
   };
 
   const onPressShowAllEvent = () => {
-    (eventLocation || activeTag || activeFilter?.eventType || activeFilter?.eventLocation) && 
-    (eventLocation!==activeFilter?.eventLocation || activeTag!==activeFilter?.eventType)  
-    &&  dispatch(clearAllEvents());
-   navigation.navigate(ROUTES.EvezTrending,{
-       eventLocation,
-       eventType: activeTag
-   })
-  }
+    (eventLocation ||
+      activeTag ||
+      activeFilter?.eventType ||
+      activeFilter?.eventLocation) &&
+      (eventLocation !== activeFilter?.eventLocation ||
+        activeTag !== activeFilter?.eventType) &&
+      dispatch(clearAllEvents());
+    navigation.navigate(ROUTES.EvezTrending, {
+      eventLocation,
+      eventType: activeTag,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -78,16 +87,18 @@ const FilterEvez = memo(() => {
                 ))
               : null}
           </ScrollView>
-         </View>
+        </View>
 
-         <Text style={styles.textOptionHeader}>Event Location {eventLocation}</Text>
-          <TextInput
-         style={styles.textInput}
+        <Text style={styles.textOptionHeader}>
+          Event Location {eventLocation}
+        </Text>
+        <TextInput
+          style={styles.textInput}
           placeholder="Event Location"
           value={eventLocation}
           onChangeText={setEventLocation}
         />
-      </ScrollView> 
+      </ScrollView>
       <View style={styles.buttonView}>
         <ButtonLinear
           title={"Show Filtered Events"}
@@ -110,7 +121,7 @@ const styles = StyleSheet.create({
     height: height_screen * 0.07,
     width: width_screen * 0.9,
     borderWidth: 0.8,
-    borderColor: "#F05F3E",
+    borderColor: Color.GRAD_COLOR_3,
     borderRadius: 10,
     marginTop: height_screen * 0.03,
     paddingLeft: height_screen * 0.02,

@@ -19,6 +19,7 @@ import Logo from "../../assets/logo.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingScreen from "./LoadingScreen";
 import SubmitButton from "components/buttons/submitButton";
+import Color from "ultis/color";
 const Login = memo(() => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
@@ -26,9 +27,9 @@ const Login = memo(() => {
 
   const dispatch = useDispatch();
   const { authloading } = useSelector<any, any>((state) => state.loading);
-  const {all_errors} = useSelector<any, any>((state) => state.errors);
+  const { all_errors } = useSelector<any, any>((state) => state.errors);
 
-  console.log({all_errors})
+  console.log({ all_errors });
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;
@@ -77,7 +78,9 @@ const Login = memo(() => {
           textContentType="password"
           onChangeText={(data) => setpassword(data)}
         />
-        {all_errors && typeof(all_errors)==="string" ? <Text>{all_errors}</Text> : null}
+        {all_errors && typeof all_errors === "string" ? (
+          <Text>{all_errors}</Text>
+        ) : null}
 
         {/* <Text_Input
         secureText={false}
@@ -89,7 +92,11 @@ const Login = memo(() => {
         <View style={styles.viewForgotPass}>
           <TouchableOpacity onPress={() => navigate(ROUTES.ForgotPassword)}>
             <Text
-              style={{ color: "#ED3269", fontSize: 12, textAlign: "right" }}
+              style={{
+                color: Color.GRAD_COLOR_3,
+                fontSize: 12,
+                textAlign: "right",
+              }}
             >
               Forgot Password?
             </Text>
@@ -97,7 +104,7 @@ const Login = memo(() => {
         </View>
 
         <View style={styles.viewCreate}>
-          <Text style={{ color: "#ED3269" }}>
+          <Text style={{ color: Color.GRAD_COLOR_3 }}>
             Don't have an Account?{" "}
             <TouchableOpacity onPress={() => navigate(ROUTES.Register)}>
               <Text style={{ textDecorationLine: "underline" }}>Create</Text>
@@ -124,7 +131,7 @@ const styles = StyleSheet.create({
     height: height_screen * 0.07,
     width: width_screen * 0.8,
     borderWidth: 0.8,
-    borderColor: "#F05F3E",
+    borderColor: Color.GRAD_COLOR_3,
     borderRadius: 10,
     marginTop: height_screen * 0.01,
     paddingLeft: height_screen * 0.02,

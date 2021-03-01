@@ -8,6 +8,7 @@ import { getAllEvents } from "redux/events/events.actions";
 import { height_screen, width_screen } from "ultis/dimensions";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import isEmpty from "ultis/isEmpty";
+import Color from "ultis/color";
 
 const data = [
   {
@@ -26,7 +27,9 @@ const data = [
 const ProfileSaved = memo(() => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { all_attended_events } = useSelector<any, any>((state) => state.events);
+  const { all_attended_events } = useSelector<any, any>(
+    (state) => state.events
+  );
   const { all_errors } = useSelector<any, any>((state) => state.errors);
   const { loading } = useSelector<any, any>((state) => state.loading);
   const [eventStatus, setEventStatus] = useState("saved");
@@ -78,9 +81,10 @@ const ProfileSaved = memo(() => {
             style={[
               styles.loginBtn,
               {
-                backgroundColor: eventStatus === "saved" ? `#ED3269` : `#fff`,
+                backgroundColor:
+                  eventStatus === "saved" ? Color.GRAD_COLOR_3 : `#fff`,
 
-                color: eventStatus === "saved" ? `#fff` : `#ED3269`,
+                color: eventStatus === "saved" ? `#fff` : Color.GRAD_COLOR_3,
               },
             ]}
           >
@@ -93,8 +97,8 @@ const ProfileSaved = memo(() => {
               styles.loginBtn,
               {
                 backgroundColor:
-                  eventStatus === "attended" ? `#ED3269` : `#fff`,
-                color: eventStatus === "attended" ? `#fff` : `#ED3269`,
+                  eventStatus === "attended" ? Color.GRAD_COLOR_3 : `#fff`,
+                color: eventStatus === "attended" ? `#fff` : Color.GRAD_COLOR_3,
               },
             ]}
           >
@@ -134,13 +138,13 @@ const styles = StyleSheet.create({
   loginBtn: {
     height: height_screen * 0.06,
     width: width_screen * 0.25,
-    backgroundColor: "#ED3269",
+    backgroundColor: Color.GRAD_COLOR_3,
     borderRadius: 10,
     marginTop: height_screen * 0.01,
     textAlign: "center",
     paddingTop: height_screen * 0.015,
     color: "#fff",
     borderWidth: 0.5,
-    borderColor: "#ED3269",
+    borderColor: Color.GRAD_COLOR_3,
   },
 });

@@ -9,19 +9,22 @@ import UserItem from "components/UserItem";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { height_screen, width_screen } from "ultis/dimensions";
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import { getAuthGroupsObserver } from "redux/groups/groups.actions";
 import { useDispatch } from "react-redux";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import Color from "ultis/color";
 
 const TabSearchEvents = memo(() => {
-
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const {
-    params,
-  } = useRoute();
+  const { params } = useRoute();
 
   const toCreateGroup = () => {
     navigation.navigate(ROUTES.CreateGroup);
@@ -34,15 +37,24 @@ const TabSearchEvents = memo(() => {
     }, [dispatch])
   );
 
-
-  console.log({groupList})
+  console.log({ groupList });
   return (
     <View style={styles.container}>
       <ScrollView>
         {!groupList ? (
           <Text>...loading</Text>
         ) : !groupList?.length ? (
-          <Text>No group found</Text>
+          <Text
+            style={{
+              color: "#a4a4a4",
+              textTransform: "uppercase",
+              fontSize: 12,
+              width: width_screen,
+              textAlign: "center",
+            }}
+          >
+            No group found
+          </Text>
         ) : (
           groupList.map(
             ({
@@ -53,18 +65,19 @@ const TabSearchEvents = memo(() => {
             }: {
               image: string;
               name: string;
-              members: string[]
+              members: string[];
               id: string;
-            }) => 
-            <UserItem
-             image={image} 
-             user_name={name} 
-             key={id} 
-             id={id}
-             members={members}
-             isGroupItem
-            eventShareStatus={params?.eventShare}
-             />
+            }) => (
+              <UserItem
+                image={image}
+                user_name={name}
+                key={id}
+                id={id}
+                members={members}
+                isGroupItem
+                eventShareStatus={params?.eventShare}
+              />
+            )
           )
         )}
       </ScrollView>
@@ -93,7 +106,7 @@ const styles = StyleSheet.create({
     bottom: height_screen * 0.05,
     height: height_screen * 0.075,
     width: width_screen * 0.15,
-    backgroundColor: "#ED3269",
+    backgroundColor: Color.GRAD_COLOR_3,
     borderRadius: 50,
     paddingLeft: width_screen * 0.035,
     paddingTop: height_screen * 0.01,

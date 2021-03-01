@@ -5,6 +5,8 @@ import { height_screen, width_screen } from "ultis/dimensions";
 import FONTS from "ultis/fonts";
 import Header from "screens/PurchaseDetail/component/Header";
 import { useNavigation } from "@react-navigation/native";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import Color from "ultis/color";
 
 interface Props {
   amount: number;
@@ -18,7 +20,7 @@ const HeaderReward = memo((props: Props) => {
   return (
     <LinearGradient
       style={styles.linear}
-      colors={["#F05F3E", "#ED3269"]}
+      colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
       start={{ x: 1, y: 0 }}
       end={{ x: 1, y: 1 }}
     >

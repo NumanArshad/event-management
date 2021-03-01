@@ -40,18 +40,15 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   (response) => {
-    const isAuthUrl = [
-      "login",
-      "register",
-    ].includes(response?.config);
+    const isAuthUrl = ["login", "register"].includes(response?.config);
 
     !isAuthUrl && dispatch(stopLoading());
     dispatch(clearErrors());
     return response;
   },
   (error) => {
-    console.log("in error is", error)
-    alertMessage(`error is ${error}`)
+    console.log("in error is", error);
+    alertMessage(`error is ${error}`);
     dispatch(stopLoading());
     const { status, data } = error?.response;
     //console.log("error response is ", error?.response.status);

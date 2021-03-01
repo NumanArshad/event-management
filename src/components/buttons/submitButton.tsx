@@ -9,23 +9,28 @@ import {
   ViewStyle,
 } from "react-native";
 import { useSelector } from "react-redux";
+import Color from "ultis/color";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
 
 interface ButtonFilterProps {
   onPress: () => void;
   text: string;
   btnStyle?: ViewStyle;
-  isDisabled: Boolean
+  isDisabled: Boolean;
 }
 
 const SubmitButton = memo(
-  ({ onPress, text, btnStyle = styles.submitBtn, isDisabled = false }: ButtonFilterProps) => {
+  ({
+    onPress,
+    text,
+    btnStyle = styles.submitBtn,
+    isDisabled = false,
+  }: ButtonFilterProps) => {
     const { loading } = useSelector<any, any>((state) => state.loading);
     return (
-      <TouchableOpacity onPress={onPress}
-      disabled={isDisabled}>
+      <TouchableOpacity onPress={onPress} disabled={isDisabled}>
         <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
+          colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
           style={{ borderRadius: 10, marginTop: height_screen * 0.03 }}

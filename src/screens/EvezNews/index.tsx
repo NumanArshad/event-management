@@ -25,6 +25,7 @@ import PinLocation from "svgs/PinLocation";
 import { ScrollView } from "react-native-gesture-handler";
 import { getAllReservedEvents } from "redux/events/events.actions";
 import dayjs from "dayjs";
+import Color from "ultis/color";
 
 const data = [
   {
@@ -139,7 +140,7 @@ const EvezNews = memo(() => {
     const result = all_reserved_events?.filter(
       (event) => event.event_date.toString() === d
     );
-  //  console.log("RESULT ON CLICK", result);
+    //  console.log("RESULT ON CLICK", result);
     setcheckEvent(result);
   };
 
@@ -153,7 +154,7 @@ const EvezNews = memo(() => {
 
   const onDetail = useCallback((id) => {
     navigation.navigate(ROUTES.EventDetail, {
-      data: {id},
+      data: { id },
     });
   }, []);
 
@@ -167,7 +168,7 @@ const EvezNews = memo(() => {
             date: data.event_date,
             // Random colors
             style: {
-              backgroundColor: "#F05F3E",
+              backgroundColor: Color.GRAD_COLOR_3,
             },
             textStyle: { color: "#fff" }, // sets the font color
             containerStyle: [], // extra styling for day container
@@ -184,13 +185,13 @@ const EvezNews = memo(() => {
       <ScrollView>
         <CalendarPicker
           onDateChange={(e) => getDateConsole(e)}
-          selectedDayColor="#ED3269"
+          selectedDayColor={Color.GRAD_COLOR_3}
           textStyle={{
             fontSize: 16,
             lineHeight: 60,
           }}
           weekdays={["S", "M", "T", "W", "T", "F", "S"]}
-          todayBackgroundColor="#ED3269"
+          todayBackgroundColor={Color.GRAD_COLOR_3}
           // nextTitle={rightIcon}
           // previousTitle={lefttIcon}
           dayLabelsWrapper={{ borderTopWidth: 0, borderBottomWidth: 0 }}
@@ -201,7 +202,7 @@ const EvezNews = memo(() => {
           ? checkEvent.map((data, id) => (
               <TouchableOpacity onPress={() => onDetail(data.event_id)}>
                 <LinearGradient
-                  colors={["#ED3269", "#F05F3E"]}
+                  colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
                   start={{ x: 0, y: 1 }}
                   end={{ x: 1, y: 1 }}
                   style={{

@@ -21,10 +21,11 @@ import { useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import SubmitButton from "components/buttons/submitButton";
 import useImagePicker from "components/ImgPicker";
+import Color from "ultis/color";
 
 const Register = memo((navigation) => {
   const dispatch = useDispatch();
-  const {image, pickImage} = useImagePicker();
+  const { image, pickImage } = useImagePicker();
 
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
@@ -107,7 +108,7 @@ const Register = memo((navigation) => {
         onChangeText={(data) => setcPassword(data)}
       />
       <View style={styles.viewCreate}>
-        <Text style={{ color: "#ED3269" }}>
+        <Text style={{ color: Color.GRAD_COLOR_3 }}>
           Already have an Account?{" "}
           <TouchableOpacity onPress={() => navigate(ROUTES.Login)}>
             <Text style={{ textDecorationLine: "underline" }}>Login</Text>
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
     height: height_screen * 0.07,
     width: width_screen * 0.8,
     borderWidth: 0.8,
-    borderColor: "#F05F3E",
+    borderColor: Color.GRAD_COLOR_3,
     borderRadius: 10,
     marginTop: height_screen * 0.01,
     paddingLeft: height_screen * 0.02,
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     // resizeMode: "contain",
     borderRadius: 100,
     borderWidth: 0.8,
-    borderColor: "#F05F3E",
+    borderColor: Color.GRAD_COLOR_3,
     marginBottom: height_screen * 0.02,
   },
   iconEdit: {

@@ -16,6 +16,7 @@ import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
 import SubmitButton from "components/buttons/submitButton";
+import Color from "ultis/color";
 
 const ChangePassword = memo((navigation) => {
   const { navigate } = useNavigation();
@@ -86,7 +87,7 @@ const ChangePassword = memo((navigation) => {
         onChangeText={(data) => setconfirmPassword(data)}
       />
       <View style={styles.viewCreate}>
-        <Text style={{ color: "#ED3269", fontSize: 12 }}>
+        <Text style={{ color: Color.GRAD_COLOR_3, fontSize: 12 }}>
           Remember Password?{" "}
           <TouchableOpacity onPress={() => navigate(ROUTES.Profile)}>
             <Text style={{ textDecorationLine: "underline", fontSize: 12 }}>
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     height: height_screen * 0.07,
     width: width_screen * 0.8,
     borderWidth: 0.8,
-    borderColor: "#F05F3E",
+    borderColor: Color.GRAD_COLOR_3,
     borderRadius: 10,
     marginTop: height_screen * 0.01,
     paddingLeft: height_screen * 0.02,

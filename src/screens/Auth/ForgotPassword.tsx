@@ -72,7 +72,7 @@ const ForgotPassword = memo((navigation) => {
       />
 
       <View style={styles.viewCreate}>
-        <Text style={{ color: "#ED3269", fontSize: 12 }}>
+        <Text style={{ color: Color.GRAD_COLOR_3, fontSize: 12 }}>
           Remember Password?{" "}
           <TouchableOpacity onPress={() => navigate(ROUTES.Login)}>
             <Text style={{ textDecorationLine: "underline", fontSize: 12 }}>
@@ -83,7 +83,7 @@ const ForgotPassword = memo((navigation) => {
       </View>
       <TouchableOpacity onPress={handleForgotPassword}>
         <LinearGradient
-          colors={["#ED3269", "#F05F3E"]}
+          colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
           style={{ borderRadius: 10, marginTop: height_screen * 0.03 }}
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     height: height_screen * 0.07,
     width: width_screen * 0.8,
     borderWidth: 0.8,
-    borderColor: "#F05F3E",
+    borderColor: Color.GRAD_COLOR_3,
     borderRadius: 10,
     marginTop: height_screen * 0.01,
     paddingLeft: height_screen * 0.02,

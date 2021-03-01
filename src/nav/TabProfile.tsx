@@ -6,6 +6,7 @@ import ProfileTickets from "screens/ProfileTickets";
 import ProfileSaved from "screens/ProfileSaved";
 import About from "screens/About";
 import Donation from "screens/Donation/Donation";
+import Color from "ultis/color";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -13,10 +14,10 @@ const TabProfile = memo(() => {
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeTintColor: "#ED3269",
+        activeTintColor: Color.GRAD_COLOR_3,
         inactiveTintColor: "#7F8FA6",
         indicatorStyle: {
-          backgroundColor: "#ED3269",
+          backgroundColor: Color.GRAD_COLOR_3,
         },
       }}
     >
