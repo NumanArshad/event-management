@@ -109,7 +109,7 @@ const ProfileSaved = memo(() => {
       {loading ? (
         <Text>...loading</Text>
       ) : !isEmpty(all_errors) ? (
-        <Text>{all_errors?.message}</Text>
+        <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors?.message}</Text>
       ) : (
         <FlatList
           data={all_attended_events}

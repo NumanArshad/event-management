@@ -70,7 +70,9 @@ const Login = memo(() => {
           placeholder="Email..."
           onChangeText={(data) => setemail(data)}
         />
-        {all_errors?.email && <Text>{all_errors?.email}</Text>}
+        {all_errors?.email && (
+          <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors?.email}</Text>
+        )}
         <TextInput
           style={styles.textInput}
           secureTextEntry={true}
@@ -79,7 +81,7 @@ const Login = memo(() => {
           onChangeText={(data) => setpassword(data)}
         />
         {all_errors && typeof all_errors === "string" ? (
-          <Text>{all_errors}</Text>
+          <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors}</Text>
         ) : null}
 
         {/* <Text_Input
