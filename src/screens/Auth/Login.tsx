@@ -15,7 +15,6 @@ import { width_screen, height_screen } from "../../ultis/dimensions/index";
 import { login } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
-import Logo from "../../assets/logo.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingScreen from "./LoadingScreen";
 import SubmitButton from "components/buttons/submitButton";
@@ -29,7 +28,6 @@ const Login = memo(() => {
   const { authloading } = useSelector<any, any>((state) => state.loading);
   const { all_errors } = useSelector<any, any>((state) => state.errors);
 
-  console.log({ all_errors });
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
       return true;
@@ -62,7 +60,7 @@ const Login = memo(() => {
           //   uri:
           //     "https://i.pinimg.com/originals/f6/db/9b/f6db9b785d37c154c2be26b7c32604b6.jpg",
           // }}
-          source={Logo}
+          source={require("assets/logo.jpg")}
           style={styles.imageProfile}
         />
         <TextInput

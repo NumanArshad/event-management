@@ -4,10 +4,10 @@
     "slug": "evez_expo_20201116",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./src/assets/logo.jpg",
     "githubUrl": "https://github.com/NumanArshad/event-management",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./src/assets/logo.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

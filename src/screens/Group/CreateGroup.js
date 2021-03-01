@@ -68,7 +68,6 @@ const CreateGroup = () => {
 
   const handleSubmit = async () => {
     const downloadUrl = await uploadImage();
-    alertMessage(downloadUrl);
     if (downloadUrl) {
       dispatch(startLoading());
       console.log("downloaded is ", downloadUrl);
