@@ -143,8 +143,8 @@ export const getSingleUser = (user_id , isAuthCallBack) => {
         
         userInfo = { ...payload.data(), user_doc_id: payload.id };
       });
-      //console.log("my info us", userInfo)
-      isAuthCallBack && isAuthCallBack(userInfo, res.docs?.length );
+      // console.log("my info us", userInfo)
+      isAuthCallBack?.(userInfo, res.docs?.length );
     });
 };
 

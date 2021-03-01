@@ -22,6 +22,7 @@ export const login = (data) => (dispatch) => {
     if (res.data.status_code === 200) {
       const { user, token } = res.data.data;
       setUserSessions({ user: user?.id, token });
+      
       getSingleUser(user?.id, (userInfo, docLength) => {
         docLength ?
           dispatch(isAuthenticated({ ...userInfo, auth_token: token })) :
@@ -123,18 +124,15 @@ export const setUserSessions = (data) => {
 
 //// get token from async storage///
 export const getUserSessions = () => async (dispatch) => {
-  ////console.log("Runing getUserSessions");
   dispatch(startAuthLoading());
   try {
     const token = await AsyncStorage.getItem("Token");
     const userId = await AsyncStorage.getItem("user");
-    dispatch(stopAuthLoading());
-
-    token &&
+    token ?
       getSingleUser(parseInt(userId), (userInfo) => {
-    //    console.log("profile is ",userInfo )
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));
-      });
+      }) :
+      dispatch(stopAuthLoading());
   } catch (error) {
     console.error("error is ", error);
     dispatch(stopAuthLoading());
@@ -156,20 +154,23 @@ export const isAuthenticated = (payload) => (dispatch) => {
   // const token = await registerForAsyncPushToken();
   // const updatedTokenList = payload?.deviceToken?.includes(token) ?
   //   payload?.deviceToken : [...payload?.deviceToken, token];
-  registerForAsyncPushToken().then(token => {
+ // registerForAsyncPushToken().then(token => {
   //  console.log({payload})
     // const updatedTokenList = payload?.deviceToken?.includes(token) ?
     //   payload?.deviceToken : [...payload?.deviceToken, token];
+    dispatch(stopAuthLoading());
+
     dispatch({
       type: IS_AUTHENTICATED,
       payload,
     });
     dispatch(updateUser({ isOnline: true }))
-  }).catch(error => {
-    console.log("errir in fetch token is" + error)
-  }).finally(onFinall => {
-    dispatch(stopAuthLoading());
-  })
+  //}).catch(error => {
+   // console.log("errir in fetch token is" + error)
+  //}).finally(onFinall => {
+
+  console.log("stopping")
+  //})
 };
 
 export const unAuthorized = () => async(dispatch) => {

@@ -93,42 +93,6 @@ const Notification = memo(() => {
     getUsersbyDocRefList(docIdList, setNotificationUsers);
   }, [all_notifications]);
 
-  //console.log("notifoicayion users are",all_notifications, notificationUsers )
-
-  //console.log("my notification are",all_notifications, notificationUsers )
-  
-  // const renderItem = useCallback(({item}) => {
-  //   const {
-  //     typeNotification,
-  //     avatar,
-  //     userName,
-  //     message,
-  //     time,
-  //     un_Read,
-  //     title,
-  //     imageEvent,
-  //     event,
-  //   } = item;
-  //   return typeNotification === 0 ? (
-  //     <NotificationMessage
-  //       avatar={avatar}
-  //       userName={userName}
-  //       message={message}
-  //       time={time}
-  //       un_Read={un_Read}
-  //     />
-  //   ) : (
-  //     <NotificationEvent
-  //       avatar={avatar}
-  //       title={title}
-  //       imageEvent={imageEvent}
-  //       event={event}
-  //       time={time}
-  //       un_Read={un_Read}
-  //     />
-  //   );
-  // }, []);
-
   const renderItem = useCallback(({item, index}) => {
     const {
       type,
@@ -161,7 +125,7 @@ const Notification = memo(() => {
     );
   }, []);
 
-  //console.log(!all_notifications)
+  console.log(!all_notifications, notificationUsers)
   return (
     <>
       {!all_notifications?.length ? (
