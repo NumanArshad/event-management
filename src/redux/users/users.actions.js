@@ -115,7 +115,7 @@ export const updateUser = (payload, updateStatus) => (dispatch, getState) => {
     login_Session: { user_doc_id },
   } = getState()?.auth;
 
-  //console.log("collection is", user_doc_id, payload, updateStatus)
+  // console.log("collection is", user_doc_id, payload, updateStatus)
 
   userCollectionRef
     .doc(user_doc_id)

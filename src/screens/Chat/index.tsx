@@ -36,6 +36,8 @@ import isEmpty from "ultis/isEmpty";
 
 const CustomView = (props:any) => {
   const { single_event } = useSelector<any, any>((state) => state?.events);
+
+
  // alertMessage("kwfjenj");
   const {
     event_name,
@@ -51,6 +53,7 @@ const CustomView = (props:any) => {
   return (
     <View style={{ padding: 10, width: "95%" }} {...props}>
       <EventItem
+      
         thumbnail={require("@assets/Trending/trending_3.png")}
         tag={type_name}
         id={event_id}
@@ -81,6 +84,8 @@ const Chat = () => {
 
   const isGroupChat = chatType === "groupChat";
 
+  const [isEventShare, setIsEventShare] = useState("");
+
   const {
     login_Session: { user_doc_id, user_id, user_name, coverImage },
   } = useSelector<any, any>((state) => state?.auth);
@@ -108,6 +113,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (isGroupChat) {
+      setIsEventShare(eventShareStatus)
       getUsersbyDocRefList(members, setGroupUsers);
       !all_trending_events?.length && dispatch(getAllTrendingEvents());
       return;
@@ -211,7 +217,10 @@ const Chat = () => {
     );
   }, []);
 
+  console.log("share status is", isEventShare, eventShareStatus)
+
   const renderSend = useCallback((props) => {
+    isEventShare && setIsEventShare("");
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
@@ -219,26 +228,26 @@ const Chat = () => {
         </View>
       </Send>
     );
-  }, []);
+  }, [isEventShare]);
 
   return (
     <View style={styles.container}>
       {isGroupChat ? (
         <GiftedChat
-          text={isEventSharing ? "share event" : ""}
+          text={isEventShare ? "share event" : ""}
           renderBubble={renderbuffer}
           placeholder={"Write a message..."}
           messages={messages}
           onSend={(newMessage) => onSend(newMessage)}
-          alwaysShowSend={isEventSharing}
+          alwaysShowSend={isEventShare}
           showUserAvatar={true}
           renderInputToolbar={(props) =>
-            isEventSharing ? <InputToolbar {...props} /> : null
+            isEventShare ? <InputToolbar {...props} /> : null
           }
           renderComposer={(props) =>
-            isEventSharing ? <CustomView {...props} /> : null
+            isEventShare ? <CustomView {...props} /> : null
           }
-          minComposerHeight={isEventSharing ? 0 : 40}
+          minComposerHeight={isEventShare ? 0 : 40}
           renderSend={renderSend}
           user={{
             _id: user_doc_id,

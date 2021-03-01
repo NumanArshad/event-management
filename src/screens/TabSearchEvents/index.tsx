@@ -19,6 +19,7 @@ import { getAuthGroupsObserver } from "redux/groups/groups.actions";
 import { useDispatch } from "react-redux";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import Color from "ultis/color";
+import NoContentFound from "components/NoContentFound";
 
 const TabSearchEvents = memo(() => {
   const dispatch = useDispatch();
@@ -37,24 +38,13 @@ const TabSearchEvents = memo(() => {
     }, [dispatch])
   );
 
-  console.log({ groupList });
   return (
     <View style={styles.container}>
       <ScrollView>
         {!groupList ? (
           <Text>...loading</Text>
         ) : !groupList?.length ? (
-          <Text
-            style={{
-              color: "#a4a4a4",
-              textTransform: "uppercase",
-              fontSize: 12,
-              width: width_screen,
-              textAlign: "center",
-            }}
-          >
-            No group found
-          </Text>
+          <NoContentFound text="No group found"/>
         ) : (
           groupList.map(
             ({

@@ -24,6 +24,7 @@ import keyExtractor from "ultis/keyExtractor";
 import isEmpty from "ultis/isEmpty";
 import { formatDateTime, splitLatLongStr } from "ultis/functions";
 import Color from "ultis/color";
+import NoContentFound from "components/NoContentFound";
 
 const EventAroundYou = memo(() => {
   const navigation = useNavigation();
@@ -108,7 +109,7 @@ const EventAroundYou = memo(() => {
             contentContainerStyle={styles.contentContainerStyle}
           />
         ) : !isEmpty(all_errors) ? (
-          <Text>{all_errors}</Text>
+          <NoContentFound text={all_errors}/>
         ) : (
           <Text>...Loading</Text>
         )}

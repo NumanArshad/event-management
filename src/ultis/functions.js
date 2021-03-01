@@ -126,5 +126,5 @@ export const getDistanceByLatLong = (
 
 export const getImage = image => {
   const imagePath = image?.includes("firebasestorage") ? `` : baseImageUrl;
-  return (!image || image.includes('default')) ? noFoundImg : `${imagePath}${image}`
+  return (!image || image.includes('default')) ? noFoundImg : image.includes("exponent") ? image : `${imagePath}${image}`
 }

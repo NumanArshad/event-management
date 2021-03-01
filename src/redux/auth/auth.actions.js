@@ -53,6 +53,7 @@ export const updateProfile = (data, jsonData) => (dispatch) => {
   axios.post("auth/update-profile", data).then((res) => {
     alertMessage("Your Profile has been Updated Successfully!");
     dispatch(updateUser(jsonData, 'profileUpdated'));
+    dispatch(stopLoading());
   });
 };
 

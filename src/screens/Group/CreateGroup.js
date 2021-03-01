@@ -36,6 +36,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { alertMessage } from "ultis/alertToastMessages";
 import { startLoading, stopLoading } from "redux/loading/loading.actions";
+import NoContentFound from "components/NoContentFound";
 
 const CreateGroup = () => {
   const dispatch = useDispatch();
@@ -102,6 +103,9 @@ const CreateGroup = () => {
 
   return (
     <View style={styles.container}>
+      {friends?.length ? 
+      <NoContentFound text="You must have atleast one friend to create group" />
+      : 
       <ScrollView
         onScroll={Animated.event([
           { nativeEvent: { contentOffset: { x: scrollX } } },
@@ -126,7 +130,7 @@ const CreateGroup = () => {
           onChangeText={(name) => setFormData({ ...formData, name })}
         />
 
-        <Text
+        {/* <Text
           style={{
             fontWeight: "bold",
             fontSize: 15,
@@ -136,8 +140,8 @@ const CreateGroup = () => {
           }}
         >
           Add People
-        </Text>
-        <ScrollView
+        </Text> */}
+        {/* <ScrollView
           style={{
             marginVertical: height_screen * 0.02,
           }}
@@ -153,7 +157,7 @@ const CreateGroup = () => {
               <Text style={styles.userName}>{user_name}</Text>
             </TouchableOpacity>
           ))}
-        </ScrollView>
+        </ScrollView> */}
         <View
           style={{
             width: width_screen * 0.8,
@@ -167,6 +171,7 @@ const CreateGroup = () => {
           />
         </View>
       </ScrollView>
+}
     </View>
   );
 };

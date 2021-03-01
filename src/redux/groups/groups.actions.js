@@ -25,7 +25,6 @@ export const getAuthGroupsObserver = callback => (dispatch, getState) => {
             })
         })
 
-      //  console.log("hey groups are", groups)
         callback(groups)
     }) : callback([]);
 }
