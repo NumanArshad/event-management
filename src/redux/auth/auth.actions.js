@@ -16,6 +16,7 @@ import {
 import { alertMessage } from "ultis/alertToastMessages";
 import { registerForAsyncPushToken } from "redux/notifications/notifications.actions";
 import isEmpty from "ultis/isEmpty";
+import { clearErrors } from "redux/error/error.actions";
 
 export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
@@ -180,4 +181,6 @@ export const unAuthorized = () => async(dispatch) => {
     type: NOT_AUTHORIZED,
   });
   dispatch(stopAuthLoading());
+  dispatch(clearErrors());
+
 };
