@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ROUTES from "ultis/routes";
 import Walkthrough from "screens/Walkthrough";
 import Settings from "screens/Settings";
-import SelectCity from "screens/SelectCity";
+// import SelectCity from "screens/SelectCity";
 import Rewards from "screens/Rewards";
 import EvezForUTab from "nav/EvezForUTab";
 import FilterEvez from "screens/FilterEvez";
@@ -24,7 +24,7 @@ import PurchaseDetail from "screens/PurchaseDetail";
 import EventDetail from "screens/EventDetail";
 import EvezNews from "screens/EvezNews";
 import PeopleProfile from "screens/PeopleProfile";
-import NewDetail from "screens/NewDetail";
+// import NewDetail from "screens/NewDetail";
 import EventDetailMap from "screens/EventDetailMap";
 import EventDetailRateComment from "screens/EventDetailRateComment";
 import Chat from "screens/Chat";
@@ -120,11 +120,11 @@ const PrivateNavigator = () => (
       component={EventDetailRateComment}
       options={{ title: "Reviews", headerBackTitleVisible: false }}
     />
-    <privateNavStack.Screen
+    {/* <privateNavStack.Screen
       name={ROUTES.NewDetail}
       component={NewDetail}
       options={{ headerShown: false }}
-    />
+    /> */}
     <privateNavStack.Screen
       name={ROUTES.Notification}
       component={Notification}

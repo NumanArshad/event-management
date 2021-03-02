@@ -9,125 +9,25 @@ import {
 } from "react-native";
 import keyExtractor from "ultis/keyExtractor";
 import NewsItem from "screens/SearchNews/components/NewsItem";
-import HeaderEvezNew from "screens/EvezNews/components/HeaderEvezNew";
+// import HeaderEvezNew from "screens/EvezNews/components/HeaderEvezNew";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
-import Header from "screens/PeopleProfile/components/Header";
-import SvgSearch from "svgs/EvezNews/SvgSearch";
-import { adsBannerId } from "data/ads";
-import { AdMobBanner } from "expo-ads-admob";
 import CalendarPicker from "react-native-calendar-picker";
 import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { height_screen } from "ultis/dimensions";
 import FONTS from "ultis/fonts";
-import PinLocation from "svgs/PinLocation";
 import { ScrollView } from "react-native-gesture-handler";
 import { getAllReservedEvents } from "redux/events/events.actions";
 import dayjs from "dayjs";
 import Color from "ultis/color";
-
-const data = [
-  {
-    imgEvent: require("assets/EvezNews/Finest.png"),
-    event: "Fashions Finest\n" + "AW17 During London\n" + "Fashion Week",
-    time: "MAR. 10, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Bike.png"),
-    event: "Bike New York for\n" + "Bike Month",
-    time: "MAR. 24, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Washington.png"),
-    event: "Washington Square\n" + "Outdoor Art Exhibit",
-    time: "MAR. 20, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/LasVegas.png"),
-    event: "Why Las Vegas Hotel\n" + "Rooms For You",
-    time: "MAR. 15, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Finest.png"),
-    event: "The 1968 Fashion\n" + "Show, the History\n" + "Lesson Melania…",
-    time: "MAR. 7, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Finest.png"),
-    event: "Fashions Finest\n" + "AW17 During London\n" + "Fashion Week",
-    time: "MAR. 10, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Bike.png"),
-    event: "Bike New York for\n" + "Bike Month",
-    time: "MAR. 24, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Washington.png"),
-    event: "Washington Square\n" + "Outdoor Art Exhibit",
-    time: "MAR. 20, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/LasVegas.png"),
-    event: "Why Las Vegas Hotel\n" + "Rooms For You",
-    time: "MAR. 15, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Finest.png"),
-    event: "The 1968 Fashion\n" + "Show, the History\n" + "Lesson Melania…",
-    time: "MAR. 7, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Finest.png"),
-    event: "Fashions Finest\n" + "AW17 During London\n" + "Fashion Week",
-    time: "MAR. 10, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Bike.png"),
-    event: "Bike New York for\n" + "Bike Month",
-    time: "MAR. 24, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Washington.png"),
-    event: "Washington Square\n" + "Outdoor Art Exhibit",
-    time: "MAR. 20, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/LasVegas.png"),
-    event: "Why Las Vegas Hotel\n" + "Rooms For You",
-    time: "MAR. 15, 2018",
-  },
-  {
-    imgEvent: require("assets/EvezNews/Finest.png"),
-    event: "The 1968 Fashion\n" + "Show, the History\n" + "Lesson Melania…",
-    time: "MAR. 7, 2018",
-  },
-];
 
 const EvezNews = memo(() => {
   const navigation = useNavigation();
   const [dateChange, setdateChange] = useState("");
   const [listDate, setlistDate] = useState("");
   const [checkEvent, setcheckEvent] = useState("");
-  const onNewDetail = useCallback(() => {
-    navigation.navigate(ROUTES.NewDetail);
-  }, [navigation]);
-  const onSearchNews = useCallback(() => {
-    navigation.navigate(ROUTES.SearchNews);
-  }, [navigation]);
-  const renderItem = useCallback(
-    ({ item }) => {
-      const { imgEvent, event, time } = item;
-      return (
-        <TouchableOpacity onPress={onNewDetail}>
-          <NewsItem imgEvent={imgEvent} event={event} time={time} />
-        </TouchableOpacity>
-      );
-    },
-    [onNewDetail]
-  );
-
+  
   const dispatch = useDispatch();
   const { all_reserved_events } = useSelector<any, any>(
     (state) => state.events

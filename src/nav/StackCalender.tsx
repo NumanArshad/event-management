@@ -12,6 +12,7 @@ import NotificationRightHeader from "components/NotificationRightHeader";
 const Stack = createStackNavigator();
 const StackCalender = memo(() => {
   const navigation = useNavigation();
+  
   const onSearchPeople = useCallback(() => {
     navigation.navigate(ROUTES.SearchPeople);
   }, [navigation]);
