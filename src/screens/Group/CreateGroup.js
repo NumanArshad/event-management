@@ -102,7 +102,7 @@ const CreateGroup = () => {
 
   return (
     <View style={styles.container}>
-      {friends?.length ? 
+      {!friends?.length ? 
       <NoContentFound text="You must have atleast one friend to create group" />
       : 
       <ScrollView
