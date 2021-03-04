@@ -36,8 +36,8 @@ const Header = memo((props: Props) => {
   }, [navigation]);
   return (
     <Animated.View style={styles.headerStyle}>
-      <View style={styles.headerLeftIcon} />
-      <Animated.Text
+      {/* <View style={styles.headerLeftIcon} /> */}
+      {/* <Animated.Text
         style={[
           styles.headerTitle,
           {
@@ -45,10 +45,10 @@ const Header = memo((props: Props) => {
           },
         ]}
       >
-        {props.userName}
-      </Animated.Text>
+        {props.userName} 
+      </Animated.Text> */}
       <View style={styles.headerLeftIcon}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={onNotification}
           style={styles.headerRightIcon}
         >
@@ -56,7 +56,7 @@ const Header = memo((props: Props) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={onSettings} style={styles.headerRightIcon}>
           <SvgSettingIcon />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       {/*<LinearAnimated*/}
       {/*    // colors={[color1, color2]}*/}

@@ -16,7 +16,6 @@ import { width_screen, height_screen } from "../../ultis/dimensions/index";
 import { register } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
-import Logo from "../../assets/logo.jpg";
 import { useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import SubmitButton from "components/buttons/submitButton";

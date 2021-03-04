@@ -48,6 +48,7 @@ const EventAroundYou = memo(() => {
         const eventLocationList = all_attended_events?.map(
           ({ lat_long }: { lat_long: string }) => splitLatLongStr(lat_long)
         );
+        
         setEventLocation(eventLocationList);
         return;
       }
@@ -57,7 +58,7 @@ const EventAroundYou = memo(() => {
 
   const onPressAllEventAroundYou = useCallback(() => {
     navigation.navigate(ROUTES.AllEventAroundYou, {
-      eventLocation,
+      eventLocation
     });
   }, [navigation]);
 

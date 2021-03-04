@@ -24,7 +24,7 @@ export const login = (data) => (dispatch) => {
       const { user, token } = res.data.data;
       setUserSessions({ user: user?.id, token });
       
-      getSingleUser(user?.id, (userInfo, docLength) => {
+      getSingleUser(user?.id, user?.name,(userInfo, docLength) => {
         docLength ?
           dispatch(isAuthenticated({ ...userInfo, auth_token: token })) :
           dispatch(getProfile(token));
@@ -150,30 +150,29 @@ export const updateAuthUser = (payload) => (dispatch) => {
 };
 
 export const isAuthenticated = (payload) => (dispatch) => {
-  // (async (payload) => {
-  //   try {
-  //     toastMessages("iif called")
-  // const token = await registerForAsyncPushToken();
-  // const updatedTokenList = payload?.deviceToken?.includes(token) ?
-  //   payload?.deviceToken : [...payload?.deviceToken, token];
- // registerForAsyncPushToken().then(token => {
-  //  console.log({payload})
-    // const updatedTokenList = payload?.deviceToken?.includes(token) ?
-    //   payload?.deviceToken : [...payload?.deviceToken, token];
-    dispatch(stopAuthLoading());
+ 
+    //  alertMessage("iif called")
+      // const token = await registerForAsyncPushToken();
+      // const updatedTokenList = payload?.deviceToken?.includes(token) ?
+      //   payload?.deviceToken : [...payload?.deviceToken, token];
+      registerForAsyncPushToken().then(token => {
+        console.log({ payload })
+        const updatedTokenList = payload?.deviceToken?.includes(token) ?
+          payload?.deviceToken : [...payload?.deviceToken, token];
+        dispatch(stopAuthLoading());
 
-    dispatch({
-      type: IS_AUTHENTICATED,
-      payload,
-    });
-    dispatch(updateUser({ isOnline: true }))
-  //}).catch(error => {
-   // console.log("errir in fetch token is" + error)
-  //}).finally(onFinall => {
+        dispatch({
+          type: IS_AUTHENTICATED,
+          payload,
+        });
+        dispatch(updateUser({ isOnline: true, deviceToken: token }))
+      }).catch(error => {
+        console.log("errir in fetch token is" + error)
+      }).finally(onFinall => {
 
-  console.log("stopping")
-  //})
-};
+        console.log("stopping")
+      })
+    };
 
 export const unAuthorized = () => async(dispatch) => {
  await dispatch(updateUser({isOnline: false}))

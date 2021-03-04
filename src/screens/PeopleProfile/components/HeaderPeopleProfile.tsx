@@ -7,6 +7,7 @@ import SvgArrDown from "svgs/SvgArrDown";
 import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
 import { useSelector } from "react-redux";
+import { getImage } from "ultis/functions";
 
 interface Props {
   coverImage: any;
@@ -14,9 +15,7 @@ interface Props {
   userName: string;
   user_id: number,
   user_doc_id: string;
-  address: string;
-//  followers: string;
-//  following: number;
+  email: string;
   interested: string[];
 }
 
@@ -61,9 +60,9 @@ const HeaderPeopleProfile = memo((props: Props) => {
         end={{ x: 1, y: 1 }}
       />
       <View style={styles.mask}>
-        <Image style={styles.img} source={props.avatar} />
+        <Image style={styles.img} source={{uri:getImage(props.avatar)}} />
         <Text style={styles.userName}>{props.userName}</Text>
-        <Text style={styles.address}>{props.address}</Text>
+        <Text style={styles.address}>{props.email}</Text>
         <View style={styles.btn}>
           <TouchableOpacity onPress={onChat} style={styles.inbox}>
             <Text style={styles.txtInbox}>MESSAGE</Text>
@@ -92,13 +91,12 @@ const HeaderPeopleProfile = memo((props: Props) => {
             <Text style={styles.txtInterested}>{item}</Text>
           ))}
         </View> */}
-        <TouchableOpacity style={[styles.arrDown]}>
+        {/* <TouchableOpacity style={[styles.arrDown]}>
           <SvgArrDown />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
-      <View style={styles.activity}>
-        {/* <Text style={styles.txtActivity}>ACTIVITY</Text> */}
-      </View>
+      {/* <View style={styles.activity}>
+      </View> */}
     </View>
   );
 });

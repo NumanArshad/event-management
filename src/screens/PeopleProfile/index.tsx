@@ -33,10 +33,11 @@ const PeopleProfile = memo(() => {
     user_name,
     image,
     user_id,
+    email,
     id: user_doc_id,
-    followers,
-    following,
   } = params?.userInfo;
+
+  console.log("poeple profile is ", params?.userInfo)
 
   return (
     <View style={styles.container}>
@@ -61,13 +62,11 @@ const PeopleProfile = memo(() => {
       >
         <HeaderPeopleProfile
           coverImage={item.coverImage}
-          avatar={item.avatar}
+          avatar={image}
           userName={user_name}
           user_doc_id={user_doc_id}
           user_id={user_id}
-          address={item.address}
-         // followers={followers}
-         // following={following}
+          email={email}
           interested={item.interested}
         />
         {/* {data.map((item, index) => {
