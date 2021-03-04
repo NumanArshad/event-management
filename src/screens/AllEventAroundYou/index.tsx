@@ -63,8 +63,9 @@ const AllEventAroundYou = memo(() => {
 if(!showMap && !region ){
   return null
 }
+console.log("hh",params?.eventLocation)
 
-  return (
+  return (  
     <View style={styles.mapView}>
       <View style={styles.mapContainer}>
         {region &&
@@ -93,7 +94,7 @@ if(!showMap && !region ){
             </Marker>
           ))}
         </MapView>}
-        <ButtonFilter onPress={onFillter} style={styles.filterButton} />
+        {/* <ButtonFilter onPress={onFillter} style={styles.filterButton} /> */}
         <MapButton
           onBack={onPressBack}
           onDirection={onPressDirection}

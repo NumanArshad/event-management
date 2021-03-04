@@ -26,6 +26,7 @@ import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPushNotification } from "redux/notifications/notifications.actions";
 import Color from "ultis/color";
+import { alertMessage } from "ultis/alertToastMessages";
 
 const data = [
   {
@@ -137,12 +138,13 @@ const EvezTrending = memo(() => {
 
   return (
     <View style={styles.container}>
-      {/* <MyNotification />
+       {/* <MyNotification />
+
       <TouchableOpacity onPress={()=>dispatch(sendPushNotification())}>
         <Text>
           send notufication
         </Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>  */}
       {!isEmpty(all_trending_events) ? (
         <FlatList
           style={styles.scroll}

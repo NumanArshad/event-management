@@ -47,7 +47,7 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("in error is", error);
+    console.log("in error interceptor is", error);
   //  alertMessage(`error is ${error}`);
     dispatch(stopLoading());
     const { status, data } = error?.response;
