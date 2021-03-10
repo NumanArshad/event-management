@@ -24,9 +24,9 @@ export  async function registerForAsyncPushToken() {
         alertMessage("Notification permission denied by user");
         return;
       }
-      token = (await Notifications.getDevicePushTokenAsync()).data;
+      token = (await Notifications.getExpoPushTokenAsync()).data;
   
-  //  alertMessage(`token i s, ${token}`)
+       console.log(`token i s, ${token}`)
        if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
@@ -42,40 +42,53 @@ export  async function registerForAsyncPushToken() {
   }
 
 
-// export const sendPushNotification = payload => {
-//     axios.post('https://exp.host/--/api/v2/push/send',
-//     payload).then(
-//         res => console.log("send response is ", res)
-//     ).catch(error => console.log("error is", error))
-// }
-
 export const sendPushNotification = () => (dispatch, getState) => {
-  const {login_Session:{deviceToken}} = getState()?.auth;
+  const { login_Session: { deviceToken } } = getState()?.auth;
 
-  fetch('https://fcm.googleapis.com/fcm/send', {
+  const requestOptions = {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'key=AAAAOUCCOgg:APA91bHj6-9xrOGKoCkKahgN_Fx4DZv_-lStCHMWZhMb2oyYaZodZn5TTX2eYZSORobCNBVCOZePEnH3SQBZf_nGWvE7v_sEnKx6JEeeffcPwnX9x9lbO_u82eNalkJ34unDCZ4aOU4i',
-    },
-    body: JSON.stringify({
-      to: deviceToken || 'eZ2FVei0TSag2Phc_BdOiP:APA91bF6Tsml__-Lu7Xmgdk8lQqK5JoqInVSE4T5iH18uWWqWcj9At3GPA3TObyGScoX2GiHEK07SopIyCvWOTBWqJ6Jwp98y8J5v49lrvrHQy0BWDJATyYXTCbjzfvwyDNEpGvGSpOJ',
-      priority: 'normal',
-      data: {
-        experienceId: '@numanarshad.dev/evez_expo_20201116',
-        title: " You've got mail",
-        message: 'Hello world!',
-      },
-    }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({  
+       "to": deviceToken,
+    "title": "hello",
+    "body": "world" 
   })
-  .then(
-    res => { 
-    console.log(JSON.stringify(`send response is ", ${res}`));
-  }
-  ).catch(error => {
-    alertMessage(JSON.stringify(`send error is ", ${error}`));
-  });
-}
+};
+
+ alertMessage("token"+deviceToken)
+ fetch('https://exp.host/--/api/v2/push/send',
+  requestOptions).then(
+      res => alertMessage("send response is in token  "+ res)
+    ).catch(error => alertMessage("error in token send is"+ error?.response))
+} 
+
+// export const sendPushNotification = () => (dispatch, getState) => {
+//   const {login_Session:{deviceToken}} = getState()?.auth;
+
+//   fetch('https://fcm.googleapis.com/fcm/send', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: 'key=AAAAOUCCOgg:APA91bHj6-9xrOGKoCkKahgN_Fx4DZv_-lStCHMWZhMb2oyYaZodZn5TTX2eYZSORobCNBVCOZePEnH3SQBZf_nGWvE7v_sEnKx6JEeeffcPwnX9x9lbO_u82eNalkJ34unDCZ4aOU4i',
+//     },
+//     body: JSON.stringify({
+//       to: deviceToken || 'eZ2FVei0TSag2Phc_BdOiP:APA91bF6Tsml__-Lu7Xmgdk8lQqK5JoqInVSE4T5iH18uWWqWcj9At3GPA3TObyGScoX2GiHEK07SopIyCvWOTBWqJ6Jwp98y8J5v49lrvrHQy0BWDJATyYXTCbjzfvwyDNEpGvGSpOJ',
+//       priority: 'normal',
+//       data: {
+//         experienceId: '@numanarshad.dev/evez_expo_20201116',
+//         title: " You've got mail",
+//         message: 'Hello world!',
+//       },
+//     }),
+//   })
+//   .then(
+//     res => { 
+//     console.log(JSON.stringify(`send response is ", ${res}`));
+//   }
+//   ).catch(error => {
+//     alertMessage(JSON.stringify(`send error is ", ${error}`));
+//   });
+// }
 
 
 export const sendNotification = payload  => {

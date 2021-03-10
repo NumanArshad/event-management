@@ -11,12 +11,13 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { width_screen, height_screen } from "../../ultis/dimensions/index";
-import { forgotPassword } from "redux/auth/auth.actions";
+import { changePassword } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
 import SubmitButton from "components/buttons/submitButton";
 import Color from "ultis/color";
+import { alertMessage } from "ultis/alertToastMessages";
 
 const ChangePassword = memo((navigation) => {
   const { navigate } = useNavigation();
@@ -40,22 +41,22 @@ const ChangePassword = memo((navigation) => {
 
         formData.append("password_confirmation", confirmPassword);
 
-        //   ////console.log("FORMDATA:", formData);
-        forgotPassword(formData)
+        console.log("FORMDATA:", formData);
+        changePassword(formData)
           .then((res) => {
             ////console.log("Response ", res.data);
             if (res.data.status_code === 200) {
-              Alert.alert("", res.data.message);
-              navigate(ROUTES.Login);
+              alertMessage(res.data.message);
+           //   navigate(ROUTES.Login);
             }
           })
           .catch((err) => {
-            ////console.log("ERror :", err.response.data.errors);
-            Alert.alert("", JSON.stringify(err.response.data.errors));
+            console.log("ERror :", err.response.data.errors);
+            alertMessage(JSON.stringify(err.response.data.errors));
           });
       }
     } else {
-      Alert.alert("", "Kindly Fill All The Inputs.");
+    alertMessage("Kindly Fill All The Inputs.");
     }
   };
   return (

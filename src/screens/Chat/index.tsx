@@ -84,7 +84,6 @@ const Chat = () => {
 
   const isGroupChat = chatType === "groupChat";
 
-  const [isEventShare, setIsEventShare] = useState("");
 
   const {
     login_Session: { user_doc_id, user_id, user_name, coverImage },
@@ -102,6 +101,8 @@ const Chat = () => {
 
   const isEventSharing = eventShareStatus && !isEmpty(shareEventDetail);
 
+  const [isEventShare, setIsEventShare] = useState(isEventSharing);
+
   const { setOptions } = useNavigation();
 
   useLayoutEffect(() => {
@@ -113,7 +114,6 @@ const Chat = () => {
 
   useEffect(() => {
     if (isGroupChat) {
-      setIsEventShare(eventShareStatus)
       getUsersbyDocRefList(members, setGroupUsers);
       !all_trending_events?.length && dispatch(getAllTrendingEvents());
       return;
@@ -145,6 +145,9 @@ const Chat = () => {
 
   const onSend = (newMessage = []) => {
     // @ts-ignore
+    
+      isEventShare && setIsEventShare(false);
+
     const { user, ...messagePayload } = newMessage[0];
     const { text } = messagePayload;
     sendMessage(conversationId, {
@@ -217,10 +220,8 @@ const Chat = () => {
     );
   }, []);
 
-  console.log("share status is", isEventShare, eventShareStatus)
-
   const renderSend = useCallback((props) => {
-    isEventShare && setIsEventShare("");
+
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
@@ -228,7 +229,7 @@ const Chat = () => {
         </View>
       </Send>
     );
-  }, [isEventShare]);
+  }, []);
 
   return (
     <View style={styles.container}>
