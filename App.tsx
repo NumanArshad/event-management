@@ -44,7 +44,6 @@ const Evez = () => {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-
   return (
     <Provider store={store}>
       <Main />
