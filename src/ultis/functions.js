@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { baseImageUrl, noFoundImg } from "./constants";
+import { baseImageUrl, noFoundImg, noUserFoundImage } from "./constants";
 
 export let [currentLat, currentLong] = [null, null];
 
@@ -9,7 +9,7 @@ export const getUserPosition = () => {
       //@ts-ignore
       (position) => {
         const location = JSON.stringify(position);
-        console.log("my location is", location);
+       // console.log("my location is", location);
         const {
           coords: { latitude, longitude },
         } = position;
@@ -18,7 +18,7 @@ export const getUserPosition = () => {
         // {latitude, longitude}
       },
       (error) => {
-        console.log("in user location",error.message);
+       // console.log("in user location",error.message);
         return reject(error);
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
@@ -67,7 +67,7 @@ export const isEventInProgress = (eventDateTime, duration) => {
   const diffMinutes =  overAllMinutes * -1;
   const durationMinutes = (durationHours * 60) + durationMins;
 
-  console.log("det is", diffMinutes, durationMinutes,isBefore, isAfter, getEventTimeDown(eventDateTime))
+  //console.log("det is", diffMinutes, durationMinutes,isBefore, isAfter, getEventTimeDown(eventDateTime))
 
   const progressFlag = isBefore ?
 
@@ -124,7 +124,8 @@ export const getDistanceByLatLong = (
   }
 };
 
-export const getImage = image => {
+export const getImage = (image, isUser) => {
+  const defaultImage = isUser ? noUserFoundImage : noFoundImg;
   const imagePath = image?.includes("firebasestorage") ? `` : baseImageUrl;
-  return (!image || image.includes('default')) ? noFoundImg : image.includes("exponent") ? image : `${imagePath}${image}`
+  return (!image || image.includes('default')) ? defaultImage : image.includes("exponent") ? image : `${imagePath}${image}`
 }

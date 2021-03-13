@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useRef } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import {
   useFocusEffect,
@@ -18,6 +18,7 @@ import isEmpty from "ultis/isEmpty";
 import {
   formatDateTime,
   getEventTimeDown,
+  getImage,
   isEventInProgress,
 } from "ultis/functions";
 import dayjs from "dayjs";
@@ -27,46 +28,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPushNotification } from "redux/notifications/notifications.actions";
 import Color from "ultis/color";
 import { alertMessage } from "ultis/alertToastMessages";
-
-const data = [
-  {
-    thumbnail: require("@assets/Trending/trending_1.png"),
-    // tag: ["#culture"],
-    //  reviewTimes: 1.2,
-    eventName: "Sculpture Without Sight Experience",
-    location: "812 Thatcher Court Yonkers…",
-    distance: 4,
-    //  currentAttending: 19,
-    // //maxAttending: 5000,
-    save: false,
-    //  rate: 4.5,
-  },
-  {
-    thumbnail: require("@assets/Trending/trending_2.png"),
-    // tag: ["#fashion"],
-    //  reviewTimes: 2.4,
-    eventName: "Mahogany Bridal Fair 2018",
-    location: "The Grand Connaught Rooms…",
-    distance: 2.5,
-    //  currentAttending: 2568,
-    //maxAttending: 10000,
-    save: false,
-    // rate: 4.5,
-  },
-  {
-    thumbnail: require("@assets/Trending/trending_3.png"),
-    // tag: ["#Fashion", "#Convention"],
-    // reviewTimes: 1.2,
-    eventName: "Mahogany Bridal Fair 2016",
-    location: "The Grand Connaught Rooms…",
-    distance: 3.5,
-    //  currentAttending: 2568,
-    //maxAttending: 5000,
-    save: false,
-    // rate: 4.5,
-    timeCountDown: "7 Days 06 Hours 27 Mins 44 secs",
-  },
-];
 
 const EvezTrending = memo(() => {
   const navigation = useNavigation();
@@ -80,6 +41,9 @@ const EvezTrending = memo(() => {
 
   const { all_errors } = useSelector<any, any>((state) => state.errors);
   const { loading } = useSelector<any, any>((state) => state.loading);
+
+  const flList = useRef();
+
   //const { login_Session } = useSelector<any, any>((state) => state.auth);
 
   const onPressFilter = useCallback(() => {
@@ -97,8 +61,12 @@ const EvezTrending = memo(() => {
           ? getFilteredEvents(eventLocation, eventType)
           : getAllTrendingEvents()
       );
+    //  flList?.current.scrollToOffset({ animated: true, y: 0 });
     }, [dispatch, navigation, params])
+    
   );
+
+  
 
   const renderItem = useCallback(({ item }) => {
     const {
@@ -119,11 +87,13 @@ const EvezTrending = memo(() => {
       rating,
       duration,
       type_name,
+      image
     } = item;
 
+    //console.log(getImage(image))
     return (
       <EventItem
-        thumbnail={require("@assets/Trending/trending_3.png")}
+        thumbnail={getImage(image)}
         tag={type_name}
         id={event_id}
         eventName={event_name}
@@ -136,17 +106,16 @@ const EvezTrending = memo(() => {
     );
   }, []);
 
+
   return (
     <View style={styles.container}>
+       {/* <MyNotification /> */}
        {/* <MyNotification />
-
-      <TouchableOpacity onPress={()=>dispatch(sendPushNotification())}>
-        <Text>
-          send notufication
-        </Text>
-      </TouchableOpacity>  */}
+*/}
+     
       {!isEmpty(all_trending_events) ? (
         <FlatList
+           ref={flList}
           style={styles.scroll}
           data={all_trending_events}
           renderItem={renderItem}
@@ -173,6 +142,7 @@ const EvezTrending = memo(() => {
         ))
       )}
       <ButtonFilter onPress={onPressFilter} />
+
     </View>
   );
 });

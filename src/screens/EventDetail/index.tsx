@@ -45,6 +45,7 @@ import isEmpty from "ultis/isEmpty";
 import {
   compareDateTime,
   formatDateTime,
+  getImage,
   isEventInProgress,
 } from "ultis/functions";
 import EventTimeCountDown from "components/EventTimeCountDown";
@@ -184,6 +185,9 @@ const EventDetail = memo(() => {
           activeDotColor={"#fff"}
         >
           <View>
+            <Image source={{uri:getImage(data?.image)}} style={styles.thumbnail} />
+          </View>
+          {/* <View>
             <Image source={data?.thumbnail} style={styles.thumbnail} />
           </View>
           <View>
@@ -191,10 +195,7 @@ const EventDetail = memo(() => {
           </View>
           <View>
             <Image source={data?.thumbnail} style={styles.thumbnail} />
-          </View>
-          <View>
-            <Image source={data?.thumbnail} style={styles.thumbnail} />
-          </View>
+          </View> */}
         </Swiper>
 
         {/* 7 Days 06 Hours 27 Mins 44 secs */}
@@ -208,16 +209,18 @@ const EventDetail = memo(() => {
         {isEmpty(single_event) ? (
           <Text>...loading</Text>
         ) : (
-          isAfter && (
+        
             <EventTimeCountDown
               id={data?.id}
               eventDateTime={formatDateTime(
                 single_event?.event_date,
                 single_event?.start_time
               )}
+              hasPassed={!isAfter}
+              isInProgress={is_event_in_progress}
               isDetail={styles.countDownView}
             />
-          )
+          
         )}
 
         <View style={styles.infoView}>
@@ -232,8 +235,11 @@ const EventDetail = memo(() => {
             distance={single_event?.lat_long || ""}
             eventDateTime={
               !isEmpty(single_event) &&
-              `${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`
+              formatDateTime(single_event?.event_date, single_event?.start_time)
+             // `${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`
             }
+            duration={ !isEmpty(single_event) && single_event?.duration}
+
             loadFlag={isEmpty(single_event)}
           />
         </View>

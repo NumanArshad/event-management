@@ -21,10 +21,12 @@ import { Ionicons } from "@expo/vector-icons";
 import SubmitButton from "components/buttons/submitButton";
 import useImagePicker from "components/ImgPicker";
 import Color from "ultis/color";
+import { startLoading } from "redux/loading/loading.actions";
+import { noFoundImg } from "ultis/constants";
 
 const Register = memo((navigation) => {
   const dispatch = useDispatch();
-  const { image, pickImage } = useImagePicker();
+  const { image, pickImage, getImageFormConversion } = useImagePicker();
 
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
@@ -51,12 +53,15 @@ const Register = memo((navigation) => {
   const handleRegister = () => {
     if (email != "" && password != "" && name != "" && cPassword != "") {
       if (ValidateEmail() && validatePassword()) {
+        dispatch(startLoading());
         const formData = new FormData();
         formData.append("email", email);
         formData.append("password", password);
         formData.append("user_type", "citizen");
         formData.append("name", name);
         formData.append("password_confirmation", cPassword);
+        image !== noFoundImg &&
+          formData.append("image", getImageFormConversion());
         dispatch(register(formData));
       }
     } else {
@@ -69,10 +74,7 @@ const Register = memo((navigation) => {
   return (
     <View style={styles.container}>
       <View>
-        <Image
-          source={{ uri: image ? image : img }}
-          style={styles.imageProfile}
-        />
+        <Image source={{ uri: image || img }} style={styles.imageProfile} />
         <Ionicons
           name="create-outline"
           size={18}

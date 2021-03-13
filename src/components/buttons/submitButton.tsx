@@ -16,7 +16,7 @@ interface ButtonFilterProps {
   onPress: () => void;
   text: string;
   btnStyle?: ViewStyle;
-  isDisabled: Boolean;
+  isDisabled?: Boolean;
 }
 
 const SubmitButton = memo(

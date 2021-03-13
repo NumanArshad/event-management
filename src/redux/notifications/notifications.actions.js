@@ -42,25 +42,31 @@ export  async function registerForAsyncPushToken() {
   }
 
 
-export const sendPushNotification = () => (dispatch, getState) => {
-  const { login_Session: { deviceToken } } = getState()?.auth;
+export const sendPushNotification = payload => {
+  //const { login_Session: { deviceToken } } = getState()?.auth;
 
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({  
-       "to": deviceToken,
-    "title": "hello",
-    "body": "world" 
-  })
+    body: JSON.stringify(
+      payload
+  //     {  
+  //      "to": deviceToken,
+  //   "title": "hello",
+  //   "body": "world" 
+  // }
+  )
 };
 
- alertMessage("token"+deviceToken)
+console.log({requestOptions})
+
  fetch('https://exp.host/--/api/v2/push/send',
   requestOptions).then(
       res => alertMessage("send response is in token  "+ res)
     ).catch(error => alertMessage("error in token send is"+ error?.response))
 } 
+
+
 
 // export const sendPushNotification = () => (dispatch, getState) => {
 //   const {login_Session:{deviceToken}} = getState()?.auth;
@@ -102,7 +108,7 @@ export const sendNotification = payload  => {
 export const bulkFirestoreHandler = (data, callBack) => {
   Promise.all(data).then(
     res => {
-      alertMessage("bulk send successfully!");
+      console.log("bulk send successfully!");
       callBack()
     }
   )
@@ -147,7 +153,7 @@ export const getAuthNotifications = () => (dispatch, getState) => {
         id: res.id
       })
     })
-   console.log({notifArray})
+   //console.log({notifArray})
     dispatch({
       type: GET_ALL_NOTIFICATIONS,
       payload: notifArray

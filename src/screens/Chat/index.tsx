@@ -18,14 +18,17 @@ import FONTS from "ultis/fonts";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getConversation,
+getConversation,
+  getRoomUsers,
   isConversationInitiated,
+  joinChatRoom,
+  leaveChatRoom,
   sendMessage,
 } from "redux/chatServices/chat.actions";
 import { getUsersbyDocRefList } from "redux/users/users.actions";
 import { noFoundImg } from "ultis/constants";
 import EventItem from "components/EventItem";
-import { formatDateTime } from "ultis/functions";
+import { formatDateTime, getImage } from "ultis/functions";
 import { width_screen } from "ultis/dimensions";
 import { alertMessage } from "ultis/alertToastMessages";
 import {
@@ -33,6 +36,7 @@ import {
   getAllTrendingEvents,
 } from "redux/events/events.actions";
 import isEmpty from "ultis/isEmpty";
+
 
 const CustomView = (props:any) => {
   const { single_event } = useSelector<any, any>((state) => state?.events);
@@ -49,12 +53,13 @@ const CustomView = (props:any) => {
     start_time,
     duration,
     rating,
+    image
   } = single_event || {};
   return (
     <View style={{ padding: 10, width: "95%" }} {...props}>
       <EventItem
       
-        thumbnail={require("@assets/Trending/trending_3.png")}
+        thumbnail={getImage(image)}
         tag={type_name}
         id={event_id}
         eventName={event_name}
@@ -86,13 +91,15 @@ const Chat = () => {
 
 
   const {
-    login_Session: { user_doc_id, user_id, user_name, coverImage },
+    login_Session: { user_doc_id, user_id, user_name, image: senderImage, deviceToken },
   } = useSelector<any, any>((state) => state?.auth);
 
   const { single_event = {}, all_trending_events } = useSelector<any, any>(
     (state) => state?.events
   );
 
+//console.log({deviceToken})
+  
   const [groupUsers, setGroupUsers] = useState([]);
 
   const [messages, setMessages] = useState([]);
@@ -112,9 +119,14 @@ const Chat = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getMemberInfo = userDocId => {
+        return groupUsers.find(({id}) => id===userDocId);
+  }  
+
+
   useEffect(() => {
+
     if (isGroupChat) {
-      getUsersbyDocRefList(members, setGroupUsers);
       !all_trending_events?.length && dispatch(getAllTrendingEvents());
       return;
     }
@@ -126,7 +138,20 @@ const Chat = () => {
     });
   }, [user_doc_id, conversationId, isGroupChat, members]);
 
+  //console.log(conversationId)
+
   useEffect(() => {
+    //getRoomUsers(conversationId);
+    joinChatRoom(conversationId, user_doc_id);
+
+    return () => leaveChatRoom(conversationId, user_doc_id)
+  }, []);
+
+  useEffect(() => {
+    let groupMembers = isGroupChat ? members : conversationId?.split('_')
+   // console.log({groupMembers})
+    !groupUsers.length ? getUsersbyDocRefList(groupMembers, setGroupUsers) :
+    
     getConversation(conversationId, messages, (res) => {
       //@ts-ignore
       let updateMessages = res.map(({ sentBy, text, id, createdAt }) => ({
@@ -136,12 +161,13 @@ const Chat = () => {
         _id: id,
         user: {
           _id: sentBy,
-          avatar: noFoundImg,
+          avatar: getMemberInfo(sentBy)?.image,
         },
       }));
+      console.log("my all messagt ob show are", updateMessages)
       setMessages(updateMessages);
     });
-  }, []);
+  }, [groupUsers]);
 
   const onSend = (newMessage = []) => {
     // @ts-ignore
@@ -154,7 +180,8 @@ const Chat = () => {
       sentBy: user_doc_id,
       createdAt: Date.now(),
       text: isEventSharing ? single_event?.event_id : text,
-    });
+    }, {user_doc_id, deviceToken},
+    groupUsers);
 
     isEventSharing
       ? setEventDetail(eventDetail => eventDetail = {})
@@ -178,7 +205,7 @@ const Chat = () => {
       <>
         {isGroupChat && !isEmpty(message) ? (
           <EventItem
-            thumbnail={require("@assets/Trending/trending_3.png")}
+            thumbnail={getImage(message?.image)}
             tag={message?.type_name}
             id={message?.event_id}
             eventName={message?.event_name}
@@ -252,6 +279,7 @@ const Chat = () => {
           renderSend={renderSend}
           user={{
             _id: user_doc_id,
+            avatar: getImage(senderImage)
           }}
           textInputProps={{
             fontSize: 14,
@@ -269,6 +297,9 @@ const Chat = () => {
           renderSend={renderSend}
           user={{
             _id: user_doc_id,
+           // name:"jwfn",
+            avatar: getImage(senderImage)
+          
           }}
           textInputProps={{
             fontSize: 14,

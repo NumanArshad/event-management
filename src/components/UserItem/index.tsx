@@ -151,7 +151,7 @@ const UserItem = (props: any) => {
   // conpsole.log("people is", userInfo);
   return (
     <TouchableOpacity onPress={handleItemPress} style={styles.card}>
-      <Image style={styles.image} source={{ uri: getImage(image) }} />
+      <Image style={styles.image} source={{ uri: getImage(image, 'user') }} />
       <View style={styles.txtField}>
         <Text style={styles.txtName}>{user_name}</Text>
         {user_type && <Text style={styles.txtNumberFollower}>{user_type}</Text>}

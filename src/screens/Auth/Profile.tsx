@@ -38,16 +38,16 @@ const Profile = memo(() => {
 
   const { loading } = useSelector((state) => state?.loading);
 
-  console.log({
-    user_name,
-    email: userEmail,
-    first_name,
-    last_name,
-    contact,
-    image,
-  });
+  // console.log({
+  //   user_name,
+  //   email: userEmail,
+  //   first_name,
+  //   last_name,
+  //   contact,
+  //   image,
+  // });
 
-  console.log({ image });
+  // console.log({ image });
 
   const [email, setemail] = useState(userEmail);
   const [password, setpassword] = useState("");

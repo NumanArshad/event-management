@@ -22,7 +22,7 @@ import {
 } from "redux/events/events.actions";
 import keyExtractor from "ultis/keyExtractor";
 import isEmpty from "ultis/isEmpty";
-import { formatDateTime, splitLatLongStr } from "ultis/functions";
+import { formatDateTime, getImage, splitLatLongStr } from "ultis/functions";
 import Color from "ultis/color";
 import NoContentFound from "components/NoContentFound";
 
@@ -73,10 +73,11 @@ const EventAroundYou = memo(() => {
       rating,
       type_name,
       duration,
+      image
     } = item;
     return (
       <EventItem
-        thumbnail={require("@assets/Trending/trending_3.png")}
+        thumbnail={getImage(image)}
         tag={type_name}
         id={event_id}
         eventName={event_name}

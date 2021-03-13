@@ -11,7 +11,7 @@ import FilterEvez from "screens/FilterEvez";
 import MainBottomTab from "nav/MainBottomTab";
 import Notification from "screens/Notification";
 import Inbox from "screens/Inbox";
-import SelectHashtag from "screens/SelectHashtag";
+// import SelectHashtag from "screens/SelectHashtag";
 import AllEventAroundYou from "screens/AllEventAroundYou";
 import Attending from "screens/Attending";
 import FollowTab from "nav/FollowTab";
@@ -19,7 +19,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar, TouchableOpacity } from "react-native";
 import SearchPeople from "screens/SearchPeople";
 import TabSearchEvents from "screens/TabSearchEvents";
-import SearchNews from "screens/SearchNews";
 import PurchaseDetail from "screens/PurchaseDetail";
 import EventDetail from "screens/EventDetail";
 import EvezNews from "screens/EvezNews";
@@ -71,11 +70,11 @@ const PrivateNavigator = () => (
         title: "Search People",
       }}
     />
-    <privateNavStack.Screen
+    {/* <privateNavStack.Screen
       options={{ headerBackTitleVisible: false, title: "Search News" }}
       name={ROUTES.SearchNews}
       component={SearchNews}
-    />
+    /> */}
     <privateNavStack.Screen
       name={ROUTES.TabSearchEvents}
       component={TabSearchEvents}

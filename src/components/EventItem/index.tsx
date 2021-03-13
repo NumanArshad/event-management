@@ -20,7 +20,7 @@ import SvgSaved from "svgs/IconSaved";
 import { saveEvent, unSaveEvent } from "redux/events/events.actions";
 import { useDispatch, useSelector } from "react-redux";
 import EventTimeCountDown from "components/EventTimeCountDown";
-import { compareDateTime, isEventInProgress } from "ultis/functions";
+import { compareDateTime, formatDateTime, isEventInProgress } from "ultis/functions";
 import dayjs from "dayjs";
 import CustomSkeleton from "components/SkeletonPlaceholder";
 
@@ -40,7 +40,7 @@ interface EventItemProps {
   duration?: string;
   colorAttending?: string;
   isSmallItem?: boolean;
-  loadFlag?: boolean
+  loadFlag?: boolean;
 }
 
 const EventItem = memo((props: EventItemProps) => {
@@ -101,10 +101,11 @@ const EventItem = memo((props: EventItemProps) => {
       onPress={onDetail}
       activeOpacity={0.8}
     >
+      
       <View style={styles.viewThumbnail}>
         <CustomSkeleton loadFlag={props.loadFlag}>
           <Image
-            source={props.thumbnail}
+            source={{uri:props.thumbnail}}
             style={[styles.thumbnail, thumbnailDimension]}
           />
         </CustomSkeleton>
@@ -115,12 +116,14 @@ const EventItem = memo((props: EventItemProps) => {
           </TouchableOpacity>
         )}
 
-        {compareDateTime(props.eventDateTime)?.isAfter &&
+       {
           !props.isSmallItem && (
             <EventTimeCountDown
               eventDateTime={props.eventDateTime}
               id={props.id}
               loadFlag={props.loadFlag}
+              hasPassed={!compareDateTime(props.eventDateTime)?.isAfter }
+              isInProgress={isEventInProgress(props.eventDateTime, props?.duration)}
             />
           )}
       </View>
@@ -139,9 +142,11 @@ const EventItem = memo((props: EventItemProps) => {
         distance={props.distance}
         eventDateTime={props.eventDateTime}
         eventId={props.id}
+        duration={props.duration}
         isSmallItem={props.isSmallItem}
         loadFlag={props.loadFlag}
-
+        hasPassed={props.hasPassed}
+        isInProgress={props.isInProgress}
       />
     </TouchableOpacity>
   );

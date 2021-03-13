@@ -9,6 +9,7 @@ import { height_screen, width_screen } from "ultis/dimensions";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import isEmpty from "ultis/isEmpty";
 import Color from "ultis/color";
+import { formatDateTime, getImage } from "ultis/functions";
 
 const data = [
   {
@@ -50,19 +51,23 @@ const ProfileSaved = memo(() => {
       lat_long,
       rating,
       type_name,
+      image,
+      duration
     } = item;
     return (
       <EventItem
-        thumbnail={require("@assets/Trending/trending_3.png")}
+        thumbnail={getImage(image)}
         tag={type_name}
         id={event_id}
         eventName={event_name}
         location={address}
         distance={lat_long}
-        timeCountDown="15 Days 06 Hours 27 Mins 44 secs"
-        eventDateTime={`${event_date}  -  ${start_time}`}
+       // timeCountDown="15 Days 06 Hours 27 Mins 44 secs"
+        eventDateTime={formatDateTime(event_date, start_time)}
         rate={rating}
-        save
+        //save
+        duration={duration}
+
       />
     );
   }, []);

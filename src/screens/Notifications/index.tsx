@@ -78,7 +78,7 @@ async function registerForAsyncPushToken() {
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
 
-    console.log("token i s", token)
+    //console.log("token i s", token)
     //  if (Platform.OS === 'android') {
     // Notifications.setNotificationChannelAsync('default', {
     //   name: 'default',
