@@ -21,6 +21,7 @@ import store from "redux/store";
 import { getMyEarning } from "redux/users/users.actions";
 import { ScrollView } from "react-native-gesture-handler";
 import COLOR from "ultis/color/index";
+import { getImage } from "ultis/functions";
 interface Props {
   coverImage: any;
   avatar: any;
@@ -88,7 +89,7 @@ const HeaderProfile = memo((props: Props) => {
         end={{ x: 1, y: 1 }}
       />
       <View style={styles.mask}>
-        <Image style={styles.img} source={props.avatar} />
+        <Image style={styles.img} source={{uri:getImage(props.avatar)}} />
         <Ionicons
           name="create-outline"
           size={18}

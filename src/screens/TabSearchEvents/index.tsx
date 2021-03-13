@@ -1,8 +1,7 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import SearchBar from "components/SearchBar";
-import ListEvent from "screens/TabSearchEvents/components/ListEvent";
-import ListHotKeysNews from "screens/SearchNews/components/ListHotKeysNews";
+// import ListEvent from "screens/TabSearchEvents/components/ListEvent";
 import { adsBannerId } from "data/ads";
 import { AdMobBanner } from "expo-ads-admob";
 import UserItem from "components/UserItem";

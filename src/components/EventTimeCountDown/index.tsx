@@ -1,12 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
-import {
-  Alert,
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Alert, Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import FONTS from "ultis/fonts";
 import HourGlass from "svgs/HourGlass";
 import dayjs from "dayjs";
@@ -20,7 +13,9 @@ interface EventItemProps {
   eventDateTime?: string;
   isSmallItem?: boolean;
   isDetail?: ViewStyle;
-  loadFlag?: boolean
+  loadFlag?: boolean;
+  hasPassed?: boolean;
+  isInProgress?: boolean;
 }
 
 const EventTimeCountDown = memo((props: EventItemProps) => {
@@ -37,9 +32,8 @@ const EventTimeCountDown = memo((props: EventItemProps) => {
   });
 
   useEffect(() => {
-   const interval= setInterval(() => {
-    
-    const { days, hours, minutes } = getEventTimeDown(props.eventDateTime);
+    const interval = setInterval(() => {
+      const { days, hours, minutes } = getEventTimeDown(props.eventDateTime);
       //@ts-ignore
       setCountDown((prev) => ({
         days,
@@ -49,23 +43,32 @@ const EventTimeCountDown = memo((props: EventItemProps) => {
       }));
     }, 60000);
 
-    return ()=>{
-      clearInterval(interval)
-    }
-  }, [props?.id]);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [props?.id, props?.eventDateTime]);
 
-
-  const {days, hours, minutes, seconds} = timeCountData;
-
-  
+  const { days, hours, minutes, seconds } = timeCountData;
 
   return (
     <View style={props.isDetail || [styles.labelCountDown, countDownDimension]}>
-      <CustomSkeleton style={{width: width_screen * 0.40, height: 15}}
-      loadFlag={props.loadFlag}>
+      <CustomSkeleton
+        style={{ width: width_screen * 0.4, height: 15 }}
+        loadFlag={props.loadFlag}
+      >
         <HourGlass />
         <Text style={styles.textCountDown}>
-          {`${days ? days : ``} ${!days ? `` : days === 1 ? `day` : `days`} ${hours} hours ${minutes} minutes`}
+          {props.isInProgress ? (
+            `Event has started`
+          ) : props.hasPassed ? (
+            `Event has passed`
+          ) : (
+            <>
+              {`${days ? days : ``} ${
+                !days ? `` : days === 1 ? `day` : `days`
+              } ${hours} hours ${minutes} minutes`}
+            </>
+          )}
         </Text>
       </CustomSkeleton>
     </View>
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     marginBottom: 36,
   },
-  
+
   textReviewTimes: {
     fontSize: 14,
     color: "#353B48",

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-import {noFoundImg} from "ultis/constants"
+import {noUserFoundImage} from "ultis/constants"
 import firebase from "ultis/services/FirebaseConfig";
 import { alertMessage } from "ultis/alertToastMessages";
 import { storage } from "firebase";
 
 const useImagePicker = defaultImage => {
     
-    const [image, setImage] = useState(defaultImage ?? noFoundImg);
+    const [image, setImage] = useState(defaultImage ?? noUserFoundImage);
 
     const storageRef = firebase.storage().ref();
 
@@ -36,9 +36,20 @@ const useImagePicker = defaultImage => {
         });
 
         if (!result.cancelled) {
-          setImage(result.uri);
+        setImage(result.uri);
         }
       };
+
+      const getImageFormConversion = () => {
+        let localUri = image
+        let filename = localUri.split('/').pop();
+
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+        return {type, uri:localUri, name:filename}
+      }
 
       const uploadImage = async() => {
           const imgExtension = image?.split('.').slice(-1)
@@ -60,7 +71,7 @@ const useImagePicker = defaultImage => {
           }
       }
  
-      return {image, pickImage, uploadImage}
+      return {image, pickImage, uploadImage, getImageFormConversion}
 
 }
 

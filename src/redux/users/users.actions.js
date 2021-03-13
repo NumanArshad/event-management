@@ -35,6 +35,7 @@ export const getAllUsers = (callBack) => {
   );
 };
 
+
 ////Run when other user send friend request or accept/reject
 export const getAuthUserObserver = () => (dispatch, getState) => {
   const {login_Session: {user_doc_id}} = getState()?.auth
@@ -64,8 +65,8 @@ export const receipentTransactions = (users, groupId) => {
     })
     return Promise.resolve();
   })
-    .then(res => alertMessage("all transaction updated successfully!"))
-    .catch(error => alertMessage(`error in updated transaction is ${error}`))
+    .then(res => console.log("all transaction updated successfully!"))
+    .catch(error => console.log(`error in updated transaction is ${error}`))
 }
 
 export const getUsersbyDocRefList = (
@@ -86,7 +87,7 @@ export const getUsersbyDocRefList = (
               ...res?.data(),
             });
           });
-    console.log("userdoc is", userDocListIds, selectionBehaviour, usersList);
+   // console.log("userdoc is", userDocListIds, selectionBehaviour, usersList);
           callBack(usersList);
         });
 };
@@ -139,7 +140,7 @@ export const getSingleUser = (user_id, userName , isAuthCallBack) => {
     .then((res) => {
       let userInfo = {};
 
-   //   //console.log("my user is ", res.docs)
+   //console.log("my user is ", res.docs)
       res.forEach((payload) => {
         
         userInfo = { ...payload.data(), user_doc_id: payload.id };

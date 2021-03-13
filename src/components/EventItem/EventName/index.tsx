@@ -11,14 +11,25 @@ interface EventNameProps {
   tag?: string;
   eventName: string;
   rate?: number;
-  reviewTimes?: number;
+ // reviewTimes?: number;
   isSmallItem?: boolean;
   loadFlag?: boolean;
 }
 
+// thumbnail={getImage(image)}
+// tag={type_name}
+// id={event_id}
+// eventName={event_name}
+// location={address}
+// distance={lat_long}
+// eventDateTime={formatDateTime(event_date, start_time)}
+// rate={rating}
+// duration={duration}
 const EventName = memo((props: EventNameProps) => {
   const fontSizeTag = props.isSmallItem ? 12 : 14;
   const fontSizeName = props.isSmallItem ? 14 : 18;
+
+  
 
   return (
     <View style={styles.container}>
@@ -27,18 +38,16 @@ const EventName = memo((props: EventNameProps) => {
           style={[styles.textTag, { width: width_screen * 0.3, height: 15 }]}
           loadFlag={props.loadFlag}
         >
+          {props?.tag &&
           <Text style={[styles.textTag, { fontSize: fontSizeTag }]}>
             # {props?.tag}
-          </Text>
+          </Text>}
         </CustomSkeleton>
 
         {props?.rate ? (
           <View style={styles.rateView}>
             <InactiveRate rate={props?.rate || 0} />
-
-            <Text style={[styles.textReviewTimes, { fontSize: fontSizeTag }]}>
-              {props?.reviewTimes}K
-            </Text>
+        
           </View>
         ) : null}
       </View>

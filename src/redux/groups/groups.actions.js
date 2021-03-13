@@ -7,7 +7,7 @@ const groupCollection = firebase.firestore().collection("groups");
 export const createGroup = payload => {
     groupCollection.add(payload)
         .then(res => {
-            alertMessage("group Created successfully!");
+            alertMessage("Group Created successfully!");
             receipentTransactions(payload?.members, res?.id)
         })
         .catch(error => alertMessage(`error in creating group is ${error}`))

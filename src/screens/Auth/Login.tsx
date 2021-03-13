@@ -60,7 +60,7 @@ const Login = memo(() => {
           //   uri:
           //     "https://i.pinimg.com/originals/f6/db/9b/f6db9b785d37c154c2be26b7c32604b6.jpg",
           // }}
-          source={require("assets/logo.png")}
+          source={require("assets/iuvo.png")}
           style={styles.imageProfile}
         />
         <TextInput

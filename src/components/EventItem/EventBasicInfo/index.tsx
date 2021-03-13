@@ -13,17 +13,22 @@ import isEmpty from "ultis/isEmpty";
 import { getDistanceByLatLong, splitLatLongStr } from "ultis/functions";
 import dayjs, { Dayjs } from "dayjs";
 import CustomSkeleton from "components/SkeletonPlaceholder";
+import { Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 
 interface EventBasicInfoProps {
   eventId?: number;
   location?: string;
   distance?: string;
+  duration?: string;
   currentAttending?: number;
   //maxAttending?: number;
   eventDateTime?:  string;
   colorAttending?: string;
   isSmallItem?: boolean;
-  loadFlag?:boolean
+  loadFlag?:boolean;
+
+  hasPassed?:boolean;
+  isInProgress?:boolean
 }
 
 const EventBasicInfo = memo((props: EventBasicInfoProps) => {
@@ -45,46 +50,83 @@ const EventBasicInfo = memo((props: EventBasicInfoProps) => {
       <View style={styles.location}>
         <View style={styles.flexRow}>
           {props?.location ? <Location /> : null}
-          <CustomSkeleton style={[styles.textLocation, { width: width_screen * 0.55, height: 15 }]}
-          loadFlag={props?.loadFlag}>
+          <CustomSkeleton
+            style={[
+              styles.textLocation,
+              { width: width_screen * 0.55, height: 15 },
+            ]}
+            loadFlag={props?.loadFlag}
+          >
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
               {props?.location}
             </Text>
           </CustomSkeleton>
         </View>
-        <CustomSkeleton style={[styles.textTag, {  width: width_screen * 0.20, height: 10 }]}
-        loadFlag={props?.loadFlag}>
-        <Text style={[styles.textTag, { color: colorTextLocation }]}>
-          {getDistanceByLatLong(latitude, longitude)} km
-        </Text>
-        </CustomSkeleton>
-      
       </View>
 
-      <View style={styles.location}>
+      <View style={styles.location} >
         <View style={styles.flexRow}>
-          {props?.eventDateTime ? <SvgEventTime /> : null}
-          <CustomSkeleton style={[styles.textLocation, { width: width_screen * 0.45, height: 10 }]}
-          loadFlag={props?.loadFlag}>
+          {props?.distance ? (
+            <MaterialCommunityIcons
+              name="map-marker-distance"
+              size={18}
+              color="black"
+            />
+          ) : null}
+          <CustomSkeleton loadFlag={props?.loadFlag}>
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
-              {props?.eventDateTime}
+            {getDistanceByLatLong(latitude, longitude)} km
             </Text>
           </CustomSkeleton>
         </View>
       </View>
 
-        <View style={styles.location} onTouchStart={onAttending}>
-          <View style={styles.flexRow}>
-            {props?.currentAttending ? <TicketIcon /> : null}
-            <CustomSkeleton loadFlag={props?.loadFlag}>
+      <View style={styles.location}>
+        <View style={styles.flexRow}>
+          {props?.eventDateTime ? <SvgEventTime /> : null}
+          <CustomSkeleton
+            style={[
+              styles.textLocation,
+              { width: width_screen * 0.45, height: 10 },
+            ]}
+            loadFlag={props?.loadFlag}
+          >
+            <Text style={[styles.textLocation, { color: colorTextLocation }]}>
+              {dayjs(props?.eventDateTime).format("DD/MMM/YYYY hh:mm A")}
+            </Text>
+          </CustomSkeleton>
+        </View>
+      </View>
+
+      <View style={styles.location} onTouchStart={onAttending}>
+        <View style={styles.flexRow}>
+          {props?.duration ? (
+            <Ionicons
+              name="timer-outline"
+              size={18}
+              color="black"
+              //style={styles.iconEdit}
+              //onPress={onProfile}
+            />
+          ) : null}
+          <CustomSkeleton loadFlag={props?.loadFlag}>
+            <Text style={[styles.textLocation, { color: colorTextLocation }]}>
+              {props?.duration}
+            </Text>
+          </CustomSkeleton>
+        </View>
+      </View>
+
+      <View style={styles.location} onTouchStart={onAttending}>
+        <View style={styles.flexRow}>
+          {props?.currentAttending ? <TicketIcon /> : null}
+          <CustomSkeleton loadFlag={props?.loadFlag}>
             <Text style={[styles.textLocation, { color: colorTextLocation }]}>
               {props?.currentAttending} {props?.currentAttending && `Attendees`}
             </Text>
-            </CustomSkeleton>
-          
-          </View>
+          </CustomSkeleton>
         </View>
-    
+      </View>
     </View>
   );
 });

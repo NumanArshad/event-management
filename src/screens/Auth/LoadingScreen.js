@@ -18,7 +18,7 @@ import { login, SetItem_AsynsStorage } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from "ultis/component/Text_Input";
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/iuvo.png";
 import { useDispatch, useSelector } from "react-redux";
 const LoadingScreen = memo(() => {
   return (

@@ -18,7 +18,7 @@ const defaultSession = {
   user_doc_id: null,
   user_id: null,
   image: null,
-  device_token: null,
+  deviceToken: null,
   stripe_account: null,
 };
 
