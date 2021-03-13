@@ -145,8 +145,6 @@ const EventItem = memo((props: EventItemProps) => {
         duration={props.duration}
         isSmallItem={props.isSmallItem}
         loadFlag={props.loadFlag}
-        hasPassed={props.hasPassed}
-        isInProgress={props.isInProgress}
       />
     </TouchableOpacity>
   );
