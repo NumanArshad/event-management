@@ -41,9 +41,6 @@ interface EventItemProps {
   colorAttending?: string;
   isSmallItem?: boolean;
   loadFlag?: boolean;
-
-  //hasPassed?: boolean;
-  //isInProgress?: boolean
 }
 
 const EventItem = memo((props: EventItemProps) => {

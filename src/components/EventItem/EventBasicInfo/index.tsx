@@ -26,9 +26,6 @@ interface EventBasicInfoProps {
   colorAttending?: string;
   isSmallItem?: boolean;
   loadFlag?:boolean;
-
-  hasPassed?:boolean;
-  isInProgress?:boolean
 }
 
 const EventBasicInfo = memo((props: EventBasicInfoProps) => {
