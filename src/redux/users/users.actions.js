@@ -129,9 +129,9 @@ export const updateUser = (payload, updateStatus) => (dispatch, getState) => {
     });
 };
 
-export const getSingleUser = (user_id, userName , isAuthCallBack) => {
+export const getSingleUser = (user , isAuthCallBack) => {
 
-
+  const {id: user_id, name: userName} = user;
   userCollectionRef
     .where("user_id", "==", user_id)
     .where("user_name", "==", userName)
