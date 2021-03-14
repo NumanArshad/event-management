@@ -1,4 +1,4 @@
-name: Expo APK on staging
+name: Expo IOS on staging
 on:
   push:
     branches:
@@ -18,4 +18,4 @@ jobs:
           expo-token: ${{ secrets.EXPO_CLI_TOKEN }}
       - run: npm install
       - run: expo install
-      - run: expo build:android -t apk
+      - run: expo build:ios -t archive
