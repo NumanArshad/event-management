@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useRef } from "react";
+import React, { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import {
   useFocusEffect,
@@ -20,6 +20,7 @@ import {
   getEventTimeDown,
   getImage,
   isEventInProgress,
+  watchUserGeoLocation,
 } from "ultis/functions";
 import dayjs from "dayjs";
 import MyNotification from "screens/Notifications";
@@ -106,13 +107,24 @@ const EvezTrending = memo(() => {
     );
   }, []);
 
+  const [pos, setPos] = useState('')
+
+  useEffect(()=>{
+   // console.log("hey calllll")
+    watchUserGeoLocation().then(res => 
+      {
+       // console.log("should",{res})
+        ;setPos(pos => pos= JSON.stringify(res))}
+      );
+  })
+
 
   return (
     <View style={styles.container}>
        {/* <MyNotification /> */}
        {/* <MyNotification />
 */}
-     
+<MyNotification />
       {!isEmpty(all_trending_events) ? (
         <FlatList
            ref={flList}

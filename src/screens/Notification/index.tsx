@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAuthNotifications } from 'redux/notifications/notifications.actions';
 import { getUsersbyDocRefList } from 'redux/users/users.actions';
 import dayjs from 'dayjs';
+import { getImage } from 'ultis/functions';
 var relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
 
@@ -89,9 +90,11 @@ const Notification = memo(() => {
     const docIdList = all_notifications?.map(
       ({ senderDocId }: { senderDocId: any }) => senderDocId
     );
-
+console.log("getting all", docIdList)
     getUsersbyDocRefList(docIdList, setNotificationUsers);
   }, [all_notifications]);
+
+  console.log("het message is", notificationUsers)
 
   const renderItem = useCallback(({item, index}) => {
     const {
@@ -107,7 +110,7 @@ const Notification = memo(() => {
     } = item;
     return ["friendRequest", "groupInvite"].includes(type) ? (
       <NotificationMessage
-        avatar={data[index]?.avatar}
+        avatar={getImage(notificationUsers[index]?.image)}
         userName={notificationUsers[index]?.first_name}
         message={type}
         time={dayjs.unix(all_notifications[index]?.createdAt?.seconds).format("DD/MM/YYYY")}

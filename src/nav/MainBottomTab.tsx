@@ -13,6 +13,7 @@ import EvezNews from "screens/EvezNews";
 import StackProfile from "nav/StackProfile";
 import StackCalender from "./StackCalender";
 import Color from "ultis/color";
+import GroupStack from "./GroupsNav/GroupStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -40,8 +41,8 @@ const MainBottomTab = () => {
         }}
       />
       <Tab.Screen
-        name={ROUTES.TabSearchEvents}
-        component={StackSearchEvents}
+        name={"groups"}
+        component={GroupStack}
         options={{
           tabBarIcon: ({ color }) => <SvgTabSearchInactive color={color} />,
         }}

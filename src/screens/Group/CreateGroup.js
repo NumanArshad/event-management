@@ -9,6 +9,7 @@ import {
   Animated,
   TextInput,
   Image,
+  Button,
 } from "react-native";
 import keyExtractor from "ultis/keyExtractor";
 import TicketItem from "screens/ProfileTickets/components/TicketItem";
@@ -33,7 +34,7 @@ import {
   bulkFirestoreHandler,
   sendNotification,
 } from "redux/notifications/notifications.actions";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { alertMessage } from "ultis/alertToastMessages";
 import { startLoading, stopLoading } from "redux/loading/loading.actions";
 import NoContentFound from "components/NoContentFound";
@@ -43,6 +44,7 @@ const CreateGroup = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const { image, pickImage, uploadImage } = useImagePicker();
+  const { navigate } = useNavigation();
 
   const {
     login_Session: { user_doc_id, friends },
@@ -64,113 +66,63 @@ const CreateGroup = () => {
     );
   }, []);
 
+
   const { goBack } = useNavigation();
 
-  const handleSubmit = async () => {
-    const downloadUrl = await uploadImage();
-    if (downloadUrl) {
-      dispatch(startLoading());
-      console.log("downloaded is ", downloadUrl);
-      const selectedFriends = members.map(({ id }) => id);
-      const payload = {
-        name,
-        image: downloadUrl,
-        members: [...selectedFriends, user_doc_id],
-        createdBy: user_doc_id,
-        createdDate: new Date(),
-      };
-      createGroup(payload);
-
-      ///Send Group join notification to all receipent
-      const mapBulkNotifications = members.map(({ id: receipentDocId }) =>
-        sendNotification({
-          receipentDocId,
-          senderDocId: user_doc_id,
-          createdAt: new Date(),
-          type: "groupInvite",
-        })
-      );
-
-      bulkFirestoreHandler(mapBulkNotifications, handleGoBack);
-    }
+  const handleSubmit = () => {
+    navigate('add_member', {
+      name,
+      image
+    })
   };
 
-  const handleGoBack = () => {
-    dispatch(stopLoading());
-    goBack();
-  };
+
 
   return (
     <View style={styles.container}>
-      {!friends?.length ? 
-      <NoContentFound text="You must have atleast one friend to create group" />
-      : 
-      <ScrollView
-        onScroll={Animated.event([
-          { nativeEvent: { contentOffset: { x: scrollX } } },
-        ])}
-      >
-        <Image
-          style={styles.img}
-          source={{
-            uri: image,
-          }}
-        />
-        <Ionicons
-          name="create-outline"
-          size={18}
-          color="black"
-          onPress={pickImage}
-          style={styles.iconEdit}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Enter name..."
-          onChangeText={(name) => setFormData({ ...formData, name })}
-        />
-
-        {/* <Text
-          style={{
-            fontWeight: "bold",
-            fontSize: 15,
-            width: width_screen,
-            paddingHorizontal: width_screen * 0.1,
-            paddingVertical: height_screen * 0.01,
-          }}
+      {!friends?.length ?
+        <NoContentFound text="You must have atleast one friend to create group" />
+        :
+        <ScrollView
+          onScroll={Animated.event([
+            { nativeEvent: { contentOffset: { x: scrollX } } },
+          ])}
         >
-          Add People
-        </Text> */}
-        {/* <ScrollView
-          style={{
-            marginVertical: height_screen * 0.02,
-          }}
-        >
-          {members?.map(({ user_name, image, id }) => (
-            <TouchableOpacity style={styles.selectpeople} key={id}>
-              <Image
-                style={styles.img2}
-                source={{
-                  uri: !image || image.includes("default") ? noFoundImg : image,
-                }}
-              />
-              <Text style={styles.userName}>{user_name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView> */}
-        <View
-          style={{
-            width: width_screen * 0.8,
-            alignSelf: "center",
-          }}
-        >
-          <SubmitButton
-            text="Create"
-            onPress={handleSubmit}
-            isDisabled={!friends?.length}
+          <Image
+            style={styles.img}
+            source={{
+              uri: image,
+            }}
           />
-        </View>
-      </ScrollView>
-}
+          <Ionicons
+            name="create-outline"
+            size={18}
+            color="black"
+            onPress={pickImage}
+            style={styles.iconEdit}
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Enter name..."
+            onChangeText={(name) => setFormData({ ...formData, name })}
+            value={name}
+          />
+          <View
+            style={{
+              width: width_screen * 0.8,
+              alignSelf: "center",
+            }}
+          >
+            <SubmitButton
+              text="Add Member"
+              onPress={handleSubmit}
+              isDisabled={!friends?.length}
+            />
+          </View>
+
+
+        </ScrollView>
+      }
     </View>
   );
 };

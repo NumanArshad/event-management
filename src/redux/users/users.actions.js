@@ -41,7 +41,7 @@ export const getAuthUserObserver = () => (dispatch, getState) => {
   const {login_Session: {user_doc_id}} = getState()?.auth
 
   userCollectionRef.doc(user_doc_id).onSnapshot(snapshot => {
-    ////console.log("auth updated is here", snapshot.data())
+console.log("auth updated is here", snapshot.data())
     dispatch(updateAuthUser(snapshot.data()));
   })
 }

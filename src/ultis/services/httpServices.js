@@ -41,7 +41,6 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     const isAuthUrl = ["login", "register"].includes(response?.config?.url);
-   console.log(response?.config.url)
     !isAuthUrl && dispatch(stopLoading());
     dispatch(clearErrors());
     return response;

@@ -13,10 +13,10 @@ interface Props {
 
 const NotificationMessage = memo((props: Props) => {
   const backGroundColor = {backgroundColor: props.un_Read ? '#F7F8FA' : '#FFF'};
-
+console.log(props.avatar)
   return (
     <TouchableOpacity style={[styles.notificationMessage, backGroundColor]}>
-      <Image source={props.avatar} />
+      <Image source={{uri:props.avatar}} style={styles.image}/>
       <View style={styles.content}>
         <Text style={styles.txtUserName}>
           {props.userName} 
@@ -37,6 +37,12 @@ const styles = StyleSheet.create({
     height: height_screen * 0.12,
     paddingHorizontal: 0.064 * width_screen,
     paddingVertical: 0.022 * height_screen,
+  },
+  image: {
+    marginHorizontal: 0.04 * width_screen,
+    width: width_screen * 0.15,
+    height: height_screen * 0.08,
+    borderRadius: 100,
   },
   content: {
     marginLeft: 0.04 * width_screen,
