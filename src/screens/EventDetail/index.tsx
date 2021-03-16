@@ -181,7 +181,7 @@ const EventDetail = memo(() => {
       >
         <Swiper
           containerStyle={styles.swiperStyle}
-          dotColor={"rgba(255,255,255,0.5)"}
+          dotColor={ "rgba(255,255,255,0.5)"}
           activeDotColor={"#fff"}
         >
           <View>
@@ -378,7 +378,7 @@ const EventDetail = memo(() => {
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
           style={styles.linear}
-          colors={["#ED3269", "#F05F3E"]}
+          colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
         />
       </Animated.View>
     </View>
