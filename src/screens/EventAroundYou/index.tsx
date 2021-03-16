@@ -37,23 +37,23 @@ const EventAroundYou = memo(() => {
     dispatch(getAllSavedEvents());
   }, [dispatch]);
 
-  const { all_attended_events } = useSelector<any, any>(
+  const { all_attended_events, all_trending_events } = useSelector<any, any>(
     (state) => state.events
   );
   const { all_errors } = useSelector<any, any>((state) => state.errors);
 
   useFocusEffect(
     useCallback(() => {
-      if (all_attended_events?.length) {
-        const eventLocationList = all_attended_events?.map(
+      if (all_trending_events?.length) {
+        const eventLocationList = all_trending_events?.map(
           ({ lat_long }: { lat_long: string }) => splitLatLongStr(lat_long)
         );
-        
         setEventLocation(eventLocationList);
         return;
       }
-      dispatch(getAllAttendedEvents());
-    }, [dispatch, all_attended_events])
+      !all_trending_events?.length &&  dispatch(getAllAttendedEvents());
+     !all_attended_events?.length && dispatch(getAllTrendingEvents());
+    }, [dispatch, all_attended_events, all_trending_events])
   );
 
   const onPressAllEventAroundYou = useCallback(() => {

@@ -58,11 +58,9 @@ export const sendPushNotification = payload => {
   )
 };
 
-console.log({requestOptions})
-
  fetch('https://exp.host/--/api/v2/push/send',
   requestOptions).then(
-      res => alertMessage("send response is in token  "+ res)
+      res => console.log("send response is in token  "+ res)
     ).catch(error => alertMessage("error in token send is"+ error?.response))
 } 
 

@@ -13,18 +13,42 @@ export const createGroup = payload => {
         .catch(error => alertMessage(`error in creating group is ${error}`))
 }
 
-export const getAuthGroupsObserver = callback => (dispatch, getState) => {
-    const { login_Session: { groups } } = getState()?.auth;
+export const getAuthGroupsObserver = (callback) => (dispatch, getState) => {
+    const { login_Session: { groups: authGroups, user_doc_id } } = getState()?.auth;
 
-    groups?.length ? groupCollection.where('__name__',"in", groups).onSnapshot(snapshot => {
-        let groups = [];
-        snapshot.forEach(res => {
-            groups.push({
-                ...res.data(),
-                id: res.id
+    authGroups?.length ? groupCollection
+        .onSnapshot(snapshot => {
+            let groups = [];
+            snapshot.forEach(res => {
+                //console.log(res?.id, res.data().createdBy, user_doc_id)
+                if (authGroups.includes(res?.id) && res.data().createdBy === user_doc_id) {
+                    groups.push({
+                        ...res.data(),
+                        id: res.id
+                    })
+                }
             })
-        })
 
-        callback(groups)
-    }) : callback([]);
+            callback(groups)
+        }) : callback([]);
+}
+
+//other group of which auth is member but not admin
+export const getOtherGroups = (callback) => (dispatch, getState) => {
+    const { login_Session: { groups: authGroups, user_doc_id } } = getState()?.auth;
+
+    authGroups?.length ?
+        groupCollection//.where('__name__', "in", groups)
+            .onSnapshot(snapshot => {
+                let groups = [];
+                snapshot.forEach(res => {
+                    if (authGroups.includes(res?.id) && res.data().createdBy !== user_doc_id) {
+                        groups.push({
+                            ...res.data(),
+                            id: res.id
+                        })
+                    }
+                })
+                callback(groups)
+            }) : callback([]);
 }

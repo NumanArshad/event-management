@@ -19,7 +19,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.numanarshad.dev.EventManagement"
+      "bundleIdentifier": "com.numanarshad.dev.EventManagement1"
     },
     "android": {
       "googleServicesFile": "./google-services.json",

@@ -6,7 +6,7 @@ import {
 
 const defaultSession = {
   auth_token: null,
-  name: null,
+  user_name: null,
   email: null,
   contact: null,
   earn_credits: 0,

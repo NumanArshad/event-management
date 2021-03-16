@@ -14,7 +14,7 @@ import { width_screen, height_screen } from "ultis/dimensions";
 import FONTS from "ultis/fonts";
 import { useNavigation } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, AntDesign } from "@expo/vector-icons";
 
 import {
   updateFriendRequest,
@@ -26,9 +26,11 @@ import FriendRequest from "screens/FriendRequest";
 import {
   sendNotification,
   deleteNotification,
+  sendPushNotification,
 } from "redux/notifications/notifications.actions";
 import { noFoundImg } from "ultis/constants";
 import { getImage } from "ultis/functions";
+import { alertMessage } from "ultis/alertToastMessages";
 
 interface Props {
   // user_id: any;
@@ -36,6 +38,8 @@ interface Props {
   user_type?: string;
   // id: string;
   actionButton?: string;
+  handleAddMembers?:(memberDocId:string) => void;
+  isUserAdded?:(memberDocId:string) => void;
 }
 
 const UserItem = (props: any) => {
@@ -51,12 +55,22 @@ const UserItem = (props: any) => {
     });
   }, [navigation]);
 
-  const { user_name, image, id, friends, friendRequests, user_type } = userInfo;
+  const {
+    user_name,
+    image,
+    id,
+    friends,
+    friendRequests,
+    user_type,
+    deviceToken,
+    isOnline: isReceipentOnline,
+  } = userInfo;
 
   //@ts-ignore
   const {
     login_Session: {
       user_id,
+      user_name: authName,
       friends: authFriends,
       friendRequests: authFriendRequests,
       user_doc_id: login_user_doc,
@@ -96,6 +110,7 @@ const UserItem = (props: any) => {
     };
   };
 
+  //console.log(user_name,deviceToken, isOnline)
   const handleFriendRequest = useCallback(() => {
     let updatedFriendRequests = friendRequestStatus()?.isPending
       ? friendRequests?.filter(
@@ -105,14 +120,27 @@ const UserItem = (props: any) => {
       : [...friendRequests, { user_doc_id: login_user_doc, status: "pending" }];
     //@ts-ignore
     updateFriendRequest(id, updatedFriendRequests);
-    friendRequestStatus()?.isRejected
-      ? sendNotification({
-          receipentDocId: id,
-          senderDocId: login_user_doc,
-          type: "friendRequest",
-          createdAt: new Date(),
-        })
-      : deleteNotification(login_user_doc, id, "friendRequest");
+
+    if (friendRequestStatus()?.isRejected) {
+      sendNotification({
+        receipentDocId: id,
+        senderDocId: login_user_doc,
+        type: "friendRequest",
+        createdAt: new Date(),
+      });
+      if (isReceipentOnline) {
+        const pushTokenPayload = {
+          to: deviceToken,
+          title: "Friend Request",
+          body: `${authName} send you friend request`,
+        };
+        sendPushNotification(pushTokenPayload);
+      }
+      return;
+    }
+    deleteNotification(login_user_doc, id, "friendRequest");
+
+    //   : deleteNotification(login_user_doc, id, "friendRequest");
   }, [userInfo, friendRequests, friendRequestStatus]);
 
   const handleAcceptRejectRequest = (requestStatus: string) => {
@@ -145,13 +173,33 @@ const UserItem = (props: any) => {
       );
     }
 
+    ///notification for accept/reject
+   // if (friendRequestStatus()?.isRejected) {
+    sendNotification({
+      receipentDocId: id,
+      senderDocId: login_user_doc,
+      type: `Friend Request ${requestStatus}`,
+      createdAt: new Date(),
+    });
+    if (isReceipentOnline) {
+      const pushTokenPayload = {
+        to: deviceToken,
+        title: `Friend Request ${requestStatus}`,
+        body: `${authName} ${requestStatus} your friend request`,
+      };
+      sendPushNotification(pushTokenPayload);
+    }
+   // return;
+    // }
+    /////////
+
     deleteNotification(id, login_user_doc, "friendRequest");
   };
 
   // conpsole.log("people is", userInfo);
   return (
     <TouchableOpacity onPress={handleItemPress} style={styles.card}>
-      <Image style={styles.image} source={{ uri: getImage(image, 'user') }} />
+      <Image style={styles.image} source={{ uri: getImage(image, "user") }} />
       <View style={styles.txtField}>
         <Text style={styles.txtName}>{user_name}</Text>
         {user_type && <Text style={styles.txtNumberFollower}>{user_type}</Text>}
@@ -214,7 +262,22 @@ const UserItem = (props: any) => {
             </Text>
           </TouchableOpacity>
         </View>
-      ) : null}
+      ) :
+      actionButton === "add_member" ? (
+        <TouchableOpacity
+          onPress={() => props.handleAddMembers(id)}
+          style={styles.svg_Follow}
+        >
+          <AntDesign
+            name={!props.isUserAdded(id) ? "addusergroup": "deleteusergroup"}
+            size={26}
+            color="black"
+            style={styles.iconStyle}
+            // onPress={onProfile}
+          />
+        </TouchableOpacity>
+      ) : 
+      null}
     </TouchableOpacity>
   );
 };

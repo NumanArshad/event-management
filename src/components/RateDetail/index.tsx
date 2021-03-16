@@ -45,10 +45,10 @@ const RateDetail = (props: RateDetailProps) => {
           </Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.flexRow} onPress={onWriteReview}>
+      {/* <TouchableOpacity style={styles.flexRow} onPress={onWriteReview}>
         <SvgWriteReview />
         <Text style={styles.textWrite}>Write review</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

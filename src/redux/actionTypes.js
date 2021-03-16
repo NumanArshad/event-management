@@ -46,3 +46,4 @@ export const GET_ALL_NOTIFICATIONS = "GET_ALL_NOTIFICATIONS";
 
 ////Groups///
 export const GET_ALL_GROUPS = "GET_ALL_GROUPS";
+export const ADD_GROUP_MEMBER = "ADD_GROUP_MEMBER"

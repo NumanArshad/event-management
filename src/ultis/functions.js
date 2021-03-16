@@ -27,6 +27,28 @@ export const getUserPosition = () => {
    
 };
 
+export const watchUserGeoLocation = () => {
+  
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.watchPosition(
+      changePosition =>
+      // console.log("pos success  change",{ changePosition }
+      {
+      //  console.log("pos success  change",{ changePosition })
+        resolve(changePosition.coords)
+      }
+      , error => {
+        console.log("watch error",error?.message)
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 5000,
+        maximumAge: 0
+      }
+    )
+  })
+}
+
 export const getEventTimeDown = (dateTime) => {
   const eventDateTime = dayjs(dateTime);
   

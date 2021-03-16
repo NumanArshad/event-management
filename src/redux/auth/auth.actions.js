@@ -22,8 +22,8 @@ export const login = (data) => (dispatch) => {
   axios.post("auth/login", data).then((res) => {
     if (res.data.status_code === 200) {
       const { user, token } = res.data.data;
-      setUserSessions({ user: user, token });
-      
+      setUserSessions({  user, token });
+        console.log("hey auth data sis ", user)
       getSingleUser(user,(userInfo, docLength) => {
         docLength ?
           dispatch(isAuthenticated({ ...userInfo, auth_token: token })) :
@@ -119,7 +119,8 @@ export const logout = () => (dispatch) => {
 
 ////set token in async storage////
 export const setUserSessions = (data) => {
-  const { user:{id, name}, token } = data;
+  const { user, token } = data;
+  console.log("setting session is", user)
   AsyncStorage.setItem("Token", token);
   AsyncStorage.setItem("user", JSON.stringify(user));
   //AsyncStorage.setItem("userName", name.toString());
@@ -131,7 +132,9 @@ export const getUserSessions = () => async (dispatch) => {
   dispatch(startAuthLoading());
   try {
     const token = await AsyncStorage.getItem("Token");
-    const user = await AsyncStorage.getItem("user");
+    const user = JSON.parse(await AsyncStorage.getItem("user"));
+
+    console.log("gettinh user sesion is ", user, user, user)
     //const userName = await AsyncStorage.getItem("userName");
 
 

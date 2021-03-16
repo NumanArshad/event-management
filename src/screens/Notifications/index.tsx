@@ -37,11 +37,11 @@ const MyNotification = () => {
 
   return (
     <View>
-      <TouchableOpacity onPress={() => scheduleNotification()}>
+      {/* <TouchableOpacity onPress={() => scheduleNotification()}>
         <Text>notification</Text>
         
       </TouchableOpacity>
-      <Text>token is {expoPushToken}</Text>
+      <Text>token is {expoPushToken}</Text> */}
     </View>
   );
 };
