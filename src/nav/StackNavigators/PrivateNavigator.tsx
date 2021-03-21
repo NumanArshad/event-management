@@ -35,6 +35,7 @@ import Profile from "screens/Auth/Profile";
 import DonatePoint from "screens/Donation/component/DonatePoint";
 import ChangePassword from "screens/Auth/ChangePassword";
 import Transaction from "screens/Donation/component/Transaction";
+import CustomBarCodeScanner from "components/CustomBarCodeScanner";
 
 const privateNavStack = createStackNavigator();
 
@@ -163,6 +164,14 @@ const PrivateNavigator = () => (
       name={ROUTES.EventDetail}
       component={EventDetail}
       options={{ headerShown: false }}
+    />
+      <privateNavStack.Screen
+      name={"barCodeScanner"}
+      component={CustomBarCodeScanner}
+      options={{ 
+      //  headerShown: false,
+         headerTitle:"Auto Attend Event"
+         }}
     />
     <privateNavStack.Screen
       name={ROUTES.ListAttending}

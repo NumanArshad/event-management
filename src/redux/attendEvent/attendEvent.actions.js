@@ -15,10 +15,11 @@ export const getEventAttendees = eventId => (dispatch) => {
   });
 };
 
-export const markAttendance = data => (dispatch) => {
+export const markAttendance = (data, goBack) => (dispatch) => {
   axios.post("attendance/mark-attendance", data).then((res) => {
     if (res?.data?.status_code === 200) {
       alertMessage(res?.data?.message);
+      goBack();
       dispatch(getEventAttendees())
     }
   });

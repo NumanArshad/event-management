@@ -13,18 +13,18 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
 import SvgSend from "svgs/EventDetailRateComment/SvgSend";
 import FONTS from "ultis/fonts";
 import Rating from "components/Rating";
-import { useRoute } from "@react-navigation/native";
-import { postEventReview } from "redux/reviews/reviews.actions";
-import {alertMessage} from "ultis/alertToastMessages";
-
+import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  postEventReview,
+  getEventAllReviews,
+} from "redux/reviews/reviews.actions";
+import ROUTES from "ultis/routes";
 interface reviewModel {
   review: string;
   review_id: number;
   user_name: string;
   user_image: string;
-
 }
-
 
 const EventDetailRateComment = memo(() => {
   const { all_reviews } = useSelector<any, any>((state) => state.reviews);
@@ -32,16 +32,15 @@ const EventDetailRateComment = memo(() => {
   const [stars, setstars] = useState("");
   const dispatch = useDispatch();
 
+  const navigation = useNavigation();
+
   //@ts-ignore
   const {
     params: { eventId },
   } = useRoute();
 
   const getStars = (data) => {
-  //  alertMessage("njfbj")
-   // //console.log("stars are", data)
     setstars(data);
-    // //console.log("Data", data);
   };
 
   const onClickListener = () => {
@@ -50,10 +49,20 @@ const EventDetailRateComment = memo(() => {
       stars: stars,
       comment: comment,
     };
-    //console.log("Post Review", data);
-    dispatch(postEventReview(data));
+    dispatch(
+      postEventReview(data, () =>
+        navigation.navigate(ROUTES.EventDetail, {
+          data: {
+            id: params?.eventId,
+            save: true,
+          },
+        })
+      )
+    );
     setcomment("");
   };
+
+  console.log({ all_reviews });
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={80}
@@ -63,19 +72,13 @@ const EventDetailRateComment = memo(() => {
       <View style={styles.container}>
         <View style={styles.commentView}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            {/* {//console.log("Reviews", all_reviews)} */}
             {all_reviews?.map(
               ({ review, review_id, user_name, user_image }: reviewModel) => (
                 <CommentItem
-                  name={user_name}  
-                  //    rate={4.5}
+                  name={user_name}
                   key={review_id}
                   comment={review}
                   userImage={user_image}
-                  //  isLike={false}
-                  // numberLike={2}
-                  //  numberReply={review_id}
-                  //  time={"2 HOURS AGO"}
                 />
               )
             )}

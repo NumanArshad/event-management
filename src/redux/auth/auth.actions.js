@@ -110,6 +110,7 @@ export const updateBankInfo = (payload) => {
 ////auth user bank information ////
 
 export const logout = () => (dispatch) => {
+  dispatch(clearErrors());
   AsyncStorage.clear();
   dispatch(unAuthorized());
 };
@@ -189,6 +190,5 @@ export const unAuthorized = () => async(dispatch) => {
     type: NOT_AUTHORIZED,
   });
   dispatch(stopAuthLoading());
-  dispatch(clearErrors());
 
 };

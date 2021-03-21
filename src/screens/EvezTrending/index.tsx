@@ -29,6 +29,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { sendPushNotification } from "redux/notifications/notifications.actions";
 import Color from "ultis/color";
 import { alertMessage } from "ultis/alertToastMessages";
+import CustomBarCodeScanner from "components/CustomBarCodeScanner";
+import WatchLocation from "components/WatchLocation";
 
 const EvezTrending = memo(() => {
   const navigation = useNavigation();
@@ -109,22 +111,24 @@ const EvezTrending = memo(() => {
 
   const [pos, setPos] = useState('')
 
-  useEffect(()=>{
-   // console.log("hey calllll")
-    watchUserGeoLocation().then(res => 
-      {
-       // console.log("should",{res})
-        ;setPos(pos => pos= JSON.stringify(res))}
-      );
-  })
-
+  // useEffect(()=>{
+  //  // console.log("hey calllll")
+  //   watchUserGeoLocation().then(res => 
+  //     {
+  //      // console.log("should",{res})
+  //       ;setPos(pos => pos= JSON.stringify(res))}
+  //     );
+  // })
 
   return (
     <View style={styles.container}>
        {/* <MyNotification /> */}
        {/* <MyNotification />
 */}
+<Text>{pos}</Text>
+{/* <WatchLocation /> */}
 <MyNotification />
+{/* <CustomBarCodeScanner /> */}
       {!isEmpty(all_trending_events) ? (
         <FlatList
            ref={flList}
@@ -136,7 +140,7 @@ const EvezTrending = memo(() => {
           contentContainerStyle={styles.contentContainerStyle}
         />
       ) : !isEmpty(all_errors) ? (
-        <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors?.message}</Text>
+        <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors}</Text>
       ) : (
         [...Array(2)].map(() => (
           <EventItem

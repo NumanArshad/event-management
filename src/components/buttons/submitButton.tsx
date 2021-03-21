@@ -26,9 +26,10 @@ const SubmitButton = memo(
     btnStyle = styles.submitBtn,
     isDisabled = false,
   }: ButtonFilterProps) => {
-    const { loading } = useSelector<any, any>((state) => state.loading);
+    const { buttonLoading } = useSelector<any, any>((state) => state.loading);
+ 
     return (
-      <TouchableOpacity onPress={onPress} disabled={isDisabled}>
+      <TouchableOpacity onPress={onPress} disabled={buttonLoading || isDisabled}>
         <LinearGradient
           colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
           start={{ x: 0, y: 1 }}
@@ -47,7 +48,7 @@ const SubmitButton = memo(
               justifyContent: "center",
             }}
           >
-            <ActivityIndicator color="#fff" animating={loading} size="small" />
+            <ActivityIndicator color="#fff" animating={buttonLoading} size="small" />
           </View>
         </LinearGradient>
       </TouchableOpacity>

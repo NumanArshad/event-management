@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, useEffect} from 'react';
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import FONTS from 'ultis/fonts';
 import { getDistanceByLatLong, splitLatLongStr } from 'ultis/functions';
@@ -15,7 +15,7 @@ const {latitude, longitude} = splitLatLongStr(props.distance) || {}
 
   return (
     <View style={props.style}>
-      <Text style={[styles.textLocation, {marginTop: 16}]}>Stage 48</Text>
+      {/* <Text style={[styles.textLocation, {marginTop: 16}]}>Stage 48</Text> */}
       <Text style={[styles.textLocation, {color: '#7F8FA6'}]}>
         {props.location}
       </Text>

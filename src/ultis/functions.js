@@ -34,7 +34,7 @@ export const watchUserGeoLocation = () => {
       changePosition =>
       // console.log("pos success  change",{ changePosition }
       {
-      //  console.log("pos success  change",{ changePosition })
+        console.log("pos success  change",{ changePosition })
         resolve(changePosition.coords)
       }
       , error => {

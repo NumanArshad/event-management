@@ -14,6 +14,7 @@ import StackProfile from "nav/StackProfile";
 import StackCalender from "./StackCalender";
 import Color from "ultis/color";
 import GroupStack from "./GroupsNav/GroupStack";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
@@ -44,7 +45,14 @@ const MainBottomTab = () => {
         name={"groups"}
         component={GroupStack}
         options={{
-          tabBarIcon: ({ color }) => <SvgTabSearchInactive color={color} />,
+          tabBarIcon: ({ color }) => (
+            //<SvgTabSearchInactive color={color} />
+            <MaterialCommunityIcons
+              name="account-group-outline"
+              size={35}
+              color={color}
+            />
+          ),
         }}
       />
 

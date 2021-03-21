@@ -4,44 +4,19 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { width_screen } from "ultis/dimensions";
-import InactiveRate from "components/inactiveRate";
 import FONTS from "ultis/fonts";
-import SvgUnlike from "svgs/EventDetailRateComment/SvgUnlike";
-import SvgLike from "svgs/EventDetailRateComment/SvgLike";
-import SvgReply from "svgs/EventDetailRateComment/SvgReply";
-import SvgReport from "svgs/EventDetailRateComment/SvgReport";
+import { getImage } from "ultis/functions";
 
 interface CommentProps {
-  // isLike: boolean;
-  //reviewId: number;
   name: string;
   comment: string;
   userImage: string;
-  // time: string;
-  // numberReply: number;
-  //numberLike: number;
-  //rate: number;
 }
 
 const CommentItem = memo((props: CommentProps) => {
-  //const [isLike, setLike] = useState(props.isLike);
-  //const [numberLike, setNumLike] = useState(props.numberLike);
-  //const [numReply, setNumReply] = useState(props.numberReply);
-
-  // const onLike = useCallback(() => {
-  //   if (isLike) {
-  //     setNumLike(numberLike - 1);
-  //   } else {
-  //     setNumLike(numberLike + 1);
-  //   }
-  //   setLike(!isLike);
-  // }, [isLike]);
-  // const onReply = useCallback(() => {}, []);
-  // const onReport = useCallback(() => {}, []);
 
   return (
     <ScrollView
@@ -52,41 +27,14 @@ const CommentItem = memo((props: CommentProps) => {
     >
       <View style={styles.container}>
       <Image
-          source={require("@assets/EventAroundU/avatar_1.png")}
-         // source={{uri: props.userImage}}
+         source={{uri: getImage(props.userImage, "user")}}
           style={styles.bigAvatar}
         />
           <View style={styles.commentView}>
           <Text style={styles.textName}>{props.name}</Text>
-          {/* <InactiveRate rate={props.rate} /> */}
           <Text style={styles.textComment}>{props.comment}</Text>
-          {/* <View style={styles.timeView}>
-            <Text style={styles.textTime}>{props.time}</Text>
-            {props.numberReply > 0 ? (
-              <Text style={styles.textTime}>{numReply} reply</Text>
-            ) : null}
-            <Text style={styles.textTime} onPress={onReply}>
-              reply
-            </Text>
-          </View> */}
         </View>
-        {/* <Text style={styles.textNumberLikes}>{numberLike}</Text>
-        <TouchableOpacity
-          style={styles.flexRow}
-          onPress={onLike}
-          activeOpacity={0.8}
-        >
-          {isLike ? <SvgLike /> : <SvgUnlike />}
-        </TouchableOpacity> */}
       </View>
-      {/* <View style={styles.optionView}>
-        <TouchableOpacity style={styles.buttonOption} onPress={onReply}>
-          <SvgReply />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonOption} onPress={onReport}>
-          <SvgReport />
-        </TouchableOpacity>
-      </View> */}
     </ScrollView>
   );
 });

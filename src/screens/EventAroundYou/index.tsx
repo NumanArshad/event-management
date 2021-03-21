@@ -52,8 +52,14 @@ const EventAroundYou = memo(() => {
         return;
       }
       !all_trending_events?.length &&  dispatch(getAllAttendedEvents());
-     !all_attended_events?.length && dispatch(getAllTrendingEvents());
-    }, [dispatch, all_attended_events, all_trending_events])
+   //  !all_attended_events?.length && dispatch(getAllTrendingEvents());
+    }, [dispatch, all_trending_events])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getAllTrendingEvents());
+    }, [dispatch])
   );
 
   const onPressAllEventAroundYou = useCallback(() => {

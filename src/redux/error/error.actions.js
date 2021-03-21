@@ -6,8 +6,10 @@ export const errorActions = (errorResponse) => (dispatch) => {
   const { status, data } = errorResponse;
 
   //console.log(Object.va(data?.message))
-  if (status === 401 && !data?.message) {
+  if (status === 401 ) {
+
     dispatch(logout());
+    
   } else if (status === 422) {
     if (data?.errors) {
       // obj[Object.keys(obj)[0]] return first key value

@@ -14,7 +14,7 @@ import {
 import FriendList from "screens/FriendList";
 import isEmpty from "ultis/isEmpty";
 import { alertMessage } from "ultis/alertToastMessages";
-import { stopLoading } from "redux/loading/loading.actions";
+import { stopButtonLoading, stopLoading } from "redux/loading/loading.actions";
 
 const userCollectionRef = firebase.firestore().collection("users");
 
@@ -78,14 +78,23 @@ export const getUsersbyDocRefList = (
   (selectionBehaviour === "in" && !userDocListIds?.length)
     ? callBack([])
     : userCollectionRef
-        .where("__name__", selectionBehaviour, userDocListIds)
+       //.where("__name__", selectionBehaviour, userDocListIds)
         .onSnapshot((snapshot) => {
           let usersList = [];
           snapshot.forEach((res) => {
-            usersList.push({
-              id: res?.id,
-              ...res?.data(),
-            });
+            if(selectionBehaviour === "in" && userDocListIds.includes(res?.id)){
+              usersList.push({
+                id: res?.id,
+                ...res?.data(),
+              });
+            }
+            else if(selectionBehaviour !== "in" && !userDocListIds.includes(res?.id)){
+              usersList.push({
+                id: res?.id,
+                ...res?.data(),
+              });
+            }
+           
           });
    // console.log("userdoc is", userDocListIds, selectionBehaviour, usersList);
           callBack(usersList);
@@ -124,7 +133,8 @@ export const updateUser = (payload, updateStatus) => (dispatch, getState) => {
     .then((res) => {
       updateStatus === 'profileUpdated' ? 
       dispatch(updateAuthUser(payload)) :
-      dispatch(stopLoading());
+    //  dispatch(stopLoading());
+    dispatch(stopButtonLoading());
 
     });
 };
