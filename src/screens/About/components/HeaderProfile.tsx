@@ -103,7 +103,7 @@ const HeaderProfile = memo((props: Props) => {
         </Text>
         <Text style={styles.address}>{props.address}</Text>
         <View style={styles.btn}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             // onPress={onInbox}
             onPress={() => alertMessage("Working...")}
             style={styles.inbox}
@@ -112,7 +112,7 @@ const HeaderProfile = memo((props: Props) => {
             <View style={styles.numberMessage}>
               <Text style={styles.txtNumberMessage}>{props.numberMessage}</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={onRewards} style={styles.rewards}>
             <Text style={styles.txtRewards}>REWARD - ${props.rewards}</Text>
           </TouchableOpacity>
