@@ -8,6 +8,7 @@ import { getAuthNotifications } from 'redux/notifications/notifications.actions'
 import { getUsersbyDocRefList } from 'redux/users/users.actions';
 import dayjs from 'dayjs';
 import { getImage } from 'ultis/functions';
+import NoContentFound from 'components/NoContentFound';
 var relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
 
@@ -94,7 +95,6 @@ console.log("getting all", docIdList)
     getUsersbyDocRefList(docIdList, setNotificationUsers);
   }, [all_notifications]);
 
-  console.log("het message is", notificationUsers)
 
   const renderItem = useCallback(({item, index}) => {
     const {
@@ -108,31 +108,32 @@ console.log("getting all", docIdList)
       imageEvent,
       event,
     } = item;
-    return ["friendRequest", "groupInvite"].includes(type) ? (
-      <NotificationMessage
+    return (  <NotificationMessage
         avatar={getImage(notificationUsers[index]?.image)}
         userName={notificationUsers[index]?.first_name}
         message={type}
         time={dayjs.unix(all_notifications[index]?.createdAt?.seconds).format("DD/MM/YYYY")}
         un_Read={false}
       />
-    ) : (
-      <NotificationEvent
-        avatar={data[index]?.avatar}
-        title={title}
-        imageEvent={imageEvent}
-        event={event}
-        time={time}
-        un_Read={un_Read}
-      />
-    );
+    ) 
+    // : (
+    //   <NotificationEvent
+    //     avatar={data[index]?.avatar}
+    //     title={title}
+    //     imageEvent={imageEvent}
+    //     event={event}
+    //     time={time}
+    //     un_Read={un_Read}
+    //   />
+    // );
   }, []);
 
   console.log(!all_notifications, notificationUsers)
   return (
     <>
       {!all_notifications?.length ? (
-        <Text>... No Notification Found</Text>
+        // <Text>... No Notification Found</Text>
+        <NoContentFound text="No Notification Found"/>
       ) : (
         <FlatList
           showsVerticalScrollIndicator={false}

@@ -55,7 +55,8 @@ const AllEventAroundYou = memo(() => {
         latitude: res?.latitude,
         longitude: res?.longitude,
         latitudeDelta: initialLatitudeDelta,
-        longitudeDelta: initialLongitudeDelta
+        longitudeDelta: initialLongitudeDelta,
+        
       })
     })
   }, [region]);

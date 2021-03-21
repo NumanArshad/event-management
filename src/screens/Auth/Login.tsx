@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   },
   imageProfile: {
     height: height_screen * 0.23,
-    width: width_screen * 0.32,
+    width: width_screen * 0.50,
     // backgroundColor: "#a4a4a4",
     resizeMode: "contain",
     borderRadius: 100,

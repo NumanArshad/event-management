@@ -45,8 +45,10 @@ import isEmpty from "ultis/isEmpty";
 import {
   compareDateTime,
   formatDateTime,
+  getDistanceByLatLong,
   getImage,
   isEventInProgress,
+  splitLatLongStr,
 } from "ultis/functions";
 import EventTimeCountDown from "components/EventTimeCountDown";
 import { markAttendance } from "redux/attendEvent/attendEvent.actions";
@@ -58,18 +60,19 @@ const EventDetail = memo(() => {
   const route = useRoute();
   const navigation = useNavigation();
 
+  
   // @ts-ignore
   const data = route.params?.data;
 
   const dispatch = useDispatch();
-  const [isSaved, setSaved] = useState(data.save);
+  const [isSaved, setSaved] = useState(data?.save);
 
   const { single_event, all_reserved_events, all_saved_events } = useSelector<
     any,
     any
   >((state) => state.events);
 
-  const { loading } = useSelector<any, any>((state) => state.loading);
+  const { loading, buttonLoading } = useSelector<any, any>((state) => state.loading);
 
   useEffect(() => {
     dispatch(getSingleEventDetail(data?.id));
@@ -82,7 +85,7 @@ const EventDetail = memo(() => {
   useEffect(() => {
     return () => {
       dispatch(clearSingleEvent());
-      dispatch(clearEventAllReviews());
+    //  dispatch(clearEventAllReviews());
     };
   }, [dispatch]);
 
@@ -98,9 +101,15 @@ const EventDetail = memo(() => {
     formData.append("lat", currentLat);
     formData.append("long", currentLong);
     is_event_in_progress
-      ? dispatch(markAttendance(formData))
+      ? 
+      //handleAttendEvent()
+      dispatch(markAttendance(formData))
       : handleReserveEvent();
   };
+
+  const handleAttendEvent = () => {
+    navigation.navigate("barCodeScanner")
+  }
 
   const handleReserveEvent = () => {
     dispatch(
@@ -120,8 +129,8 @@ const EventDetail = memo(() => {
   };
 
   const onDirection = useCallback(() => {
-    navigation.navigate(ROUTES.EventDetailMap, {
-      eventLocation: single_event?.lat_long,
+    navigation.navigate(ROUTES.AllEventAroundYou, {
+      eventLocation: [splitLatLongStr(single_event?.lat_long)],
     });
   }, [single_event]);
 
@@ -159,15 +168,17 @@ const EventDetail = memo(() => {
   };
 
   const reserveAttendanceText =
-    loading || isEmpty(single_event)
-      ? `...loading`
-      : isAfter
+     isAfter
       ? isEventReservedByUser()
         ? `Unreserve`
         : `Reserve`
       : is_event_in_progress
       ? `Attend Event`
       : null;
+
+  const isEventInRange = is_event_in_progress && 
+  single_event?.type_name !== "Transactional" && 
+  getDistanceByLatLong(splitLatLongStr(single_event?.lat_long)?.latitude, splitLatLongStr(single_event?.lat_long)?.longitude) < 10000;
 
   return (
     <View style={styles.container}>
@@ -185,7 +196,10 @@ const EventDetail = memo(() => {
           activeDotColor={"#fff"}
         >
           <View>
-            <Image source={{uri:getImage(data?.image)}} style={styles.thumbnail} />
+            <Image
+              source={{ uri: getImage(data?.image) }}
+              style={styles.thumbnail}
+            />
           </View>
           {/* <View>
             <Image source={data?.thumbnail} style={styles.thumbnail} />
@@ -209,18 +223,16 @@ const EventDetail = memo(() => {
         {isEmpty(single_event) ? (
           <Text>...loading</Text>
         ) : (
-        
-            <EventTimeCountDown
-              id={data?.id}
-              eventDateTime={formatDateTime(
-                single_event?.event_date,
-                single_event?.start_time
-              )}
-              hasPassed={!isAfter}
-              isInProgress={is_event_in_progress}
-              isDetail={styles.countDownView}
-            />
-          
+          <EventTimeCountDown
+            id={data?.id}
+            eventDateTime={formatDateTime(
+              single_event?.event_date,
+              single_event?.start_time
+            )}
+            hasPassed={!isAfter}
+            isInProgress={is_event_in_progress}
+            isDetail={styles.countDownView}
+          />
         )}
 
         <View style={styles.infoView}>
@@ -236,10 +248,9 @@ const EventDetail = memo(() => {
             eventDateTime={
               !isEmpty(single_event) &&
               formatDateTime(single_event?.event_date, single_event?.start_time)
-             // `${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`
+              // `${single_event?.event_date} - ${single_event?.start_time}-duration: ${single_event?.duration}`
             }
-            duration={ !isEmpty(single_event) && single_event?.duration}
-
+            duration={!isEmpty(single_event) && single_event?.duration}
             loadFlag={isEmpty(single_event)}
           />
         </View>
@@ -343,19 +354,25 @@ const EventDetail = memo(() => {
           </ScrollView>
         </View> */}
 
-        {(isEmpty(single_event) ||
-          loading ||
-          isAfter ||
-          is_event_in_progress) && (
+        {(isAfter || is_event_in_progress) && (
           <View style={styles.buttonView}>
             <ButtonLinear
               title={reserveAttendanceText}
               style={styles.bottomButton}
-              isDisabled={loading}
               onPress={handleReserveAttendEvent}
             />
           </View>
         )}
+
+        {is_event_in_progress && isEventInRange ? (
+          <View style={styles.buttonView}>
+            <ButtonLinear
+              title={reserveAttendanceText}
+              style={styles.bottomButton}
+              onPress={handleAttendEvent}
+            />
+          </View>
+        ) : null}
       </ScrollView>
       <View style={styles.buttonTopView}>
         <TouchableOpacity onPress={onBack} style={styles.btnBack}>
@@ -378,7 +395,7 @@ const EventDetail = memo(() => {
           start={{ x: 0, y: 1 }}
           end={{ x: 1, y: 1 }}
           style={styles.linear}
-          colors={["#ED3269", "#F05F3E"]}
+          colors={[Color.GRAD_COLOR_3, Color.GRAD_COLOR_3]}
         />
       </Animated.View>
     </View>

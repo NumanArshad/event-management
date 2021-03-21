@@ -78,13 +78,15 @@ const MyGroups = memo(() => {
         )}
       </ScrollView>
       {/* <TouchableOpacity style={styles.iconPlus}> */}
-     {friends?.length && <Ionicons
+     {friends?.length ?
+      <Ionicons
         name="create-outline"
         size={30}
         color="#fff"
         style={styles.iconPlus}
         onPress={toCreateGroup}
-      />}
+      /> :
+      null}
       {/* </TouchableOpacity> */}
     </View>
   );

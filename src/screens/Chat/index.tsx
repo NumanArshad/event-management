@@ -123,7 +123,6 @@ const Chat = () => {
         return groupUsers.find(({id}) => id===userDocId);
   }  
 
-
   useEffect(() => {
 
     if (isGroupChat) {
@@ -136,9 +135,9 @@ const Chat = () => {
       text: "welcome",
       createdAt: Date.now(),
     });
-  }, [user_doc_id, conversationId, isGroupChat, members]);
+  }, [user_doc_id, conversationId, isGroupChat]);
 
-  //console.log(conversationId)
+  console.log({conversationId})
 
   useEffect(() => {
     //getRoomUsers(conversationId);
@@ -189,17 +188,19 @@ const Chat = () => {
   };
 
   const getEventById = (eventId) => {
+    alertMessage(eventId)
     return all_trending_events?.find(({ event_id }) => event_id === eventId);
   };
 
   const renderbuffer = useCallback((props) => {
     const { currentMessage } = props;
 
+    console.log({currentMessage})
+
 
     const message = isGroupChat
       ? getEventById(currentMessage?.text)
       : currentMessage?.text;
-
 
     return (
       <>

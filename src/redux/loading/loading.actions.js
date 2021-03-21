@@ -3,6 +3,8 @@ import {
   START_LOADING,
   STOP_AUTH_LOADING,
   STOP_LOADING,
+  START_BUTTON_LOADING,
+  STOP_BUTTON_LOADING
 } from "../actionTypes";
 
 export const startLoading = () => (dispatch) => {
@@ -14,6 +16,18 @@ export const startLoading = () => (dispatch) => {
 export const stopLoading = () => (dispatch) => {
   dispatch({
     type: STOP_LOADING,
+  });
+};
+
+export const startButtonLoading = () => (dispatch) => {
+  dispatch({
+    type: START_BUTTON_LOADING,
+  });
+};
+
+export const stopButtonLoading = () => (dispatch) => {
+  dispatch({
+    type: STOP_BUTTON_LOADING,
   });
 };
 
