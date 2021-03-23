@@ -15,14 +15,16 @@ export const getEventAttendees = eventId => (dispatch) => {
   });
 };
 
-export const markAttendance = (data, goBack) => (dispatch) => {
+export const markAttendance = (data, callBack) => (dispatch) => {
+  console.log("post data isk", data)
   axios.post("attendance/mark-attendance", data).then((res) => {
+    console.log("attend evet isk", res?.data);
     if (res?.data?.status_code === 200) {
       alertMessage(res?.data?.message);
-      goBack();
+      callBack();
       dispatch(getEventAttendees())
     }
-  });
+  }).catch((error) => alertMessage(error.response.data?.message));
 };
 
 // /////////////Attend event and attendees/////

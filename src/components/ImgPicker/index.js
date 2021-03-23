@@ -5,7 +5,7 @@ import firebase from "ultis/services/FirebaseConfig";
 import { alertMessage } from "ultis/alertToastMessages";
 import { storage } from "firebase";
 
-const useImagePicker = defaultImage => {
+const useImagePicker = (defaultImage) => {
     
     const [image, setImage] = useState(defaultImage ?? noUserFoundImage);
 
@@ -71,7 +71,7 @@ const useImagePicker = defaultImage => {
           }
       }
  
-      return {image, pickImage, uploadImage, getImageFormConversion}
+      return {image, pickImage, uploadImage, getImageFormConversion, setImage}
 
 }
 

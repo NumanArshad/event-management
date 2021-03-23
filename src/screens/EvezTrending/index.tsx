@@ -1,4 +1,9 @@
-import React, { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  memo,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import {
   useFocusEffect,
@@ -17,20 +22,17 @@ import {
 import isEmpty from "ultis/isEmpty";
 import {
   formatDateTime,
-  getEventTimeDown,
   getImage,
-  isEventInProgress,
-  watchUserGeoLocation,
+  splitLatLongStr,
 } from "ultis/functions";
-import dayjs from "dayjs";
 import MyNotification from "screens/Notifications";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { sendPushNotification } from "redux/notifications/notifications.actions";
 import Color from "ultis/color";
 import { alertMessage } from "ultis/alertToastMessages";
 import CustomBarCodeScanner from "components/CustomBarCodeScanner";
 import WatchLocation from "components/WatchLocation";
+import IconAroundU from "svgs/IconAroundU";
+import FONTS from "ultis/fonts";
 
 const EvezTrending = memo(() => {
   const navigation = useNavigation();
@@ -42,12 +44,11 @@ const EvezTrending = memo(() => {
     (state) => state.events
   );
 
+  const [eventLocation, setEventLocation] = useState([]);
+
   const { all_errors } = useSelector<any, any>((state) => state.errors);
-  const { loading } = useSelector<any, any>((state) => state.loading);
 
   const flList = useRef();
-
-  //const { login_Session } = useSelector<any, any>((state) => state.auth);
 
   const onPressFilter = useCallback(() => {
     navigation.navigate(ROUTES.FilterEvez, {
@@ -64,12 +65,28 @@ const EvezTrending = memo(() => {
           ? getFilteredEvents(eventLocation, eventType)
           : getAllTrendingEvents()
       );
-    //  flList?.current.scrollToOffset({ animated: true, y: 0 });
     }, [dispatch, navigation, params])
-    
   );
 
-  
+  useFocusEffect(
+    useCallback(() => {
+      if (all_trending_events?.length) {
+        console.log({all_trending_events})
+        const eventLocationList = all_trending_events?.map(
+          ({ lat_long }: { lat_long: string }) => splitLatLongStr(lat_long)
+        );
+        setEventLocation(eventLocationList);
+        return;
+      }
+    }, [dispatch, all_trending_events])
+  );
+
+
+  const onPressAllEventAroundYou = useCallback(() => {
+    navigation.navigate(ROUTES.AllEventAroundYou, {
+      eventLocation,
+    });
+  }, [navigation, eventLocation]);
 
   const renderItem = useCallback(({ item }) => {
     const {
@@ -90,10 +107,9 @@ const EvezTrending = memo(() => {
       rating,
       duration,
       type_name,
-      image
+      image,
     } = item;
 
-    //console.log(getImage(image))
     return (
       <EventItem
         thumbnail={getImage(image)}
@@ -109,11 +125,11 @@ const EvezTrending = memo(() => {
     );
   }, []);
 
-  const [pos, setPos] = useState('')
+  const [pos, setPos] = useState("");
 
   // useEffect(()=>{
   //  // console.log("hey calllll")
-  //   watchUserGeoLocation().then(res => 
+  //   watchUserGeoLocation().then(res =>
   //     {
   //      // console.log("should",{res})
   //       ;setPos(pos => pos= JSON.stringify(res))}
@@ -122,25 +138,27 @@ const EvezTrending = memo(() => {
 
   return (
     <View style={styles.container}>
-       {/* <MyNotification /> */}
-       {/* <MyNotification />
-*/}
-<Text>{pos}</Text>
-{/* <WatchLocation /> */}
-<MyNotification />
-{/* <CustomBarCodeScanner /> */}
+      <TouchableOpacity
+        style={styles.headerForU}
+        onPress={onPressAllEventAroundYou}
+      >
+        <IconAroundU />
+        <Text style={styles.textHeaderForU}>See All Event Around You</Text>
+      </TouchableOpacity>
+      <MyNotification />
+      {/* <CustomBarCodeScanner /> */}
       {!isEmpty(all_trending_events) ? (
         <FlatList
-           ref={flList}
+          ref={flList}
           style={styles.scroll}
           data={all_trending_events}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.contentContainerStyle}
+        //  contentContainerStyle={styles.contentContainerStyle}
         />
       ) : !isEmpty(all_errors) ? (
-        <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors}</Text>
+        <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors?.message}</Text>
       ) : (
         [...Array(2)].map(() => (
           <EventItem
@@ -158,7 +176,6 @@ const EvezTrending = memo(() => {
         ))
       )}
       <ButtonFilter onPress={onPressFilter} />
-
     </View>
   );
 });
@@ -176,6 +193,18 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   contentContainerStyle: {
-    paddingTop: 24,
+    paddingTop: 0,
+  },
+  headerForU: {
+    flexDirection: "row",
+    height: 72,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textHeaderForU: {
+    marginLeft: 16,
+    color: Color.GRAD_COLOR_3,
+    fontSize: 14,
+    fontFamily: FONTS.Regular,
   },
 });
