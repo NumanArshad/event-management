@@ -89,7 +89,7 @@ const HeaderProfile = memo((props: Props) => {
         end={{ x: 1, y: 1 }}
       />
       <View style={styles.mask}>
-        <Image style={styles.img} source={{uri:getImage(props.avatar)}} />
+        <Image style={styles.img} source={{ uri: getImage(props.avatar) }} />
         <Ionicons
           name="create-outline"
           size={18}
@@ -114,11 +114,13 @@ const HeaderProfile = memo((props: Props) => {
             </View>
           </TouchableOpacity> */}
           <TouchableOpacity onPress={onRewards} style={styles.rewards}>
-            <Text style={styles.txtRewards}>REWARD - ${props.rewards}</Text>
+            <Text style={styles.txtRewards}>EARNINGS - ${props.rewards}</Text>
           </TouchableOpacity>
         </View>
 
-        <ScrollView style={{ flex: 1, height: 400 }}>
+        <ScrollView
+          style={{ flex: 1, height: 500, marginBottom: height_screen * 0.05 }}
+        >
           {Array.isArray(my_earnings) && my_earnings.length > 0
             ? my_earnings.map((data, id) => (
                 <LinearGradient

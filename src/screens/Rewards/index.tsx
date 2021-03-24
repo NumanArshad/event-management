@@ -28,27 +28,31 @@ const Rewards = memo(() => {
   } = getState()?.auth;
   const handlePayoutRequest = () => {
     if (value != "") {
-      setpreLoader(true);
-      const formData = new FormData();
-      formData.append("credits", value);
-      formData.append("account_number", "12321-98790");
+      if (value > "0") {
+        setpreLoader(true);
+        const formData = new FormData();
+        formData.append("credits", value);
+        formData.append("account_number", "12321-98790");
 
-      //console.log("FORMDATA:", formData);
-      requestPayout(formData)
-        .then((res) => {
-          //console.log("Response ", res.data);
-          if (res.data.status_code === 200) {
+        //console.log("FORMDATA:", formData);
+        requestPayout(formData)
+          .then((res) => {
+            //console.log("Response ", res.data);
+            if (res.data.status_code === 200) {
+              setpreLoader(false);
+              Alert.alert("", res.data.message);
+            }
             setpreLoader(false);
-            Alert.alert("", res.data.message);
-          }
-          setpreLoader(false);
-        })
-        .catch((err) => {
-          //console.log("ERror :", err.response);
-          // // Alert.alert("",res.data.message)
-          // Alert.alert("", err.response);
-          setpreLoader(false);
-        });
+          })
+          .catch((err) => {
+            //console.log("ERror :", err.response);
+            // // Alert.alert("",res.data.message)
+            // Alert.alert("", err.response);
+            setpreLoader(false);
+          });
+      } else {
+        Alert.alert("", "We can't Proceed Your Request.");
+      }
     } else {
       Alert.alert("", "Write some Credits!Thank You.Don't leave it Empty.");
     }
@@ -79,7 +83,7 @@ const Rewards = memo(() => {
       </Text>
       {/* <Text style={styles.txtWork}>How does it work?</Text>
       <Text style={styles.txtDescription}>{txtDescription}</Text> */}
-      <View
+      {/* <View
         style={{
           position: "absolute",
           left: width_screen * 0.035,
@@ -91,7 +95,7 @@ const Rewards = memo(() => {
         }}
       >
         <ActivityIndicator color="#ED3269" animating={preLoader} size="small" />
-      </View>
+      </View> */}
     </View>
   );
 });
