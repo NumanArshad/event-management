@@ -18,7 +18,7 @@ import FONTS from "ultis/fonts";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import {
-getConversation,
+  getConversation,
   getRoomUsers,
   isConversationInitiated,
   joinChatRoom,
@@ -37,12 +37,10 @@ import {
 } from "redux/events/events.actions";
 import isEmpty from "ultis/isEmpty";
 
-
-const CustomView = (props:any) => {
+const CustomView = (props: any) => {
   const { single_event } = useSelector<any, any>((state) => state?.events);
 
-
- // alertMessage("kwfjenj");
+  // alertMessage("kwfjenj");
   const {
     event_name,
     type_name,
@@ -53,12 +51,11 @@ const CustomView = (props:any) => {
     start_time,
     duration,
     rating,
-    image
+    image,
   } = single_event || {};
   return (
     <View style={{ padding: 10, width: "95%" }} {...props}>
       <EventItem
-      
         thumbnail={getImage(image)}
         tag={type_name}
         id={event_id}
@@ -89,17 +86,22 @@ const Chat = () => {
 
   const isGroupChat = chatType === "groupChat";
 
-
   const {
-    login_Session: { user_doc_id, user_id, user_name, image: senderImage, deviceToken },
+    login_Session: {
+      user_doc_id,
+      user_id,
+      user_name,
+      image: senderImage,
+      deviceToken,
+    },
   } = useSelector<any, any>((state) => state?.auth);
 
   const { single_event = {}, all_trending_events } = useSelector<any, any>(
     (state) => state?.events
   );
 
-//console.log({deviceToken})
-  
+  //console.log({deviceToken})
+
   const [groupUsers, setGroupUsers] = useState([]);
 
   const [messages, setMessages] = useState([]);
@@ -119,12 +121,11 @@ const Chat = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getMemberInfo = userDocId => {
-        return groupUsers.find(({id}) => id===userDocId);
-  }  
+  const getMemberInfo = (userDocId) => {
+    return groupUsers.find(({ id }) => id === userDocId);
+  };
 
   useEffect(() => {
-
     if (isGroupChat) {
       !all_trending_events?.length && dispatch(getAllTrendingEvents());
       return;
@@ -137,66 +138,69 @@ const Chat = () => {
     });
   }, [user_doc_id, conversationId, isGroupChat]);
 
-  console.log({conversationId})
+  console.log({ conversationId });
 
   useEffect(() => {
     //getRoomUsers(conversationId);
     joinChatRoom(conversationId, user_doc_id);
 
-    return () => leaveChatRoom(conversationId, user_doc_id)
+    return () => leaveChatRoom(conversationId, user_doc_id);
   }, []);
 
   useEffect(() => {
-    let groupMembers = isGroupChat ? members : conversationId?.split('_')
-   // console.log({groupMembers})
-    !groupUsers.length ? getUsersbyDocRefList(groupMembers, setGroupUsers) :
-    
-    getConversation(conversationId, messages, (res) => {
-      //@ts-ignore
-      let updateMessages = res.map(({ sentBy, text, id, createdAt }) => ({
-        //@ts-ignore
-        text,
-        createdAt,
-        _id: id,
-        user: {
-          _id: sentBy,
-          avatar: getMemberInfo(sentBy)?.image,
-        },
-      }));
-      console.log("my all messagt ob show are", updateMessages)
-      setMessages(updateMessages);
-    });
+    let groupMembers = isGroupChat ? members : conversationId?.split("_");
+    // console.log({groupMembers})
+    !groupUsers.length
+      ? getUsersbyDocRefList(groupMembers, setGroupUsers)
+      : getConversation(conversationId, messages, (res) => {
+          //@ts-ignore
+          let updateMessages = res.map(({ sentBy, text, id, createdAt }) => ({
+            //@ts-ignore
+            text,
+            createdAt,
+            _id: id,
+            user: {
+              _id: sentBy,
+              avatar: getMemberInfo(sentBy)?.image,
+            },
+          }));
+          console.log("my all messagt ob show are", updateMessages);
+          setMessages(updateMessages);
+        });
   }, [groupUsers]);
 
   const onSend = (newMessage = []) => {
     // @ts-ignore
-    
-      isEventShare && setIsEventShare(false);
+
+    isEventShare && setIsEventShare(false);
 
     const { user, ...messagePayload } = newMessage[0];
     const { text } = messagePayload;
-    sendMessage(conversationId, {
-      sentBy: user_doc_id,
-      createdAt: Date.now(),
-      text: isEventSharing ? single_event?.event_id : text,
-    }, {user_doc_id, deviceToken},
-    groupUsers);
+    sendMessage(
+      conversationId,
+      {
+        sentBy: user_doc_id,
+        createdAt: Date.now(),
+        text: isEventSharing ? single_event?.event_id : text,
+      },
+      { user_doc_id, deviceToken },
+      groupUsers
+    );
 
     isEventSharing
-      ? setEventDetail(eventDetail => eventDetail = {})
+      ? setEventDetail((eventDetail) => (eventDetail = {}))
       : setMessages(GiftedChat.append(messages, newMessage));
   };
 
   const getEventById = (eventId) => {
-    alertMessage(eventId)
+    alertMessage(eventId);
     return all_trending_events?.find(({ event_id }) => event_id === eventId);
   };
 
   const renderbuffer = useCallback((props) => {
     const { currentMessage } = props;
 
-    console.log({currentMessage})
-
+    console.log({ currentMessage });
 
     const message = isGroupChat
       ? getEventById(currentMessage?.text)
@@ -249,7 +253,6 @@ const Chat = () => {
   }, []);
 
   const renderSend = useCallback((props) => {
-
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
@@ -280,7 +283,7 @@ const Chat = () => {
           renderSend={renderSend}
           user={{
             _id: user_doc_id,
-            avatar: getImage(senderImage)
+            avatar: getImage(senderImage),
           }}
           textInputProps={{
             fontSize: 14,
@@ -298,9 +301,8 @@ const Chat = () => {
           renderSend={renderSend}
           user={{
             _id: user_doc_id,
-           // name:"jwfn",
-            avatar: getImage(senderImage)
-          
+            // name:"jwfn",
+            avatar: getImage(senderImage),
           }}
           textInputProps={{
             fontSize: 14,
@@ -321,8 +323,8 @@ const styles = StyleSheet.create({
   },
   sendingContainer: {
     alignSelf: "center",
-    top: -10,
-    right: 24,
+    top: -8,
+    right: 26,
   },
   svgSend: {
     alignSelf: "center",

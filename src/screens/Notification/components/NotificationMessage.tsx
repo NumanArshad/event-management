@@ -18,13 +18,13 @@ const NotificationMessage = memo((props: Props) => {
   console.log(props.avatar);
   return (
     <TouchableOpacity style={[styles.notificationMessage, backGroundColor]}>
-      <Image source={{ uri: props.avatar }} style={styles.image} />
+      <Image source={{ uri: props?.avatar }} style={styles.image} />
       <View style={styles.content}>
         {/* <Text style={styles.txtUserName}>
           {props.userName ? props.userName : "Name"}
         </Text> */}
-        <Text style={styles.txtMessage}>{props.message}</Text>
-        <Text style={styles.txtTime}>{props.time}</Text>
+        <Text style={styles.txtMessage}>{props?.message}</Text>
+        <Text style={styles.txtTime}>{props?.time}</Text>
       </View>
     </TouchableOpacity>
   );
