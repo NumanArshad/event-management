@@ -53,7 +53,7 @@ const UserItem = (props: any) => {
     navigation.navigate(ROUTES.PeopleProfile, {
       userInfo,
     });
-  }, [navigation]);
+  }, [navigation, userInfo]);
 
   const {
     user_name,

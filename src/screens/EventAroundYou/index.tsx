@@ -78,7 +78,7 @@ const EventAroundYou = memo(() => {
           />
         ) : 
         !isEmpty(all_errors) ? (
-          <NoContentFound text={all_errors?.message}/>
+          <NoContentFound text={all_errors}/>
         ) : (
           <Text>...Loading</Text>
         )

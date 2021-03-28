@@ -4,13 +4,16 @@ import {height_screen, width_screen} from 'ultis/dimensions';
 import FONTS from 'ultis/fonts';
 import {useNavigation} from '@react-navigation/native';
 import ROUTES from 'ultis/routes';
+import { getImage } from 'ultis/functions';
+import { noFoundImg } from 'ultis/constants';
 
 interface Props {
-  image: any;
+  image: string;
   nameUser: string;
   numberMessage: number;
   message: string;
   time: string;
+  conversationId: string
 }
 
 const InboxItem = memo((props: Props) => {
@@ -18,23 +21,31 @@ const InboxItem = memo((props: Props) => {
     backgroundColor: props.numberMessage !== 0 ? '#F7F8FA' : '#FFF',
   };
   const navigation = useNavigation();
-  const onChat = useCallback(() => {
-    navigation.navigate(ROUTES.Chat);
-  }, [navigation]);
+
+  // const onChat = useCallback(() => {
+  //   navigation.navigate(ROUTES.Chat, 
+  //     {
+  //       group: {
+  //         name: props.nameUser,
+  //         image: props.image,
+  //       },
+  //       conversationId: props.conversationId 
+  //     });
+  // }, [navigation]);
+
   return (
     <TouchableOpacity
-      onPress={onChat}
+      // onPress={onChat}
+
       style={[styles.inboxItem, backGroundColor]}>
-      <Image style={styles.avatar} source={props.image} />
-      <View style={styles.flex}>
-        <View style={styles.content}>
+      <Image style={styles.avatar} source={{uri:props.image}} />
+      <View style={styles.content}>
           <Text style={styles.txtNameUser}>
             {props.nameUser}{' '}
-            {props.numberMessage !== 0 ? `(${props.numberMessage})` : ''}
+            {/* {props.numberMessage !== 0 ? `(${props.numberMessage})` : ''} */}
           </Text>
+          <Text style={styles.txtMessage}>{props.message}</Text>
           <Text style={styles.txtTime}>{props.time}</Text>
-        </View>
-        <Text style={styles.txtMessage}>{props.message}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -43,13 +54,16 @@ export default InboxItem;
 
 const styles = StyleSheet.create({
   inboxItem: {
-    height: 0.098 * height_screen,
+    // height: 0.098 * height_screen,
     flexDirection: 'row',
     paddingHorizontal: 0.064 * width_screen,
-    alignItems: 'center',
+    paddingVertical: 0.022 * height_screen,
   },
   avatar: {
-    marginRight: 0.033 * width_screen,
+     marginTop: 3,
+    width: width_screen * 0.17,
+    height: height_screen * 0.085,
+    borderRadius: 100,
   },
   txtNameUser: {
     fontFamily: FONTS.Medium,
@@ -69,12 +83,12 @@ const styles = StyleSheet.create({
   txtMessage: {
     fontFamily: FONTS.Regular,
     fontSize: 14,
+    marginVertical: 0.01 * height_screen,
     color: '#353B48',
   },
   content: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 0.01 * height_screen,
+    marginLeft: 0.04 * width_screen,
+    
   },
   flex: {
     flex: 1,

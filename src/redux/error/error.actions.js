@@ -21,7 +21,7 @@ export const errorActions = (error) => (dispatch) => {
   else {
     dispatch({
       type: GET_ALL_ERRORS,
-      payload: data,
+      payload: data?.message,
     });
   }
 };

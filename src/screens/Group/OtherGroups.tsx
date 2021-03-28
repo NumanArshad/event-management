@@ -1,11 +1,11 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import SearchBar from "components/SearchBar";
 // import ListEvent from "screens/OtherGroups/components/ListEvent";
 import { adsBannerId } from "data/ads";
 import { AdMobBanner } from "expo-ads-admob";
 import UserItem from "components/UserItem";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { height_screen, width_screen } from "ultis/dimensions";
 import {
@@ -14,7 +14,7 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
-import { getAuthGroupsObserver, getOtherGroups } from "redux/groups/groups.actions";
+import { getOtherGroups } from "redux/groups/groups.actions";
 import { useDispatch } from "react-redux";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import Color from "ultis/color";

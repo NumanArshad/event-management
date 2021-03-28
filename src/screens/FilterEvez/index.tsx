@@ -29,8 +29,11 @@ const FilterEvez = memo(() => {
 
   //@ts-ignore
   const {
-    params: { activeFilter },
+    params: { 
+      activeFilter,
+      isProfileSavedAttended },
   } = useRoute();
+
 
   const [activeTag, setactiveTag] = useState(activeFilter?.eventType || "");
   const [eventLocation, setEventLocation] = useState(
@@ -47,11 +50,21 @@ const FilterEvez = memo(() => {
     "Cash-Back",
   ];
 
+  const profileSaveEventTypes = [
+    "Saved",
+    "Attended"
+  ]
+
   const handleActiveTag = (data: string) => {
     setactiveTag(activeTag === data ? "" : data);
   };
 
   const onPressShowAllEvent = () => {
+   if(isProfileSavedAttended){
+     
+     return;
+   }
+   
     (eventLocation ||
       activeTag ||
       activeFilter?.eventType ||
@@ -65,6 +78,8 @@ const FilterEvez = memo(() => {
     });
   };
 
+  const targetFilterTags = isProfileSavedAttended ? profileSaveEventTypes : eventTags;
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
@@ -76,28 +91,27 @@ const FilterEvez = memo(() => {
         </View>
         <View style={styles.hashTagView}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {eventTags
-              ? eventTags.map((tag, id) => (
-                  <ItemTag
-                    active={tag === activeTag}
-                    onPress={() => handleActiveTag(tag)}
-                    tagName={tag}
-                    key={id}
-                  />
-                ))
-              : null}
+            {targetFilterTags.map((tag, id) => (
+              <ItemTag
+                active={tag === activeTag}
+                onPress={() => handleActiveTag(tag)}
+                tagName={tag}
+                key={id}
+              />
+            ))}
           </ScrollView>
         </View>
-
-        <Text style={styles.textOptionHeader}>
-          Event Location {eventLocation}
-        </Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Event Location"
-          value={eventLocation}
-          onChangeText={setEventLocation}
-        />
+        {!isProfileSavedAttended && (
+          <>
+            <Text style={styles.textOptionHeader}>Event Location</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Event Location"
+              value={eventLocation}
+              onChangeText={setEventLocation}
+            />
+          </>
+        )}
       </ScrollView>
       <View style={styles.buttonView}>
         <ButtonLinear

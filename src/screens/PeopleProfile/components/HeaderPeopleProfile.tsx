@@ -39,7 +39,7 @@ const HeaderPeopleProfile = memo((props: Props) => {
     navigation.navigate(ROUTES.Chat, {
       group: {
         name: props.userName,
-        image: props.coverImage,
+        image: props.avatar,
       },
       conversationId 
     });

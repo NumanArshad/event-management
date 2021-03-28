@@ -8,6 +8,7 @@ import donateReducer from "./donate/donate.Reducer";
 import errorReducer from "./error/error.reducer";
 import usersReducer from "./users/users.reducer";
 import notificationReducer from "./notifications/notifications.reducer";
+import groupsReducer from "./groups/groups.reducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   donate: donateReducer,
   errors: errorReducer,
   users: usersReducer,
-  notifications: notificationReducer
+  notifications: notificationReducer,
+  groups: groupsReducer
 });
 
 export default rootReducer;

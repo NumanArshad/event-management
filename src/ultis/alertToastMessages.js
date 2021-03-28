@@ -1,7 +1,9 @@
 import { Alert, ToastAndroid } from "react-native";
 
-export const alertMessage = (showText, headerText = "") => {
-  Alert.alert(headerText, showText);
+export const alertMessage = (showText,  alertBody ) => {
+  alertBody ?
+    Alert.alert("", showText, alertBody) :
+    Alert.alert("", showText);
 };
 
 export const toastMessages = (showMessage, bottomMargin=25) => {

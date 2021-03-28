@@ -15,7 +15,6 @@ import {
   getUserPosition,
 } from "ultis/functions";
 
-console.log(latitude, longitude);
 export const userLocation = {
   latitude,
   longitude,
@@ -44,7 +43,6 @@ const AllEventAroundYou = memo(() => {
 
   const { params } = useRoute();
 
-  console.log("locaion is", params?.eventLocation);
   const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
@@ -70,7 +68,6 @@ const AllEventAroundYou = memo(() => {
   if (!showMap && !region) {
     return null;
   }
-  console.log("hh", params?.eventLocation);
 
   return (
     <View style={styles.mapView}>

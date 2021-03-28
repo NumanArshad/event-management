@@ -79,7 +79,6 @@ const EventDetail = memo(() => {
       ({ event_id }: { event_id: number }) => event_id === data?.id
     );
 
-    console.log({data})
     setSaved(!!isEventSaved);
   }, [dispatch, all_saved_events, data]);
 

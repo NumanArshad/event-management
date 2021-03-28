@@ -71,7 +71,6 @@ const EvezTrending = memo(() => {
   useFocusEffect(
     useCallback(() => {
       if (all_trending_events?.length) {
-        console.log({all_trending_events})
         const eventLocationList = all_trending_events?.map(
           ({ lat_long }: { lat_long: string }) => splitLatLongStr(lat_long)
         );
@@ -158,7 +157,7 @@ const EvezTrending = memo(() => {
         //  contentContainerStyle={styles.contentContainerStyle}
         />
       ) : !isEmpty(all_errors) ? (
-        <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors?.message}</Text>
+        <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors}</Text>
       ) : (
         [...Array(2)].map(() => (
           <EventItem

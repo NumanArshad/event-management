@@ -29,25 +29,25 @@ import SubmitButton from "components/buttons/submitButton";
 import { getUsersbyDocRefList } from "redux/users/users.actions";
 import useImagePicker from "components/ImgPicker";
 import { noFoundImg } from "ultis/constants";
-import { createGroup } from "redux/groups/groups.actions";
+import { createGroup, getAuthGroupsObserver } from "redux/groups/groups.actions";
 import {
   bulkFirestoreHandler,
   sendNotification,
 } from "redux/notifications/notifications.actions";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
-import { alertMessage } from "ultis/alertToastMessages";
-import { startLoading, stopLoading } from "redux/loading/loading.actions";
+import { alertMessage, toastMessages } from "ultis/alertToastMessages";
+import { startButtonLoading, startLoading, stopButtonLoading, stopLoading } from "redux/loading/loading.actions";
 import NoContentFound from "components/NoContentFound";
 
 const CreateGroup = () => {
   const dispatch = useDispatch();
   const scrollX = useRef(new Animated.Value(0)).current;
 
-  const { image, pickImage, uploadImage } = useImagePicker();
+  const { image, pickImage, uploadImage } = useImagePicker(noFoundImg);
   const { navigate } = useNavigation();
 
   const {
-    login_Session: { user_doc_id, friends },
+    login_Session: { user_doc_id, friends, groups },
   } = useSelector((state) => state?.auth);
 
   const [formData, setFormData] = useState({
@@ -67,15 +67,60 @@ const CreateGroup = () => {
   }, []);
 
 
-  const { goBack } = useNavigation();
+  const  navigation = useNavigation();
 
   const handleSubmit = () => {
-    navigate('add_member', {
-      name,
-      image
-    })
+    alertMessage(
+      "Create Group",
+      [
+        {
+          text: "Add Member",
+          onPress: () => {
+            navigate('add_member', {
+              name,
+              image
+            })
+          }
+        },
+        {
+          text: "Cancel",
+           onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Save", onPress: () => handleCreateGroup() }
+      ]
+    )
   };
 
+  const handleCreateGroup = async() => {
+    
+    dispatch(startButtonLoading());
+    try{
+      const downloadUrl = await uploadImage();
+      console.log({downloadUrl})  
+      if (downloadUrl) {
+        console.log("hete creating")
+        const payload = {
+          name,
+          image: downloadUrl,
+          members: [ user_doc_id],
+          createdBy: user_doc_id,
+          createdDate: new Date(),
+        };
+        createGroup(payload, handleGoBack);
+      }
+    }
+    catch(error){
+      console.log(`error in creating group is ${error}`)
+    }
+
+  };
+
+  const handleGoBack = newGroupDocId => {
+    dispatch(stopButtonLoading());
+    dispatch(getAuthGroupsObserver(newGroupDocId));
+    navigation.goBack();
+  }
 
 
   return (
@@ -114,9 +159,8 @@ const CreateGroup = () => {
             }}
           >
             <SubmitButton
-              text="Add Member"
+              text="Create"
               onPress={handleSubmit}
-              isDisabled={!friends?.length}
             />
           </View>
 

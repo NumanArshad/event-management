@@ -20,7 +20,6 @@ export default function (state = initialState, action) {
     case STOP_LOADING:
       return { ...state, loading: false };
       case START_BUTTON_LOADING:
-        console.log("start")
         return { ...state, buttonLoading: true };
       case STOP_BUTTON_LOADING:
         return { ...state, buttonLoading: false };

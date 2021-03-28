@@ -20,11 +20,11 @@ const NotificationMessage = memo((props: Props) => {
     <TouchableOpacity style={[styles.notificationMessage, backGroundColor]}>
       <Image source={{ uri: props?.avatar }} style={styles.image} />
       <View style={styles.content}>
-        {/* <Text style={styles.txtUserName}>
-          {props.userName ? props.userName : "Name"}
-        </Text> */}
-        <Text style={styles.txtMessage}>{props?.message}</Text>
-        <Text style={styles.txtTime}>{props?.time}</Text>
+        <Text style={styles.txtUserName}>
+          {props.userName}
+        </Text>
+        <Text style={styles.txtMessage}>{props.message}</Text>
+        <Text style={styles.txtTime}>{props.time}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -61,11 +61,6 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
   },
   txtTime: {
-    fontFamily: FONTS.Regular,
-    fontSize: 12,
-    color: "#7F8FA6",
-  },
-  txtSend: {
     fontFamily: FONTS.Regular,
     fontSize: 12,
     color: "#7F8FA6",

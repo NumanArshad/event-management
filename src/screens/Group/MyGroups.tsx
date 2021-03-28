@@ -16,7 +16,6 @@ import {
 import ROUTES from "ultis/routes";
 import { getAuthGroupsObserver } from "redux/groups/groups.actions";
 import { useDispatch, useSelector } from "react-redux";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import Color from "ultis/color";
 import NoContentFound from "components/NoContentFound";
 
@@ -26,22 +25,19 @@ const MyGroups = memo(() => {
 
   const { params } = useRoute();
 
-  const {
-    login_Session: {
-      friends
-    },
-  } = useSelector((state) => state?.auth);
+  const { allAuthGroups: groupList } = useSelector((state) => state?.groups);
 
   const toCreateGroup = () => {
     navigation.navigate(ROUTES.CreateGroup);
   };
-  const [groupList, setGroupList] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
-     dispatch(getAuthGroupsObserver(setGroupList));
-    }, [dispatch])
+     dispatch(getAuthGroupsObserver());
+    }, [dispatch, navigation])
   );
+
+// console.log("hey groups are", groupList)
 
   return (
     <View style={styles.container}>
@@ -78,15 +74,13 @@ const MyGroups = memo(() => {
         )}
       </ScrollView>
       {/* <TouchableOpacity style={styles.iconPlus}> */}
-     {friends?.length ?
       <Ionicons
         name="create-outline"
         size={30}
         color="#fff"
         style={styles.iconPlus}
         onPress={toCreateGroup}
-      /> :
-      null}
+      /> 
       {/* </TouchableOpacity> */}
     </View>
   );

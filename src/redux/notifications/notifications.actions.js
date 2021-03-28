@@ -4,7 +4,7 @@ import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import { alertMessage } from "ultis/alertToastMessages";
 import firebase from "ultis/services/FirebaseConfig";
-import { GET_ALL_NOTIFICATIONS } from "redux/actionTypes";
+import { GET_ALL_INBOX_NOTIFICATIONS, GET_ALL_NOTIFICATIONS } from "redux/actionTypes";
 
 const notificationCollectionRef = firebase.firestore().collection("notifications");
 
@@ -135,21 +135,22 @@ export const deleteNotification = (senderDocId, receipentDocId, type = 'friendRe
     })
 }
 
+///excluding inbox message notification/////
 export const getAuthNotifications = () => (dispatch, getState) => {
   const {
     login_Session: { user_doc_id },
   } = getState()?.auth;
-
-  //alert("jwkfnej")
-  notificationCollectionRef.where('receipentDocId','==',user_doc_id)
+  notificationCollectionRef
+  .orderBy("createdAt","desc")
   .onSnapshot(snapshot => {
     let notifArray = [];
     snapshot.forEach(res => {
-      //console.log("res is", res.id)
-      notifArray.push({
-        ...res.data(),
-        id: res.id
-      })
+      if(res.data().receipentDocId === user_doc_id && res.data().type !== "inboxMessage"){
+        notifArray.push({
+          ...res.data(),
+          id: res.id
+        })
+      }
     })
    //console.log({notifArray})
     dispatch({
@@ -158,4 +159,30 @@ export const getAuthNotifications = () => (dispatch, getState) => {
     })
   })
 
+}
+
+
+///excluding inbox message notification/////
+export const getInboxMessageNotifications = () => (dispatch, getState) => {
+  const {
+    login_Session: { user_doc_id },
+  } = getState()?.auth;
+
+  notificationCollectionRef
+  .orderBy("createdAt","desc")
+  .onSnapshot(snapshot => {
+    let notifArray = [];
+    snapshot.forEach(res => {
+      if(res.data().receipentDocId === user_doc_id && res.data().type === "inboxMessage"){
+        notifArray.push({
+          ...res.data(),
+          id: res.id
+        })
+      }
+    })
+    dispatch({
+      type: GET_ALL_INBOX_NOTIFICATIONS,
+      payload: notifArray
+    })  
+  })
 }

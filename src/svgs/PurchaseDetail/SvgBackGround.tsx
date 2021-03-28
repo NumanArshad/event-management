@@ -7,7 +7,6 @@ import Svg, {
   LinearGradient,
   Stop,
 } from "react-native-svg"
-import {Text, View} from "react-native";
 /* SVGR has dropped some elements not supported by react-native-svg: filter */
 
 export interface SvgProps {

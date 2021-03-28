@@ -151,3 +151,7 @@ export const getImage = (image, isUser) => {
   const imagePath = image?.includes("firebasestorage") ? `` : baseImageUrl;
   return (!image || image.includes('default')) ? defaultImage : image.includes("exponent") ? image : `${imagePath}${image}`
 }
+
+export const capitalizeFirstLetter = ([first, ...rest] = input) => (
+  first.toUpperCase() + rest.join('')
+)

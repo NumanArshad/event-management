@@ -3,13 +3,15 @@ import { StyleSheet, View, FlatList, Button, Text } from "react-native";
 import EventItem from "components/EventItem";
 import keyExtractor from "ultis/keyExtractor";
 import { useDispatch, useSelector } from "react-redux";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { getAllEvents } from "redux/events/events.actions";
 import { height_screen, width_screen } from "ultis/dimensions";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import isEmpty from "ultis/isEmpty";
 import Color from "ultis/color";
-import { formatDateTime, getImage } from "ultis/functions";
+import { capitalizeFirstLetter, formatDateTime, getImage } from "ultis/functions";
+import ButtonFilter from "components/buttons/ButtonFilter";
+import ROUTES from "ultis/routes";
 
 const data = [
   {
@@ -28,6 +30,8 @@ const data = [
 const ProfileSaved = memo(() => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const {params} = useRoute();
   const { all_attended_events } = useSelector<any, any>(
     (state) => state.events
   );
@@ -37,8 +41,9 @@ const ProfileSaved = memo(() => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(getAllEvents(eventStatus));
-    }, [dispatch, eventStatus])
+      dispatch(getAllEvents(eventStatus ?? params?.eventType));
+      params?.eventType && setEventStatus(params?.eventType);
+    }, [dispatch, eventStatus, params])
   );
 
   const renderItem = useCallback(({ item }) => {
@@ -72,6 +77,13 @@ const ProfileSaved = memo(() => {
     );
   }, []);
 
+  const onPressFilter = useCallback(() => {
+    navigation.navigate(ROUTES.FilterEvez, {
+      activeFilter: {eventType: capitalizeFirstLetter(eventStatus)},
+      isProfileSavedAttended: true
+    });
+  }, [navigation, params, eventStatus]);
+
   return (
     <View style={styles.container}>
       <View
@@ -81,7 +93,7 @@ const ProfileSaved = memo(() => {
           marginTop: height_screen * 0.02,
         }}
       >
-        <TouchableOpacity onPress={() => setEventStatus("saved")}>
+        {/* <TouchableOpacity onPress={() => setEventStatus("saved")}>
           <Text
             style={[
               styles.loginBtn,
@@ -95,8 +107,8 @@ const ProfileSaved = memo(() => {
           >
             Saved
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setEventStatus("attended")}>
+        </TouchableOpacity> */}
+        {/* <TouchableOpacity onPress={() => setEventStatus("attended")}>
           <Text
             style={[
               styles.loginBtn,
@@ -109,12 +121,12 @@ const ProfileSaved = memo(() => {
           >
             Attended
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       {loading ? (
         <Text>...loading</Text>
       ) : !isEmpty(all_errors) ? (
-        <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors?.message}</Text>
+        <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors}</Text>
       ) : (
         <FlatList
           data={all_attended_events}
@@ -125,6 +137,15 @@ const ProfileSaved = memo(() => {
           contentContainerStyle={styles.contentContainerStyle}
         />
       )}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ButtonFilter onPress={onPressFilter} />
+      </View>
     </View>
   );
 });

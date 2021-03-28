@@ -2,7 +2,6 @@ import React, { memo } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import ROUTES from "ultis/routes";
 import MayBeYouKnow from "screens/MayBeYouKnow";
-import Explorer from "screens/Explorer";
 import FriendList from "screens/FriendList";
 import FriendRequest from "screens/FriendRequest";
 import Color from "ultis/color";
