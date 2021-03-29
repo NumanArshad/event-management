@@ -45,7 +45,8 @@ export const GET_ALL_EARNINGS = "GET_ALL_EARNINGS";
 
 ////Notifications//////
 export const GET_ALL_NOTIFICATIONS = "GET_ALL_NOTIFICATIONS";
+export const GET_ALL_INBOX_NOTIFICATIONS = "GET_ALL_INBOX_NOTIFICATIONS";
 
 ////Groups///
-export const GET_ALL_GROUPS = "GET_ALL_GROUPS";
+export const GET_AUTH_GROUPS = "GET_AUTH_GROUPS";
 export const ADD_GROUP_MEMBER = "ADD_GROUP_MEMBER"

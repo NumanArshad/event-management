@@ -12,13 +12,13 @@ import {
   InputToolbar,
   Composer,
 } from "react-native-gifted-chat";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import SvgSend from "svgs/SvgSend";
 import FONTS from "ultis/fonts";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import {
-getConversation,
+  getConversation,
   getRoomUsers,
   isConversationInitiated,
   joinChatRoom,
@@ -29,7 +29,7 @@ import { getUsersbyDocRefList } from "redux/users/users.actions";
 import { noFoundImg } from "ultis/constants";
 import EventItem from "components/EventItem";
 import { formatDateTime, getImage } from "ultis/functions";
-import { width_screen } from "ultis/dimensions";
+import { height_screen, width_screen } from "ultis/dimensions";
 import { alertMessage } from "ultis/alertToastMessages";
 import {
   clearSingleEvent,
@@ -37,12 +37,10 @@ import {
 } from "redux/events/events.actions";
 import isEmpty from "ultis/isEmpty";
 
-
-const CustomView = (props:any) => {
+const CustomView = (props: any) => {
   const { single_event } = useSelector<any, any>((state) => state?.events);
 
-
- // alertMessage("kwfjenj");
+  // alertMessage("kwfjenj");
   const {
     event_name,
     type_name,
@@ -53,12 +51,11 @@ const CustomView = (props:any) => {
     start_time,
     duration,
     rating,
-    image
+    image,
   } = single_event || {};
   return (
     <View style={{ padding: 10, width: "95%" }} {...props}>
       <EventItem
-      
         thumbnail={getImage(image)}
         tag={type_name}
         id={event_id}
@@ -89,18 +86,25 @@ const Chat = () => {
 
   const isGroupChat = chatType === "groupChat";
 
-
   const {
-    login_Session: { user_doc_id, user_id, user_name, image: senderImage, deviceToken },
+    login_Session: {
+      user_doc_id,
+      user_id,
+      user_name,
+      image: senderImage,
+      deviceToken,
+    },
   } = useSelector<any, any>((state) => state?.auth);
 
+
+  console.log({image})
   const { single_event = {}, all_trending_events } = useSelector<any, any>(
     (state) => state?.events
   );
 
-//console.log({deviceToken})
-  
-  const [groupUsers, setGroupUsers] = useState([]);
+  //console.log({deviceToken})
+
+  const [groupUsers, setGroupUsers] = useState(null);
 
   const [messages, setMessages] = useState([]);
 
@@ -119,84 +123,84 @@ const Chat = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getMemberInfo = userDocId => {
-        return groupUsers.find(({id}) => id===userDocId);
-  }  
+  const getMemberInfo = (userDocId: string) => {
+    return groupUsers.find(({ id }) => id === userDocId);
+  };
 
   useEffect(() => {
-
     if (isGroupChat) {
       !all_trending_events?.length && dispatch(getAllTrendingEvents());
       return;
     }
 
-    isConversationInitiated(conversationId, {
-      sentBy: user_doc_id,
-      text: "welcome",
-      createdAt: Date.now(),
-    });
-  }, [user_doc_id, conversationId, isGroupChat]);
-
-  console.log({conversationId})
+    // isConversationInitiated(conversationId,
+    // //   {
+    // //   sentBy: user_doc_id,
+    // //   text: "welcome",
+    // //   createdAt: Date.now(),
+    // // }
+    // );
+  }, [isGroupChat, all_trending_events]);
 
   useEffect(() => {
+
+    console.log(conversationId, user_doc_id)
     //getRoomUsers(conversationId);
     joinChatRoom(conversationId, user_doc_id);
 
-    return () => leaveChatRoom(conversationId, user_doc_id)
+    return () => leaveChatRoom(conversationId, user_doc_id);
   }, []);
 
   useEffect(() => {
-    let groupMembers = isGroupChat ? members : conversationId?.split('_')
-   // console.log({groupMembers})
-    !groupUsers.length ? getUsersbyDocRefList(groupMembers, setGroupUsers) :
-    
-    getConversation(conversationId, messages, (res) => {
-      //@ts-ignore
-      let updateMessages = res.map(({ sentBy, text, id, createdAt }) => ({
-        //@ts-ignore
-        text,
-        createdAt,
-        _id: id,
-        user: {
-          _id: sentBy,
-          avatar: getMemberInfo(sentBy)?.image,
-        },
-      }));
-      console.log("my all messagt ob show are", updateMessages)
-      setMessages(updateMessages);
-    });
+    let groupMembers = isGroupChat ? members : conversationId?.split("_");
+    !groupUsers
+      ? getUsersbyDocRefList(groupMembers, setGroupUsers)
+      : getConversation(conversationId, messages, (res) => {
+          //@ts-ignore
+          let updateMessages = res.map(({ sentBy, text, id, createdAt }) => ({
+            //@ts-ignore
+            text,
+            createdAt,
+            _id: id,
+            user: {
+              _id: sentBy,
+              avatar: getImage(getMemberInfo(sentBy)?.image),
+            },
+          }));
+          setMessages(updateMessages);
+        });
   }, [groupUsers]);
 
   const onSend = (newMessage = []) => {
     // @ts-ignore
-    
-      isEventShare && setIsEventShare(false);
+
+    isEventShare && setIsEventShare(false);
 
     const { user, ...messagePayload } = newMessage[0];
     const { text } = messagePayload;
-    sendMessage(conversationId, {
-      sentBy: user_doc_id,
-      createdAt: Date.now(),
-      text: isEventSharing ? single_event?.event_id : text,
-    }, {user_doc_id, deviceToken},
-    groupUsers);
+    sendMessage(
+      conversationId,
+      {
+        sentBy: user_doc_id,
+        createdAt: Date.now(),
+        text: isEventSharing ? single_event?.event_id : text,
+      },
+      { user_doc_id, deviceToken },
+      groupUsers,
+      {chatName: name, chatDisplayImage: senderImage}
+    );
 
     isEventSharing
-      ? setEventDetail(eventDetail => eventDetail = {})
+      ? setEventDetail((eventDetail) => (eventDetail = {}))
       : setMessages(GiftedChat.append(messages, newMessage));
   };
 
   const getEventById = (eventId) => {
-    alertMessage(eventId)
     return all_trending_events?.find(({ event_id }) => event_id === eventId);
   };
 
   const renderbuffer = useCallback((props) => {
     const { currentMessage } = props;
-
-    console.log({currentMessage})
-
 
     const message = isGroupChat
       ? getEventById(currentMessage?.text)
@@ -204,23 +208,25 @@ const Chat = () => {
 
     return (
       <>
-        {isGroupChat && !isEmpty(message) ? (
-          <EventItem
-            thumbnail={getImage(message?.image)}
-            tag={message?.type_name}
-            id={message?.event_id}
-            eventName={message?.event_name}
-            location={message?.address}
-            distance={message?.lat_long}
-            eventDateTime={formatDateTime(
-              message?.event_date,
-              message?.start_time
-            )}
-            rate={message?.rating}
-            duration={message?.duration}
-            isSmallItem
-            key={message?.id}
-          />
+        {isGroupChat ? (
+          !isEmpty(message) ? (
+            <EventItem
+              thumbnail={getImage(message?.image)}
+              tag={message?.type_name}
+              id={message?.event_id}
+              eventName={message?.event_name}
+              location={message?.address}
+              distance={message?.lat_long}
+              eventDateTime={formatDateTime(
+                message?.event_date,
+                message?.start_time
+              )}
+              rate={message?.rating}
+              duration={message?.duration}
+              isSmallItem
+              key={message?.id}
+            />
+          ) : null
         ) : (
           <Bubble
             {...props}
@@ -249,7 +255,6 @@ const Chat = () => {
   }, []);
 
   const renderSend = useCallback((props) => {
-
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
@@ -280,7 +285,7 @@ const Chat = () => {
           renderSend={renderSend}
           user={{
             _id: user_doc_id,
-            avatar: getImage(senderImage)
+            avatar: getImage(senderImage),
           }}
           textInputProps={{
             fontSize: 14,
@@ -298,9 +303,8 @@ const Chat = () => {
           renderSend={renderSend}
           user={{
             _id: user_doc_id,
-           // name:"jwfn",
-            avatar: getImage(senderImage)
-          
+            // name:"jwfn",
+            avatar: getImage(senderImage),
           }}
           textInputProps={{
             fontSize: 14,
@@ -321,26 +325,10 @@ const styles = StyleSheet.create({
   },
   sendingContainer: {
     alignSelf: "center",
-    top: -10,
-    right: 24,
+    top: -8,
+    right: 26,
   },
   svgSend: {
     alignSelf: "center",
-  },
+  }
 });
-
-// {
-//   id: 1,
-//   text: "It's going well! How about you?",
-//   user: { id: 2, name: "Name", avatar: require("@assets/Chat/Hieu.png") },
-// },
-// {
-//   id: 2,
-//   text: "What do you do for a living?",
-//   user: { id: 2, name: "Name", avatar: require("@assets/Chat/Hieu.png") },
-// },
-// {
-//   id: 3,
-//   text: "Hello, My name's Hieu Le.\n" + "Nice to meet you!",
-//   user: { _id: 1, name: "Name", avatar: require("@assets/Chat/Lisa.png") },
-// },

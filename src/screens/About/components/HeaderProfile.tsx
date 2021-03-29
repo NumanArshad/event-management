@@ -22,6 +22,7 @@ import { getMyEarning } from "redux/users/users.actions";
 import { ScrollView } from "react-native-gesture-handler";
 import COLOR from "ultis/color/index";
 import { getImage } from "ultis/functions";
+import { getInboxMessageNotifications } from "redux/notifications/notifications.actions";
 interface Props {
   coverImage: any;
   avatar: any;
@@ -62,6 +63,10 @@ const HeaderProfile = memo((props: Props) => {
   const dispatch = useDispatch();
   const { my_earnings } = useSelector<any, any>((state) => state.users);
 
+  const { all_inbox_message_notification } = useSelector<any, any>(
+    (state) => state?.notifications
+  );
+
   useEffect(() => {
     if (Array.isArray(my_earnings) && my_earnings.length > 0) {
       // makeRow();
@@ -69,7 +74,10 @@ const HeaderProfile = memo((props: Props) => {
       dispatch(getMyEarning());
       //   console.log("Run", my_earnings);
     }
+    dispatch(getInboxMessageNotifications());
   }, [dispatch, my_earnings]);
+
+
 
   const startAnimation = useCallback(() => {
     Animated.timing(spin, {
@@ -89,7 +97,7 @@ const HeaderProfile = memo((props: Props) => {
         end={{ x: 1, y: 1 }}
       />
       <View style={styles.mask}>
-        <Image style={styles.img} source={{uri:getImage(props.avatar)}} />
+        <Image style={styles.img} source={{ uri: getImage(props.avatar) }} />
         <Ionicons
           name="create-outline"
           size={18}
@@ -104,28 +112,31 @@ const HeaderProfile = memo((props: Props) => {
         <Text style={styles.address}>{props.address}</Text>
         <View style={styles.btn}>
           <TouchableOpacity
-            // onPress={onInbox}
-            onPress={() => alertMessage("Working...")}
+            onPress={onInbox}
+            // onPress={() => alertMessage("Working...")}
             style={styles.inbox}
           >
             <Text style={styles.txtInbox}>INBOX</Text>
             <View style={styles.numberMessage}>
-              <Text style={styles.txtNumberMessage}>{props.numberMessage}</Text>
+              <Text style={styles.txtNumberMessage}>{all_inbox_message_notification?.length}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={onRewards} style={styles.rewards}>
-            <Text style={styles.txtRewards}>REWARD - ${props.rewards}</Text>
+            <Text style={styles.txtRewards}>EARNINGS - ${props.rewards}</Text>
           </TouchableOpacity>
         </View>
 
-        <ScrollView style={{ flex: 1, height: 400 }}>
+        <ScrollView
+          style={{ flex: 1, height: 500, marginBottom: height_screen * 0.05 }}
+        >
           {Array.isArray(my_earnings) && my_earnings.length > 0
-            ? my_earnings.map((data, id) => (
+            ? my_earnings.map((data, index) => (
                 <LinearGradient
                   colors={[COLOR.GRAD_COLOR_3, COLOR.GRAD_COLOR_3]}
                   start={{ x: 0, y: 1 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.mainCard}
+                  key={index}
                 >
                   <View style={styles.earningDetails}>
                     <Text style={styles.EventName}>

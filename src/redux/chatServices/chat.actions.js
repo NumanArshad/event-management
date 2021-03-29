@@ -15,13 +15,13 @@ export const roomUsers = conversationDocId => {
       if (snapshot.exists) {
         users = snapshot?.data()?.roomUsers;
       }
-     // console.log("nice to have is ", users)
+      // console.log("nice to have is ", users)
       resolve(users)
     })
   )
 }
 
-  //const roomUserRef = conversionDocId => chatRoomsRef.doc(conversionDocId)
+//const roomUserRef = conversionDocId => chatRoomsRef.doc(conversionDocId)
 export const joinChatRoom = (conversationDocId, authDocId) => {
   roomUsers(conversationDocId).then(usersList => {
     let updateUsersList = usersList?.length ? [...usersList, authDocId] : [authDocId];
@@ -32,26 +32,29 @@ export const joinChatRoom = (conversationDocId, authDocId) => {
 }
 
 export const leaveChatRoom = (conversationDocId, authDocId) => {
-//alertMessage("leaving is")
+  //alertMessage("leaving is")
   roomUsers(conversationDocId).then(usersList => {
-    let updateUsersList = usersList?.filter((userDocId) => userDocId!==authDocId);
- console.log({updateUsersList})
+    let updateUsersList = usersList?.filter((userDocId) => userDocId !== authDocId);
+    console.log({ updateUsersList })
     chatRoomsRef.doc(conversationDocId).set({
       roomUsers: updateUsersList
     })
   })
 }
 
-const sendMessageNotification = (conversationDocId, { user_doc_id }, messageText, chatUsers) => {
 
+const sendMessageNotification = (conversationDocId, { user_doc_id }, messageText, chatUsers,
+  { chatName, chatDisplayImage }
+) => {
   roomUsers(conversationDocId).then(users => {
     let filterAuthUsers = chatUsers?.filter(({ id: userDocId }) => userDocId !== user_doc_id);
 
-  
-    let receipentDeviceToken = filterAuthUsers?.filter(({ id: userDocId, isOnline }) =>
-      (!users.includes(userDocId) && isOnline)).map(({ deviceToken }) => (deviceToken));
+    let receipentUsers = filterAuthUsers?.filter(({ id: userDocId, isOnline }) =>
+      (!users.includes(userDocId) && isOnline));
 
-      console.log({receipentDeviceToken})
+    let receipentDeviceToken = receipentUsers.map(({ deviceToken }) => (deviceToken));
+
+    console.log({ receipentDeviceToken })
     if (receipentDeviceToken?.length) {
       ///push token online users
       const notificationPayload = {
@@ -62,14 +65,23 @@ const sendMessageNotification = (conversationDocId, { user_doc_id }, messageText
       sendPushNotification(notificationPayload)
     }
 
-    let offlineGroupUsers = filterAuthUsers?.filter(({ isOnline }) => !isOnline);
-    if (offlineGroupUsers?.length) {
-      let inboxNotificatioOfflineUser = offlineGroupUsers.map(({ id: receipentDocId }) =>
+    let receipentMessageUser = chatUsers?.filter(({ id }) => !users.includes(id));
+
+    console.log({ receipentMessageUser })
+    if (receipentMessageUser?.length) {
+      let inboxNotificatioOfflineUser = receipentMessageUser.map(({ id: receipentDocId }) =>
         sendNotification({
           receipentDocId,
           senderDocId: user_doc_id,
           createdAt: new Date(),
-          type: "inboxMessage",
+          type: `inboxMessage`,
+            messageText, 
+            conversationInfo: {
+              Id: conversationDocId,
+              name: chatName,
+              image: chatDisplayImage
+            
+          }
         })
       );
       bulkFirestoreHandler(inboxNotificatioOfflineUser, () => alertMessage("offline message sent"))
@@ -82,14 +94,14 @@ export const isConversationInitiated = (conversionDocId, initialMsg) => {
     .get()
     .then((res) => {
       if (!res.docs.length) {
-        sendMessage(conversionDocId, initialMsg);
+        //  sendMessage(conversionDocId, initialMsg);
       }
     });
 };
 
-export const sendMessage = (conversionDocId, messagePayload, authUser, chatUsers) => {
-  
-  //sendMessageNotification(conversionDocId,authUser, messagePayload?.text, chatUsers );
+export const sendMessage = (conversionDocId, messagePayload, authUser, chatUsers, conversationBasicInfo) => {
+
+  sendMessageNotification(conversionDocId, authUser, messagePayload?.text, chatUsers, conversationBasicInfo);
   chatMessagesRef(conversionDocId)
     .add(messagePayload)
     .then((res) =>
@@ -101,9 +113,9 @@ export const getConversation = (conversionDocId, myMessages, callBack) => {
   chatMessagesRef(conversionDocId).orderBy("createdAt").onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((changes) => {
       if (changes.type === "added") {
-      console.log("chnage data is", changes.doc.data());
+        console.log("chnage data is", changes.doc.data());
 
-      
+
         myMessages.unshift({
           ...changes.doc.data(),
           id: changes.doc.id,

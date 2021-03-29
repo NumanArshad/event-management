@@ -65,20 +65,20 @@ const EventDetail = memo(() => {
   const data = route.params?.data;
 
   const dispatch = useDispatch();
-  const [isSaved, setSaved] = useState(data?.save);
+  const [isSaved, setSaved] = useState(false);
 
   const { single_event, all_reserved_events, all_saved_events } = useSelector<
     any,
     any
   >((state) => state.events);
 
-  const { loading, buttonLoading } = useSelector<any, any>((state) => state.loading);
 
   useEffect(() => {
     dispatch(getSingleEventDetail(data?.id));
     const isEventSaved = all_saved_events?.find(
       ({ event_id }: { event_id: number }) => event_id === data?.id
     );
+
     setSaved(!!isEventSaved);
   }, [dispatch, all_saved_events, data]);
 
@@ -102,8 +102,8 @@ const EventDetail = memo(() => {
     formData.append("long", currentLong);
     is_event_in_progress
       ? 
-      //handleAttendEvent()
-      dispatch(markAttendance(formData))
+      handleAttendEvent()
+  //  dispatch(markAttendance(formData))
       : handleReserveEvent();
   };
 
@@ -131,6 +131,7 @@ const EventDetail = memo(() => {
   const onDirection = useCallback(() => {
     navigation.navigate(ROUTES.AllEventAroundYou, {
       eventLocation: [splitLatLongStr(single_event?.lat_long)],
+      pinPoint: splitLatLongStr(single_event?.lat_long)
     });
   }, [single_event]);
 
@@ -220,20 +221,19 @@ const EventDetail = memo(() => {
           </View>
         ) : null} */}
 
-        {isEmpty(single_event) ? (
-          <Text>...loading</Text>
-        ) : (
+        
           <EventTimeCountDown
             id={data?.id}
-            eventDateTime={formatDateTime(
+            eventDateTime={!isEmpty(single_event) && formatDateTime(
               single_event?.event_date,
               single_event?.start_time
             )}
+            loadFlag={isEmpty(single_event)}
             hasPassed={!isAfter}
             isInProgress={is_event_in_progress}
             isDetail={styles.countDownView}
           />
-        )}
+        
 
         <View style={styles.infoView}>
           <EventName
@@ -364,7 +364,7 @@ const EventDetail = memo(() => {
           </View>
         )}
 
-        {is_event_in_progress && isEventInRange ? (
+        {/* {is_event_in_progress && isEventInRange ? (
           <View style={styles.buttonView}>
             <ButtonLinear
               title={reserveAttendanceText}
@@ -372,7 +372,7 @@ const EventDetail = memo(() => {
               onPress={handleAttendEvent}
             />
           </View>
-        ) : null}
+        ) : null} */}
       </ScrollView>
       <View style={styles.buttonTopView}>
         <TouchableOpacity onPress={onBack} style={styles.btnBack}>

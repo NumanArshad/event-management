@@ -135,11 +135,6 @@ export const getUserSessions = () => async (dispatch) => {
     const token = await AsyncStorage.getItem("Token");
     const user = JSON.parse(await AsyncStorage.getItem("user"));
 
-    console.log("gettinh user sesion is ", user, user, user)
-    //const userName = await AsyncStorage.getItem("userName");
-
-
-
     token ?
       getSingleUser(user, (userInfo) => {
         dispatch(isAuthenticated({ ...userInfo, auth_token: token }));

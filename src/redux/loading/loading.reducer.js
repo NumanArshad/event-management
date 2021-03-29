@@ -16,11 +16,10 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case START_LOADING:
-      return { loading: true };
+      return { ...state, loading: true };
     case STOP_LOADING:
-      return { loading: false };
+      return { ...state, loading: false };
       case START_BUTTON_LOADING:
-        console.log("start")
         return { ...state, buttonLoading: true };
       case STOP_BUTTON_LOADING:
         return { ...state, buttonLoading: false };

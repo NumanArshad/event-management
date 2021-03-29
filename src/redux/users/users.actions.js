@@ -47,9 +47,8 @@ console.log("auth updated is here", snapshot.data())
 }
 
 ///Update receipent user added in group 'groups field by transaction///
-export const receipentTransactions = (users, groupId) => {
+export const receipentTransactions = (users, groupId, callBack) => {
 
-  ////console.log("recepient params is ", users, groupId);
 
   firebase.firestore().runTransaction(transaction => {
     users.forEach(userId => {
@@ -65,7 +64,8 @@ export const receipentTransactions = (users, groupId) => {
     })
     return Promise.resolve();
   })
-    .then(res => console.log("all transaction updated successfully!"))
+    .then(res => {console.log("all transaction updated successfully!");
+    callBack && callBack(groupId)})
     .catch(error => console.log(`error in updated transaction is ${error}`))
 }
 

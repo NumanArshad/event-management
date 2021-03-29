@@ -87,7 +87,7 @@ const EventItem = memo((props: EventItemProps) => {
     navigation.navigate(ROUTES.EventDetail, {
       data,
     });
-  }, []);
+  }, [data]);
 
   return (
     <TouchableOpacity

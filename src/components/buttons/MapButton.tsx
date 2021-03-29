@@ -25,9 +25,9 @@ const MapButton = memo((props: MapButtonProps) => {
       <ButtonIcon onPress={onPressBack}>
         <IconClose />
       </ButtonIcon>
-      <ButtonIcon onPress={onPressDirection}>
+      {/* <ButtonIcon onPress={onPressDirection}>
         <IconDirection />
-      </ButtonIcon>
+      </ButtonIcon> */}
     </View>
   );
 });

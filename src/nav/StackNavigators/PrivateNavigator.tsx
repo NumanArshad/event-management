@@ -170,7 +170,7 @@ const PrivateNavigator = () => (
       component={CustomBarCodeScanner}
       options={{ 
       //  headerShown: false,
-         headerTitle:"Auto Attend Event"
+         headerTitle:"Attend Event"
          }}
     />
     <privateNavStack.Screen

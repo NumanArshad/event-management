@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getImage } from "ultis/functions";
 import { Ionicons } from "@expo/vector-icons";
 import useImagePicker from "components/ImgPicker";
+import FONTS from "ultis/fonts";
 
 const Profile = memo(() => {
   const {
@@ -86,9 +87,8 @@ const Profile = memo(() => {
       if (ValidateEmail()) {
         try {
           // setpreLoader(true);
-          if(image!==img){
+          if (image !== img) {
             var downloadUrl = await uploadImage();
-
           }
           const formData = new FormData();
           formData.append("email", email);
@@ -120,7 +120,7 @@ const Profile = memo(() => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.container}>
-        <View>
+        <View style={{ marginBottom: height_screen * 0.02 }}>
           <Image source={{ uri: getImage(img) }} style={styles.imageProfile} />
           <Ionicons
             name="create-outline"
@@ -131,24 +131,35 @@ const Profile = memo(() => {
           />
         </View>
 
+        <Text style={styles.label}>Email</Text>
+
         <TextInput
           style={styles.textInput}
           placeholder="soemone@gmail.com..."
           onChangeText={(data) => setemail(data)}
           value={email}
         />
+
+        <Text style={styles.label}>First Name</Text>
+
         <TextInput
           style={styles.textInput}
           placeholder="First Name..."
           onChangeText={(data) => setfirstName(data)}
           value={firstName}
         />
+
+        <Text style={styles.label}>Last Name</Text>
+
         <TextInput
           style={styles.textInput}
           placeholder="Last Name..."
           onChangeText={(data) => setlastName(data)}
           value={lastName}
         />
+
+        <Text style={styles.label}>Stripe Account Number</Text>
+
         <TextInput
           style={styles.textInput}
           placeholder="Strip Account Number..."
@@ -156,6 +167,9 @@ const Profile = memo(() => {
           value={stripAccount}
           //  secureTextEntry={true}
         />
+
+        <Text style={styles.label}>Phone Number</Text>
+
         <TextInput
           style={styles.textInput}
           placeholder="Phone Number..."
@@ -163,6 +177,9 @@ const Profile = memo(() => {
           value={phone}
           keyboardType="number-pad"
         />
+
+        <Text style={styles.label}>Username</Text>
+
         <TextInput
           style={styles.textInput}
           placeholder="Name..."
@@ -301,11 +318,18 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   imageProfile: {
-    height: height_screen * 0.18,
-    width: width_screen * 0.35,
+    height: height_screen * 0.15,
+    width: width_screen * 0.3,
     // backgroundColor: "#a4a4a4",
-     resizeMode: "contain",
+    // resizeMode: "contain",
     borderRadius: 100,
     marginTop: "3%",
+  },
+  label: {
+    fontFamily: FONTS.Regular,
+    textAlign: "left",
+    width: width_screen * 0.8,
+    marginTop: height_screen * 0.015,
+    fontSize: height_screen * 0.0165,
   },
 });

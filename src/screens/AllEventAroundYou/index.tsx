@@ -1,17 +1,20 @@
-import React, {memo, useCallback, useEffect, useState} from 'react';
-import {InteractionManager, ScrollView, StyleSheet, View} from 'react-native';
-import MapView, {Circle, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import UserLocation from 'svgs/UserLocation';
-import EventItem from 'components/EventItem';
-import {eventLocation} from 'data/eventLocation';
-import PinLocation from 'svgs/PinLocation';
-import ButtonFilter from 'components/buttons/ButtonFilter';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import MapButton from 'components/buttons/MapButton';
-import ROUTES from 'ultis/routes';
-import {currentLat as latitude, currentLong as longitude, getUserPosition} from "ultis/functions"
+import React, { memo, useCallback, useEffect, useState } from "react";
+import { InteractionManager, ScrollView, StyleSheet, View } from "react-native";
+import MapView, { Circle, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import UserLocation from "svgs/UserLocation";
+import EventItem from "components/EventItem";
+import { eventLocation } from "data/eventLocation";
+import PinLocation from "svgs/PinLocation";
+import ButtonFilter from "components/buttons/ButtonFilter";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import MapButton from "components/buttons/MapButton";
+import ROUTES from "ultis/routes";
+import {
+  currentLat as latitude,
+  currentLong as longitude,
+  getUserPosition,
+} from "ultis/functions";
 
-console.log(latitude, longitude)
 export const userLocation = {
   latitude,
   longitude,
@@ -27,7 +30,7 @@ const AllEventAroundYou = memo(() => {
   //   latitudeDelta: initialLatitudeDelta,
   //   longitudeDelta: initialLongitudeDelta,
   // };
-  const [color, setColor] = useState('#000');
+  const [color, setColor] = useState("#000");
   const [region, setRegion] = useState(null);
 
   const onPressBack = useCallback(() => {
@@ -38,63 +41,78 @@ const AllEventAroundYou = memo(() => {
   }, [navigation]);
   const onPressDirection = useCallback(() => {}, []);
 
-  const {params} = useRoute();
+  const { params } = useRoute();
 
-  console.log("locaion is", params?.eventLocation)
- const [showMap, setShowMap] = useState(false)
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
-  //  InteractionManager.runAfterInteractions(() => setShowMap(true));
-  InteractionManager.runAfterInteractions(()=>setShowMap(true))
+    //  InteractionManager.runAfterInteractions(() => setShowMap(true));
+    InteractionManager.runAfterInteractions(() => setShowMap(true));
   }, [latitude, longitude]);
 
   useEffect(() => {
-    setColor('rgba(255, 0, 0, 0.2)');
-   !region && getUserPosition()?.then(res => {
-      setRegion({
-        latitude: res?.latitude,
-        longitude: res?.longitude,
-        latitudeDelta: initialLatitudeDelta,
-        longitudeDelta: initialLongitudeDelta,
-        
-      })
-    })
+    setColor("rgba(255, 0, 0, 0.2)");
+    !region &&
+      getUserPosition()?.then((res) => {
+        setRegion({
+          ...(params?.pinPoint ?? {
+            latitude: res?.latitude,
+            longitude: res?.longitude,
+          }),
+          latitudeDelta: initialLatitudeDelta,
+          longitudeDelta: initialLongitudeDelta,
+        });
+      });
   }, [region]);
 
-if(!showMap && !region ){
-  return null
-}
-console.log("hh",params?.eventLocation)
+  if (!showMap && !region) {
+    return null;
+  }
 
-  return (  
+  return (
     <View style={styles.mapView}>
       <View style={styles.mapContainer}>
-        {region &&
-         <MapView
-          initialRegion={region}
-          provider={PROVIDER_GOOGLE}
-          
-          style={styles.mapStyle}>
-          <Marker coordinate={{latitude: region?.latitude, longitude: region?.longitude}} tracksViewChanges={false}>
-            <UserLocation />
-          </Marker>
-          <Circle
-            center={{latitude: region?.latitude, longitude: region?.longitude}}
-            radius={initialRadius}
-            strokeColor={color}
-            fillColor={color}
-            zIndex={2}
-            strokeWidth={1}
-          />
-          {params?.eventLocation.map(({latitude, longitude}, index) => (
+        {region && (
+          <MapView
+            initialRegion={region}
+            provider={PROVIDER_GOOGLE}
+            style={styles.mapStyle}
+          >
             <Marker
-              coordinate={{latitude, longitude}}
-              key={index}
-              tracksViewChanges={true}>
-              <PinLocation />
+              coordinate={
+                userLocation
+              //   {
+              //   latitude: region?.latitude,
+              //   longitude: region?.longitude,
+              // }
+            }
+              tracksViewChanges={false}
+            >
+              <UserLocation />
             </Marker>
-          ))}
-        </MapView>}
+
+            <Circle
+              center={{
+                latitude: region?.latitude,
+                longitude: region?.longitude,
+              }}
+              radius={initialRadius}
+              strokeColor={color}
+              fillColor={color}
+              zIndex={2}
+              strokeWidth={1}
+            />
+            {params?.eventLocation.map(({ latitude, longitude }, index) => (
+              <Marker
+                coordinate={{ latitude, longitude }}
+                key={index}
+                tracksViewChanges={true}
+              >
+                <PinLocation />
+              </Marker>
+            ))}
+          </MapView>
+        )}
         {/* <ButtonFilter onPress={onFillter} style={styles.filterButton} /> */}
         <MapButton
           onBack={onPressBack}
@@ -188,31 +206,31 @@ export default AllEventAroundYou;
 
 const styles = StyleSheet.create({
   mapView: {
-    width: '100%',
+    width: "100%",
     flex: 1,
   },
   mapStyle: {
-    width: '100%',
+    width: "100%",
     flex: 1,
   },
-  mapContainer: {flex: 1, alignItems: 'center'},
-  filterButton: {zIndex: 6},
+  mapContainer: { flex: 1, alignItems: "center" },
+  filterButton: { zIndex: 6 },
   buttonIcon: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 24,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     paddingHorizontal: 24,
-    flexDirection: 'row',
-    width: '100%',
+    flexDirection: "row",
+    width: "100%",
   },
   eventView: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    alignItems: "center",
     paddingTop: 16,
   },
   scroll: {
-    width: '100%',
+    width: "100%",
   },
   mapBtnStyle: {
     bottom: 24,

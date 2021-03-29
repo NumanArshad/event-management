@@ -16,23 +16,26 @@ import { width_screen, height_screen } from "../../ultis/dimensions/index";
 import { register } from "redux/auth/auth.actions";
 import ROUTES from "ultis/routes";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 import SubmitButton from "components/buttons/submitButton";
 import useImagePicker from "components/ImgPicker";
 import Color from "ultis/color";
-import { startLoading } from "redux/loading/loading.actions";
-import { noFoundImg } from "ultis/constants";
+import { noUserFoundImage } from "ultis/constants";
 
-const Register = memo((navigation) => {
+const Register = memo(() => {
   const dispatch = useDispatch();
-  const { image, pickImage, getImageFormConversion } = useImagePicker();
+  const { image, pickImage, getImageFormConversion, setImage } = useImagePicker();
 
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [name, setname] = useState("");
   const [cPassword, setcPassword] = useState("");
   const { navigate } = useNavigation();
+
+  const { all_errors } = useSelector<any, any>((state) => state.errors);
+
+  console.log("nice all eror ris", all_errors)
 
   const ValidateEmail = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -53,15 +56,17 @@ const Register = memo((navigation) => {
   const handleRegister = () => {
     if (email != "" && password != "" && name != "" && cPassword != "") {
       if (ValidateEmail() && validatePassword()) {
-        dispatch(startLoading());
+       // dispatch(startLoading());
         const formData = new FormData();
         formData.append("email", email);
         formData.append("password", password);
         formData.append("user_type", "citizen");
         formData.append("name", name);
         formData.append("password_confirmation", cPassword);
-        image !== noFoundImg &&
-          formData.append("image", getImageFormConversion());
+        image !== noUserFoundImage && formData.append("image", getImageFormConversion());
+
+          console.log("hey form dara os", formData)
+          setImage(noUserFoundImage);
         dispatch(register(formData));
       }
     } else {
@@ -75,6 +80,13 @@ const Register = memo((navigation) => {
     <View style={styles.container}>
       <View>
         <Image source={{ uri: image || img }} style={styles.imageProfile} />
+        <Entypo
+          name="cross"
+          size={20}
+          color="grey"
+          style={styles.iconRemove}
+          onPress={()=>setImage(noUserFoundImage)}
+        />
         <Ionicons
           name="create-outline"
           size={18}
@@ -94,6 +106,9 @@ const Register = memo((navigation) => {
         placeholder="Email..."
         onChangeText={(data) => setemail(data)}
       />
+       {all_errors && (
+          <Text style={{ color: Color.GRAD_COLOR_1 }}>{all_errors?.errors?.email}</Text>
+        )}
       <TextInput
         style={styles.textInput}
         secureTextEntry={true}
@@ -182,6 +197,17 @@ const styles = StyleSheet.create({
   iconEdit: {
     position: "absolute",
     top: height_screen * 0.12,
+    left: width_screen * 0.25,
+    backgroundColor: "white",
+    height: height_screen * 0.035,
+    width: width_screen * 0.07,
+    borderRadius: 100,
+    paddingTop: "10%",
+    paddingLeft: "15%",
+  },
+  iconRemove: {
+    position: "absolute",
+    bottom: height_screen * 0.15,
     left: width_screen * 0.25,
     backgroundColor: "white",
     height: height_screen * 0.035,

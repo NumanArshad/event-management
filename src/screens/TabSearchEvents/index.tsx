@@ -14,8 +14,8 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import ROUTES from "ultis/routes";
-import { getAuthGroupsObserver } from "redux/groups/groups.actions";
-import { useDispatch } from "react-redux";
+import { getAllAuthGroups, getAuthGroupsObserver } from "redux/groups/groups.actions";
+import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import Color from "ultis/color";
 import NoContentFound from "components/NoContentFound";
@@ -29,11 +29,11 @@ const TabSearchEvents = memo(() => {
   const toCreateGroup = () => {
     navigation.navigate(ROUTES.CreateGroup);
   };
-  const [groupList, setGroupList] = useState(null);
+  const [ groupList , setGroupList] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(getAuthGroupsObserver(setGroupList));
+      dispatch(getAllAuthGroups(setGroupList));
     }, [dispatch])
   );
 

@@ -27,8 +27,8 @@ import isEmpty from "ultis/isEmpty";
 import { alertMessage } from "ultis/alertToastMessages";
 import { height_screen, width_screen } from "ultis/dimensions";
 import useImagePicker from "components/ImgPicker";
-import { startLoading, stopLoading } from "redux/loading/loading.actions";
-import { createGroup } from "redux/groups/groups.actions";
+import { startButtonLoading, startLoading, stopButtonLoading, stopLoading } from "redux/loading/loading.actions";
+import { createGroup, getAuthGroupsObserver } from "redux/groups/groups.actions";
 import {
   bulkFirestoreHandler,
   sendNotification,
@@ -87,7 +87,7 @@ const Friendlist = memo(() => {
   const handleCreateGroup = async () => {
     const downloadUrl = await uploadImage();
     if (downloadUrl) {
-      dispatch(startLoading());
+      dispatch(startButtonLoading());
       const payload = {
         name: params?.name,
         image: downloadUrl,
@@ -123,7 +123,8 @@ const Friendlist = memo(() => {
   };
 
   const handleGoBack = () => {
-    dispatch(stopLoading());
+    dispatch(stopButtonLoading());
+    dispatch(getAuthGroupsObserver());
     navigate("groups");
   };
 

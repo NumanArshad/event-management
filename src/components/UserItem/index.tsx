@@ -38,8 +38,8 @@ interface Props {
   user_type?: string;
   // id: string;
   actionButton?: string;
-  handleAddMembers?:(memberDocId:string) => void;
-  isUserAdded?:(memberDocId:string) => void;
+  handleAddMembers?: (memberDocId: string) => void;
+  isUserAdded?: (memberDocId: string) => void;
 }
 
 const UserItem = (props: any) => {
@@ -53,7 +53,7 @@ const UserItem = (props: any) => {
     navigation.navigate(ROUTES.PeopleProfile, {
       userInfo,
     });
-  }, [navigation]);
+  }, [navigation, userInfo]);
 
   const {
     user_name,
@@ -174,7 +174,7 @@ const UserItem = (props: any) => {
     }
 
     ///notification for accept/reject
-   // if (friendRequestStatus()?.isRejected) {
+    // if (friendRequestStatus()?.isRejected) {
     sendNotification({
       receipentDocId: id,
       senderDocId: login_user_doc,
@@ -189,7 +189,7 @@ const UserItem = (props: any) => {
       };
       sendPushNotification(pushTokenPayload);
     }
-   // return;
+    // return;
     // }
     /////////
 
@@ -253,7 +253,7 @@ const UserItem = (props: any) => {
             >
               Reject{" "}
               <FontAwesome5
-                name="check"
+                name="times"
                 size={12}
                 color="red"
                 style={styles.iconStyle}
@@ -262,22 +262,20 @@ const UserItem = (props: any) => {
             </Text>
           </TouchableOpacity>
         </View>
-      ) :
-      actionButton === "add_member" ? (
+      ) : actionButton === "add_member" ? (
         <TouchableOpacity
           onPress={() => props.handleAddMembers(id)}
           style={styles.svg_Follow}
         >
           <AntDesign
-            name={!props.isUserAdded(id) ? "addusergroup": "deleteusergroup"}
+            name={!props.isUserAdded(id) ? "addusergroup" : "deleteusergroup"}
             size={26}
             color="black"
             style={styles.iconStyle}
             // onPress={onProfile}
           />
         </TouchableOpacity>
-      ) : 
-      null}
+      ) : null}
     </TouchableOpacity>
   );
 };

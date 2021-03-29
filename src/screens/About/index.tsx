@@ -30,7 +30,6 @@ const About = () => {
     },
   } = useSelector((state) => state?.auth);
 
-  console.log("user name is ", image)
   const item = {
     coverImage: require("assets/Profile/CoverImage.png"),
     avatar: image,
