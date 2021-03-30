@@ -39,11 +39,16 @@ const ProfileSaved = memo(() => {
   const { loading } = useSelector<any, any>((state) => state.loading);
   const [eventStatus, setEventStatus] = useState("saved");
 
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     dispatch(getAllEvents(eventStatus ?? params?.eventType));
+  //     params?.eventType && setEventStatus(params?.eventType);
+  //   }, [dispatch, eventStatus, params])
+  // );
   useFocusEffect(
     useCallback(() => {
-      dispatch(getAllEvents(eventStatus ?? params?.eventType));
-      params?.eventType && setEventStatus(params?.eventType);
-    }, [dispatch, eventStatus, params])
+      dispatch(getAllEvents(eventStatus));
+    }, [dispatch, eventStatus])
   );
 
   const renderItem = useCallback(({ item }) => {
@@ -93,7 +98,7 @@ const ProfileSaved = memo(() => {
           marginTop: height_screen * 0.02,
         }}
       >
-        {/* <TouchableOpacity onPress={() => setEventStatus("saved")}>
+        <TouchableOpacity onPress={() => setEventStatus("saved")}>
           <Text
             style={[
               styles.loginBtn,
@@ -107,8 +112,8 @@ const ProfileSaved = memo(() => {
           >
             Saved
           </Text>
-        </TouchableOpacity> */}
-        {/* <TouchableOpacity onPress={() => setEventStatus("attended")}>
+        </TouchableOpacity> 
+         <TouchableOpacity onPress={() => setEventStatus("attended")}>
           <Text
             style={[
               styles.loginBtn,
@@ -121,7 +126,7 @@ const ProfileSaved = memo(() => {
           >
             Attended
           </Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
       {loading ? (
         <Text>...loading</Text>
@@ -137,7 +142,7 @@ const ProfileSaved = memo(() => {
           contentContainerStyle={styles.contentContainerStyle}
         />
       )}
-      <View
+      {/* <View
         style={{
           flexDirection: "row",
           justifyContent: "center",
@@ -145,7 +150,7 @@ const ProfileSaved = memo(() => {
         }}
       >
         <ButtonFilter onPress={onPressFilter} />
-      </View>
+      </View> */}
     </View>
   );
 });

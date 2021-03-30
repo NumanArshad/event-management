@@ -84,7 +84,7 @@ const sendMessageNotification = (conversationDocId, { user_doc_id }, messageText
           }
         })
       );
-      bulkFirestoreHandler(inboxNotificatioOfflineUser, () => alertMessage("offline message sent"))
+      bulkFirestoreHandler(inboxNotificatioOfflineUser, () => console.log("offline message sent"))
     }
   })
 }

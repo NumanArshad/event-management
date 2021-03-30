@@ -80,11 +80,10 @@ const AllEventAroundYou = memo(() => {
           >
             <Marker
               coordinate={
-                userLocation
-              //   {
-              //   latitude: region?.latitude,
-              //   longitude: region?.longitude,
-              // }
+                {
+                latitude: region?.latitude,
+                longitude: region?.longitude,
+              }
             }
               tracksViewChanges={false}
             >
