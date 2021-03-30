@@ -33,6 +33,7 @@ import CustomBarCodeScanner from "components/CustomBarCodeScanner";
 import WatchLocation from "components/WatchLocation";
 import IconAroundU from "svgs/IconAroundU";
 import FONTS from "ultis/fonts";
+import { eventLocation } from "data/eventLocation";
 
 const EvezTrending = memo(() => {
   const navigation = useNavigation();
@@ -44,7 +45,7 @@ const EvezTrending = memo(() => {
     (state) => state.events
   );
 
-  const [eventLocation, setEventLocation] = useState([]);
+  const [eventLocations, setEventLocation] = useState([]);
 
   const { all_errors } = useSelector<any, any>((state) => state.errors);
 
@@ -71,21 +72,24 @@ const EvezTrending = memo(() => {
   useFocusEffect(
     useCallback(() => {
       if (all_trending_events?.length) {
+        console.log({all_trending_events})
         const eventLocationList = all_trending_events?.map(
           ({ lat_long }: { lat_long: string }) => splitLatLongStr(lat_long)
         );
-        setEventLocation(eventLocationList);
+        console.log({eventLocationList})
+        setEventLocation(eventLocation => eventLocation = eventLocationList);
         return;
       }
-    }, [dispatch, all_trending_events])
+    }, [all_trending_events])
   );
 
-
-  const onPressAllEventAroundYou = useCallback(() => {
+  const onPressAllEventAroundYou = () => {
     navigation.navigate(ROUTES.AllEventAroundYou, {
-      eventLocation,
-    });
-  }, [navigation, eventLocation]);
+      eventLocation: eventLocations,
+    })
+  }
+
+  console.log("state all is", eventLocations)
 
   const renderItem = useCallback(({ item }) => {
     const {
