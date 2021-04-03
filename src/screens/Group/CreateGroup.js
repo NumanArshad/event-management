@@ -38,6 +38,7 @@ import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/nativ
 import { alertMessage, toastMessages } from "ultis/alertToastMessages";
 import { startButtonLoading, startLoading, stopButtonLoading, stopLoading } from "redux/loading/loading.actions";
 import NoContentFound from "components/NoContentFound";
+import isEmpty from "ultis/isEmpty";
 
 const CreateGroup = () => {
   const dispatch = useDispatch();
@@ -66,10 +67,13 @@ const CreateGroup = () => {
     );
   }, []);
 
-
   const  navigation = useNavigation();
 
   const handleSubmit = () => {
+   if(isEmpty(name)){
+     alertMessage("Please enter group name");
+     return;
+   }
     alertMessage(
       "Create Group",
       [
@@ -121,7 +125,6 @@ const CreateGroup = () => {
     dispatch(getAuthGroupsObserver(newGroupDocId));
     navigation.goBack();
   }
-
 
   return (
     <View style={styles.container}>
